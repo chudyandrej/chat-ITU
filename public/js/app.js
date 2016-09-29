@@ -1,13 +1,28 @@
 var socket = io();
+var name= getQueryVariable('name') || 'Anonymous';
+var room = getQueryVariable('room');
+
+
+
+jQuery('.room-title').text(room);
+
 
 socket.on('connect',function (){
-	console.log('Conected to socekt.io server.');
+	socket.emit('joinRoom',{
+		name : name,
+		room : room
+	});
+
+
 });
-socket.on('message', function (massage){
-	var momentTimestamp = moment.utc(massage.timestamp);
+socket.on('message', function (message){
+	var momentTimestamp = moment.utc(message.timestamp);
+	$messages = jQuery('.messages');
+
 	console.log('New massage');
-	console.log(massage.text);
-	jQuery('.messages').append('<p><strong>' +momentTimestamp.format('h:mm a')+'</strong>'+ massage.text + '</p>');
+	console.log(message.text);
+	$messages.append('<p><strong>'+ message.name + ' ' +momentTimestamp.format('h:mm a')+'</strong></p>');
+	$messages.append('<p>' + message.text + '</p>');
 });
 
 
@@ -18,7 +33,8 @@ $form.on('submit', function (event) {
 
 	var $message = $form.find('input[name=message]');
 	socket.emit('message',{
-		text: $message.val()
+		text: $message.val(),
+		name:name
 	});
 	$message.val('');
 });
