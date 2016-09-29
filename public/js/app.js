@@ -17,12 +17,15 @@ socket.on('connect',function (){
 });
 socket.on('message', function (message){
 	var momentTimestamp = moment.utc(message.timestamp);
-	$messages = jQuery('.messages');
+	var $messages = jQuery('.messages');
+	var $message = jQuery('<li class="list-group-item"></li>');
+
 
 	console.log('New massage');
 	console.log(message.text);
-	$messages.append('<p><strong>'+ message.name + ' ' +momentTimestamp.format('h:mm a')+'</strong></p>');
-	$messages.append('<p>' + message.text + '</p>');
+	$message.append('<p><strong>'+ message.name + ' ' +momentTimestamp.format('h:mm a')+'</strong></p>');
+	$message.append('<p>' + message.text + '</p>');
+	$messages.append($message);
 });
 
 
