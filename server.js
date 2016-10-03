@@ -17,7 +17,7 @@ app.get('/', function(req, res) {
     res.send('ITU chat');
 });
 
-app.get('/chat', middleware.requreAuthentification ,function(req, res) {
+app.get('/chat', middleware.requreAuthentification, function(req, res) {
     res.json(req.user);
 });
 
@@ -32,21 +32,30 @@ app.post('/join', function(req, res) { //reg user to portal
 
 app.post('/login', function(req, res) { //reg user to portal
     let body = _.pick(req.body, 'email', 'password');
-	var userInstance;
+    var userInstance;
 
     db.user.authenticate(body).then((user) => {
-		userInstance = user;
-		let token = user.genetateToken('authentication');
-		console.log('\n\nGenerate token :', token);
-		return db.token.create({
-			token
-		});
-    }).then((tokenInstance)=>{
-		res.header('Auth', tokenInstance.token).json(userInstance.toPublicJSON());
-	}).catch((e)=>{
-		res.status(401).json(e);
-	});
+        userInstance = user;
+        let token = user.genetateToken('authentication');
+        console.log('\n\nGenerate token :', token);
+        return db.token.create({
+            token
+        });
+    }).then((tokenInstance) => {
+        res.header('Auth', tokenInstance.token).json(userInstance.toPublicJSON());
+    }).catch((e) => {
+        res.status(401).json(e);
+    });
 });
+app.delete('/logout', middleware.requreAuthentification, function(req, res) {
+    req.token.destroy().then(() => {
+        res.status(204).send();
+    }, () => {
+        res.status(500).send();
+    });
+});
+
+
 
 db.sequelize.sync({
     //force: true
