@@ -1,64 +1,84 @@
-const PORT = process.env.PORT || 3000;
 var express = require('express');
+var _ = require('underscore');
+var db = require('./db.js');
+var bcrypt = require('bcrypt');
+
 var app = express();
 var http = require('http').Server(app);
-var moment = require('moment');
-var bodyParser = require('body-parser');
-var _ = require('underscore');
+var io = require('socket.io')(http);
 
+var PORT = process.env.PORT || 3000;
+var todos = [];
 
-var db = require('./db.js');
-var middleware = require('./middleware.js')(db);
+app.use(express.static(__dirname + '/public'));
 
-
-app.use(bodyParser.json());
-
-app.get('/', function(req, res) {
-    res.send('ITU chat');
-});
-
-app.get('/chat', middleware.requreAuthentification, function(req, res) {
-    res.json(req.user);
-});
-
-app.post('/join', function(req, res) { //reg user to portal
-    var body = _.pick(req.body, 'name', 'email', 'password');
-    db.user.create(body).then(function(user) {
-        res.json(user.toPublicJSON());
-    }, function(e) {
-        res.status(400).json(e);
-    });
-});
-
-app.post('/login', function(req, res) { //reg user to portal
-    let body = _.pick(req.body, 'email', 'password');
-    var userInstance;
-
-    db.user.authenticate(body).then((user) => {
-        userInstance = user;
-        let token = user.genetateToken('authentication');
-        console.log('\n\nGenerate token :', token);
-        return db.token.create({
-            token
+function checkTokenValidity(token) {
+    return new Promise(function(resolve, reject) {
+        db.token.findOne({
+            where: {
+                tokenHash: cryptojs.MD5(token).toString()
+            }
+        }).then(function(tokenInstance) {
+            if (!tokenInstance) {
+                reject();
+            }
+            resolve(tokenInstance);
+        }, function(e) {
+            reject(e);
         });
-    }).then((tokenInstance) => {
-        res.header('Auth', tokenInstance.token).json(userInstance.toPublicJSON());
-    }).catch((e) => {
-        res.status(401).json(e);
     });
-});
-app.delete('/logout', middleware.requreAuthentification, function(req, res) {
-    req.token.destroy().then(() => {
-        res.status(204).send();
-    }, () => {
-        res.status(500).send();
-    });
-});
+}
 
+io.on('connection', function(socket) {
+
+    socket.on('join', function(message) { //reg user to portal
+        var body = _.pick(message, 'name', 'email', 'password');
+        db.user.create(body).then(function(user) {
+            //TODO emit message
+        }, function(e) {
+            //TODO emit error message
+        });
+    });
+
+    soket.on('login', function(message) { //reg user to portal
+        var body = _.pick(message, 'email', 'password');
+        var userInstance;
+
+        db.user.authenticate(body).then(function(user) {
+            userInstance = user;
+            var token = user.genetateToken('authentication');
+
+            return db.token.create({
+                token
+            });
+        }).then(function(tokenInstance) {
+            //TODO send OK status, token
+        }).catch(function(e) {
+            //TODO send error status
+        });
+    });
+
+    soket.on('logout', function(message) {
+        checkTokenValidity(message.token).thrn(function(tokenInstance) {
+            tokenInstance.destroy().then(function() {
+                //TODO sucessful
+            }, function() {
+                //TODO unsucessful
+            });
+        });
+    });
+
+    socket.on('disconnect', function() {
+        //TODO
+    });
+
+});
 
 
 db.sequelize.sync({
     //force: true
-}).then(() => app.listen(PORT, function() {
-    console.log('Express listening on port ' + PORT + '!');
-}));
+}).then(function() {
+    app.listen(PORT, function() {
+        console.log('Express listening on port ' + PORT + '!');
+    });
+});
