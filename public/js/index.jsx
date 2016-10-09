@@ -1,10 +1,14 @@
-import React from 'react';
-import {render} from 'react-dom';
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import {Router, Route} from 'react-router';
 
-class App extends React.Component {
-    render () {
-        return <p> Hello Reactdd!</p>;
-    }
-}
 
-render(<App/>, document.getElementById('app'));
+import LoginPage from './loginPage.jsx'
+
+render(
+    <Router>
+        <Route path="/" component={LoginPage}/>
+    </Router>,
+    document.getElementById('app')
+);
+
