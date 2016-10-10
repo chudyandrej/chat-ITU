@@ -40,7 +40,7 @@ io.on('connection', function(socket) {
         });
     });
 
-    soket.on('login', function(message) { //reg user to portal
+    socket.on('login', function(message) { //reg user to portal
         var body = _.pick(message, 'email', 'password');
         var userInstance;
 
@@ -58,7 +58,7 @@ io.on('connection', function(socket) {
         });
     });
 
-    soket.on('logout', function(message) {
+    socket.on('logout', function(message) {
         checkTokenValidity(message.token).then(function(tokenInstance) {
             tokenInstance.destroy().then(function() {
                 //TODO successful
