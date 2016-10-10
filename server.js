@@ -39,7 +39,7 @@ io.on('connection', function(socket) {
         });
     });
 
-    soket.on('login', function(message) { //reg user to portal
+    socket.on('login', function(message) { //reg user to portal
         var body = _.pick(message, 'email', 'password');
         var userInstance;
 
@@ -57,7 +57,7 @@ io.on('connection', function(socket) {
         });
     });
 
-    soket.on('logout', function(message) {
+    socket.on('logout', function(message) {
         checkTokenValidity(message.token).thrn(function(tokenInstance) {
             tokenInstance.destroy().then(function() {
                 //TODO sucessful
@@ -76,7 +76,7 @@ io.on('connection', function(socket) {
 db.sequelize.sync({
     force: true
 }).then(function() {
-    app.listen(PORT, function() {
+    http.listen(PORT, function() {
         console.log('Express listening on port ' + PORT + '!');
     });
 });
