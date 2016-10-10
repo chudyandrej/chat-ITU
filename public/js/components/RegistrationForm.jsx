@@ -15,6 +15,7 @@ class RegistrationForm extends Form {
             email: null,
             valid: true
         };
+        
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handlePasswordCheckChange = this.handlePasswordCheckChange.bind(this);
@@ -22,52 +23,53 @@ class RegistrationForm extends Form {
         this.checkPasswordMatch = this.checkPasswordMatch.bind(this);
         this._registerAllowed = this._registerAllowed.bind(this);
         this.register = this.register.bind(this);
-
     }
 
-    handleUsernameChange (evt) {
+    handleUsernameChange(evt) {
         this.setState({
             username: evt.target.value
         });
     }
 
-    handlePasswordChange (evt) {
+    handlePasswordChange(evt) {
         this.setState({
             password: evt.target.value
         });
     }
 
-    handlePasswordCheckChange (evt) {
+    handlePasswordCheckChange(evt) {
         this.setState({
             passwordCheck: evt.target.value
         });
     }
 
-    handleEmailChange (evt) {
+    handleEmailChange(evt) {
         this.setState({
             email: evt.target.value
         });
     }
 
-    checkPasswordMatch () {
+    checkPasswordMatch() {
         if (this.state.password == this.state.passwordCheck) {
-            this.setState({ valid: true });
+            this.setState({valid: true});
         }
-        else{
-            this.setState({ valid: false });
+        else {
+            this.setState({valid: false});
         }
     }
+
+    //TODO check email validity
 
     componentDidMount() {
         this.props.socket.on('registerAllowed', this._registerAllowed);
     }
 
     _registerAllowed(result) {
-        if (result) {     //continue to login
-
+        if (result.status) {     //continue to login
+            //TODO show successful registration + login button
         }
         else {          //username already exists
-
+            // TODO stay on form and show what's wrong
         }
     }
 
@@ -80,7 +82,7 @@ class RegistrationForm extends Form {
         };
 
         //send data to backend
-        this.props.socket.emit('register', data);
+        this.props.socket.emit('join', data);
     }
 
     render() {

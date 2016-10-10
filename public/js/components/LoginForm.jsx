@@ -3,6 +3,8 @@ import React from 'react';
 import CloseFormButton from './CloseFormButton.jsx';
 import Form from './Form.jsx';
 
+var token = null;  //user's token, obtain after successful login
+
 class LoginForm extends Form {
 
     constructor(props, context) {
@@ -18,13 +20,13 @@ class LoginForm extends Form {
         this._loginAllowed = this._loginAllowed.bind(this);
     }
 
-    handleUsernameChange (evt) {
+    handleUsernameChange(evt) {
         this.setState({
             username: evt.target.value
         });
     }
 
-    handlePasswordChange (evt) {
+    handlePasswordChange(evt) {
         this.setState({
             password: evt.target.value
         });
@@ -35,18 +37,18 @@ class LoginForm extends Form {
     }
 
     _loginAllowed(result) {
-        if (result) {     //continue to chat
-
+        if (result.status) {     //continue to chat
+            //TODO continue to chat
         }
         else {          //wrong username or password
-
+            //TODO show error
         }
     }
 
     login(e) {
         e.preventDefault();
         var data = {
-            username: this.state.username,
+            email: this.state.username,
             password: this.state.password
         };
 
