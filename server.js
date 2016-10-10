@@ -5,9 +5,10 @@ var bcrypt = require('bcrypt');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var cryptojs = require('crypto-js');
 
 var PORT = process.env.PORT || 3000;
-var todos = [];
+
 
 app.use(express.static(__dirname + '/public'));
 
@@ -58,11 +59,11 @@ io.on('connection', function(socket) {
     });
 
     soket.on('logout', function(message) {
-        checkTokenValidity(message.token).thrn(function(tokenInstance) {
+        checkTokenValidity(message.token).then(function(tokenInstance) {
             tokenInstance.destroy().then(function() {
-                //TODO sucessful
+                //TODO successful
             }, function() {
-                //TODO unsucessful
+                //TODO unsuccessful
             });
         });
     });
