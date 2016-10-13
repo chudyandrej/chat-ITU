@@ -2,4 +2,5 @@ node_modules/
 data/*.sqlite
 .idea/
 bundle.js*
+public/index.js*
 *.log
