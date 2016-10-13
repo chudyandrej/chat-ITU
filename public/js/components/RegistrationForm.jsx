@@ -13,9 +13,13 @@ class RegistrationForm extends Form {
             password: null,
             passwordCheck: null,
             email: null,
-            valid: true
+            valid: true,
+            validUsername: true,
+            weakPassword: false,
+            registerSuccess: false,
+            buttonName: "Register"
         };
-        
+
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handlePasswordCheckChange = this.handlePasswordCheckChange.bind(this);
@@ -32,6 +36,8 @@ class RegistrationForm extends Form {
     }
 
     handlePasswordChange(evt) {
+        //TODO check length of password
+        //TODO if short =>  this.state.weakPassword = true
         this.setState({
             password: evt.target.value
         });
@@ -66,10 +72,15 @@ class RegistrationForm extends Form {
 
     _registerAllowed(result) {
         if (result.status) {     //continue to login
-            //TODO show successful registration + login button
+            this.setState({
+                buttonName: "Login",
+                registerSuccess: true
+            })
         }
         else {          //username already exists
-            // TODO stay on form and show what's wrong
+            this.set.state({
+                validUsername: false
+            })
         }
     }
 
@@ -82,7 +93,15 @@ class RegistrationForm extends Form {
         };
 
         //send data to backend
-        this.props.socket.emit('join', data);
+        //TODO send data only if it is valid!
+
+        if (this.state.buttonName == "Register") {
+            this.props.socket.emit('join', data);
+        }
+        else {   //successful registration
+            this.props.registerSuccess()
+        }
+
     }
 
     render() {
@@ -96,11 +115,15 @@ class RegistrationForm extends Form {
                            onChange={ this.handleUsernameChange }
                            placeholder="username"/>
 
+                    {this.state.validUsername ? null : <div id="alert">Username already exists!</div>}
+
                     <label>Password:</label>
                     <input type="password"
                            ref="password"
                            onChange={ this.handlePasswordChange }
                            placeholder="password"/>
+
+                    {this.state.weakPassword ? <div id="alert">Password is too weak!</div> : null}
 
                     <label>Password:</label>
                     <input type="password"
@@ -110,13 +133,17 @@ class RegistrationForm extends Form {
                            onBlur={ this.checkPasswordMatch }
                            placeholder="password"/>
 
+                    {this.state.valid ? null : <div id="alert">Passwords do not match!</div>}
+
                     <label>Email:</label>
                     <input type="text"
                            ref="email"
                            onChange={ this.handleEmailChange }
                            placeholder="email"/>
 
-                    <button onClick={ this.register }>Register</button>
+                    {this.state.registerSuccess ? <label id="success">Registration was successful!</label> : null}
+
+                    <button onClick={ this.register }>{this.state.buttonName}</button>
                 </div>
             </div>
         );

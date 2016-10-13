@@ -13,6 +13,7 @@ class LoginForm extends Form {
         this.state = {
             username: null,
             password: null,
+            valid: true
         };
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -38,10 +39,15 @@ class LoginForm extends Form {
 
     _loginAllowed(result) {
         if (result.status) {     //continue to chat
-            //TODO continue to chat
+            token = result.token;
+
+            //TODO render chat page
         }
         else {          //wrong username or password
-            //TODO show error
+            this.setState({
+                valid: false
+            });
+
         }
     }
 
@@ -65,14 +71,18 @@ class LoginForm extends Form {
                     <label>Username:</label>
                     <input type="text"
                            ref="name"
+                           id={this.state.valid ? "valid" : "invalid"}
                            onChange={ this.handleUsernameChange }
                            placeholder="username"/>
 
                     <label>Password:</label>
                     <input type="password"
                            ref="password"
+                           id={this.state.valid ? "valid" : "invalid"}
                            onChange={ this.handlePasswordChange }
                            placeholder="password"/>
+
+                    {this.state.valid ? null : <div id="alert">Wrong username or password!</div>}
 
                     <button onClick={ this.login }>Sign In</button>
                 </div>

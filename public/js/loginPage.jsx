@@ -60,8 +60,12 @@ var LoginPage = React.createClass({
                  </div>*/}
 
                 <TransitionGroup>
-                    { this.state.signInClicked ? <LoginForm socket={socket} close={this.closeForm}/> : null}
-                    { this.state.signUpClicked ? <RegistrationForm socket={socket} close={this.closeForm}/> : null}
+                    { this.state.signInClicked ? <LoginForm socket={socket}
+                                                            close={this.closeForm}/> : null}
+
+                    { this.state.signUpClicked ? <RegistrationForm socket={socket}
+                                                                   close={this.closeForm}
+                                                                   registerSuccess={this.signInClicked}/> : null}
                 </TransitionGroup>
 
             </div>
