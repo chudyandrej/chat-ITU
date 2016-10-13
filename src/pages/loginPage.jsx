@@ -1,10 +1,10 @@
 import React from 'react';
 import TransitionGroup from 'react-addons-transition-group';
 
-import LoginForm from './components/LoginForm.jsx';
-import RegistrationForm from './components/RegistrationForm.jsx';
+import LoginForm from '../components/LoginForm.jsx';
+import RegistrationForm from '../components/RegistrationForm.jsx';
 
-var io = require('socket.io-client');
+import io from 'socket.io-client';
 var socket = io();
 
 

@@ -1,12 +1,16 @@
 {
-  "name": "togo-api",
+  "name": "chat",
   "version": "1.0.0",
-  "description": "",
+  "description": "Online chat application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack -d --watch",
     "build": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chudyandrej/chat-ITU.git"
   },
   "author": "",
   "license": "ISC",
@@ -18,11 +22,13 @@
     "express": "^4.13.3",
     "gsap": "^1.19.0",
     "jsonwebtoken": "^5.0.5",
+    "moment": "^2.15.1",
     "node-persist": "0.0.6",
     "pg": "^4.4.1",
     "pg-hstore": "^2.3.2",
     "react": "^15.3.2",
     "react-addons-transition-group": "^15.3.2",
+    "react-bootstrap": "^0.30.5",
     "react-dom": "^15.3.2",
     "react-router": "^2.8.1",
     "sequelize": "^3.5.1",

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 import CloseFormButton from './CloseFormButton.jsx';
 import Form from './Form.jsx';
@@ -84,7 +85,8 @@ class LoginForm extends Form {
 
                     {this.state.valid ? null : <div id="alert">Wrong username or password!</div>}
 
-                    <button onClick={ this.login }>Sign In</button>
+                        <button onClick={ this.login }>Sign In</button>
+
                 </div>
             </div>
         );
