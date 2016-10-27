@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import {hashHistory} from 'react-router';
 
 import CloseFormButton from './CloseFormButton.jsx';
 import Form from './Form.jsx';
@@ -42,7 +42,7 @@ class LoginForm extends Form {
         if (result.status) {     //continue to chat
             token = result.token;
 
-            //TODO render chat page
+            hashHistory.push('/chat');
         }
         else {          //wrong username or password
             this.setState({
@@ -60,8 +60,9 @@ class LoginForm extends Form {
         };
 
         //send data to backend to authenticate
-        this.props.socket.emit('login', data);
+        //this.props.socket.emit('login', data);
 
+        hashHistory.push('/chat');
     }
 
     render() {

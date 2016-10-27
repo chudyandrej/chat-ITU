@@ -19,7 +19,7 @@ To install all dependencies including devDependencies run:
 
 [1.] JSX syntax and ES6, are not supported in all the browsers, so we need to translate them to .js:
 
-    $ npm run build  #will make bundle.js*
+    $ npm run build  #will make index.js*
 
 [2.] Start server:
 
