@@ -8,21 +8,37 @@ import io from 'socket.io-client';
 var socket = io();
 
 
-var LoginPage = React.createClass({
+export default class LoginPage extends React.Component {
 
-    getInitialState() {
-        return {
+    static contextTypes = {
+        user: React.PropTypes.object
+    };
+
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
             signInClicked: false,
             signUpClicked: false
-        }
-    },
+        };
+    }
+
+    componentWillMount() {
+        var user = {
+            loggedIn: false,
+            userName: "",
+            token: null,
+            socket: socket,
+        };
+       this.context.user.changeHandler(user)
+    }
 
     closeForm() {
         this.setState({
             signInClicked: false,
             signUpClicked: false
         })
-    },
+    }
 
     signInClicked() {
         if (this.state.signInClicked) {
@@ -32,8 +48,10 @@ var LoginPage = React.createClass({
         this.setState({
             signUpClicked: false,
             signInClicked: true
-        })
-    },
+        });
+
+        console.log(this.context.user);
+    }
 
     signUpClicked() {
         if (this.state.signUpClicked) {
@@ -44,15 +62,15 @@ var LoginPage = React.createClass({
             signInClicked: false,
             signUpClicked: true
         })
-    },
+    }
 
     render() {
         return (
-            <div className="loginPage">
+            <div className="loginPage" id="background-image-login">
                 <div id="header">
                     <div id="loginButtons">
-                        <button onClick={ this.signInClicked }>Sign In</button>
-                        <button onClick={ this.signUpClicked }>Sign Up</button>
+                        <button onClick={ this.signInClicked.bind(this) }>Sign In</button>
+                        <button onClick={ this.signUpClicked.bind(this) }>Sign Up</button>
                     </div>
                 </div>
                 {/*<div id="title">
@@ -60,17 +78,14 @@ var LoginPage = React.createClass({
                  </div>*/}
 
                 <TransitionGroup>
-                    { this.state.signInClicked ? <LoginForm socket={socket}
-                                                            close={this.closeForm}/> : null}
+                    { this.state.signInClicked ? <LoginForm close={this.closeForm.bind(this)}/> : null}
 
-                    { this.state.signUpClicked ? <RegistrationForm socket={socket}
-                                                                   close={this.closeForm}
-                                                                   registerSuccess={this.signInClicked}/> : null}
+                    { this.state.signUpClicked ? <RegistrationForm close={this.closeForm.bind(this)}
+                                                                   registerSuccess={this.signInClicked.bind(this)}/> : null}
                 </TransitionGroup>
 
             </div>
         )
     }
-});
+}
 
-export default LoginPage
