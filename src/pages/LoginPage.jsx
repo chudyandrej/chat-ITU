@@ -67,10 +67,14 @@ export default class LoginPage extends React.Component {
     render() {
         return (
             <div className="loginPage" id="background-image-login">
-                <div id="header">
-                    <div id="loginButtons">
-                        <button onClick={ this.signInClicked.bind(this) }>Sign In</button>
-                        <button onClick={ this.signUpClicked.bind(this) }>Sign Up</button>
+                <div className='btn-toolbar pull-right'>
+                    <div className='btn-group'>
+                        <button type='button'
+                                className='btn btn-primary'
+                                onClick={ this.signInClicked.bind(this) }>Sign In</button>
+                        <button type='button'
+                                className='btn btn-primary'
+                                onClick={ this.signUpClicked.bind(this) }>Sign Up</button>
                     </div>
                 </div>
                 {/*<div id="title">
@@ -78,10 +82,9 @@ export default class LoginPage extends React.Component {
                  </div>*/}
 
                 <TransitionGroup>
-                    { this.state.signInClicked ? <LoginForm close={this.closeForm.bind(this)}/> : null}
+                    { this.state.signInClicked ? <LoginForm /> : null}
 
-                    { this.state.signUpClicked ? <RegistrationForm close={this.closeForm.bind(this)}
-                                                                   registerSuccess={this.signInClicked.bind(this)}/> : null}
+                    { this.state.signUpClicked ? <RegistrationForm /> : null}
                 </TransitionGroup>
 
             </div>

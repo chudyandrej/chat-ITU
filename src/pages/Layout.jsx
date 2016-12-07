@@ -9,9 +9,9 @@ export default class Layout extends React.Component {
 
     componentWillMount(){
         console.log("checking if user is still signed in"); //DEBUG
-        if (!this.context.user.loggedIn){
-            hashHistory.push('/');
-        }
+        //if (!this.context.user.loggedIn){
+        //    hashHistory.push('/');
+        //}
     }
 
     render () {

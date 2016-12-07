@@ -1,10 +1,10 @@
-var webpack = require('webpack');
-var path = require('path');
+let webpack = require('webpack');
+let path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname, 'public');
-var APP_DIR = path.resolve(__dirname, 'src');
+let BUILD_DIR = path.resolve(__dirname, 'public');
+let APP_DIR = path.resolve(__dirname, 'src');
 
-var config = {
+let config = {
     entry: APP_DIR + '/index.jsx',
     output: {
         path: BUILD_DIR,
@@ -17,7 +17,11 @@ var config = {
                 include : APP_DIR,
                 loader : 'babel',
                 exclude: /node_modules/
-            }
+            },
+            {
+                test: /\.png$|\.gif$/,
+                loader: "url-loader?mimetype=image/png"
+            },
         ]
     }
 };

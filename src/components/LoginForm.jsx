@@ -1,7 +1,7 @@
 import React from 'react';
 import {hashHistory} from 'react-router';
+import ImageLoader from 'react-imageloader';
 
-import CloseFormButton from './CloseFormButton.jsx';
 import Form from './Form.jsx';
 
 
@@ -17,7 +17,8 @@ class LoginForm extends Form {
         this.state = {
             username: null,
             password: null,
-            valid: true
+            pending: false,
+            error: false
         };
 
         this._loginAllowed = this._loginAllowed.bind(this);
@@ -57,7 +58,7 @@ class LoginForm extends Form {
         }
         else {          //wrong username or password
             this.setState({
-                valid: false
+                //valid: false
             });
 
         }
@@ -65,7 +66,8 @@ class LoginForm extends Form {
 
     login(e) {
         e.preventDefault();
-        var data = {
+        this.setState({pending: true});
+        let data = {
             email: this.state.username,
             password: this.state.password
         };
@@ -76,32 +78,39 @@ class LoginForm extends Form {
         hashHistory.push('/chat'); //JUST DEBUG
     }
 
+    _handleKeyPress(e) {
+        if (e.key === 'Enter') {
+            this.login(e);
+        }
+    }
+
     render() {
+        let errorMsg = <strong className="alert alert-danger">Wrong username or password!</strong>;
+
         return (
-            <div className="formContainer">
-                <div className="form">
-                    <CloseFormButton close={ this.props.close }/>
-                    <label>Username:</label>
-                    <input type="text"
-                           ref="name"
-                           id={this.state.valid ? "valid" : "invalid"}
-                           onChange={ this.handleUsernameChange.bind(this) }
-                           placeholder="username"/>
-
-                    <label>Password:</label>
-                    <input type="password"
-                           ref="password"
-                           id={this.state.valid ? "valid" : "invalid"}
-                           onChange={ this.handlePasswordChange.bind(this) }
-                           placeholder="password"/>
-
-                    {this.state.valid ? null : <div id="alert">Wrong username or password!</div>}
-
-                        <button onClick={ this.login.bind(this) }>Sign In</button>
-
+            <div className="jumbotron loginForm">
+                {this.state.error ? errorMsg : null}
+                <div className="container">
+                    <h2 className="login">Login</h2>
+                    <div className="box">
+                        <input placeholder="email"
+                               type="text"
+                               value={this.state.username}
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               onChange={this.handleUsernameChange.bind(this, "name")}/>
+                        <input placeholder="password"
+                               type="password"
+                               value={this.state.password}
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               onChange={this.handlePasswordChange.bind(this, "password")}/>
+                        <button onClick={this.login.bind(this)}
+                                className="btn btn-default full-width">
+                            <ImageLoader src={require("../../public/img/login.png")}/>
+                        </button>
+                    </div>
                 </div>
             </div>
-        );
+        )
     }
 }
 

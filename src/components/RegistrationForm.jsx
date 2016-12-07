@@ -1,6 +1,6 @@
 import React from 'react';
+import ImageLoader from 'react-imageloader';
 
-import CloseFormButton from './CloseFormButton.jsx';
 import Form from './Form.jsx';
 
 
@@ -22,7 +22,9 @@ class RegistrationForm extends Form {
             validUsername: true,
             weakPassword: false,
             registerSuccess: false,
-            buttonName: "Register"
+            buttonName: "Register",
+
+            error: false
         };
 
         this._registerAllowed = this._registerAllowed.bind(this);
@@ -79,7 +81,7 @@ class RegistrationForm extends Form {
 
     register(e) {
         e.preventDefault();
-        var data = {
+        let data = {
             username: this.state.username,
             password: this.state.password,
             email: this.state.email
@@ -97,47 +99,43 @@ class RegistrationForm extends Form {
     }
 
     render() {
+
+        let errorMsg = <strong className="alert alert-danger">Wrong username or password!</strong>;
+
         return (
-            <div className="formContainer">
-                <div className="form">
-                    <CloseFormButton close={ this.props.close }/>
-                    <label>Username:</label>
-                    <input type="text"
-                           ref="name"
-                           onChange={ this.handleChange.bind(this, "username") }
-                           placeholder="username"/>
+        <div className="jumbotron regForm">
+            {this.state.error ? errorMsg : null}
+            <div className="container">
+                <h2 className="login">Registration</h2>
+                <div className="box">
 
-                    {this.state.validUsername ? null : <div id="alert">Username already exists!</div>}
+                    <input placeholder="username"
+                           type="text"
+                           value={this.state.username}
+                           onChange={this.handleChange.bind(this, "name")}/>
 
-                    <label>Password:</label>
-                    <input type="password"
-                           ref="password"
-                           onChange={ this.handleChange.bind(this, "password") }
-                           placeholder="password"/>
+                    <input placeholder="password"
+                           type="password"
+                           value={this.state.password}
+                           onChange={this.handleChange.bind(this, "password")}/>
 
-                    {this.state.weakPassword ? <div id="alert">Password is too weak!</div> : null}
-
-                    <label>Password:</label>
-                    <input type="password"
-                           ref="password"
+                    <input placeholder="password"
+                           type="password"
                            id={this.state.valid ? "valid" : "invalid"}
                            onChange={ this.handleChange.bind(this, "passwordCheck") }
-                           onBlur={ this.checkPasswordMatch.bind(this) }
-                           placeholder="password"/>
+                           onBlur={ this.checkPasswordMatch.bind(this) } />
 
-                    {this.state.valid ? null : <div id="alert">Passwords do not match!</div>}
+                    <input placeholder="email"
+                           type="text"
+                           onChange={ this.handleChange.bind(this, "email") }/>
 
-                    <label>Email:</label>
-                    <input type="text"
-                           ref="email"
-                           onChange={ this.handleChange.bind(this, "email") }
-                           placeholder="email"/>
-
-                    {this.state.registerSuccess ? <label id="success">Registration was successful!</label> : null}
-
-                    <button onClick={ this.register.bind(this) }>{this.state.buttonName}</button>
+                    <button onClick={this.register.bind(this)}
+                            className="btn btn-default full-width">
+                        <ImageLoader src={require("../../public/img/login.png")}/>
+                    </button>
                 </div>
             </div>
+        </div>
         );
     }
 }

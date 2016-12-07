@@ -4,7 +4,7 @@ body {
 
 #background-image-login{
     padding-top: -50px !important;
-    background: url("../images/title-pic1.jpg");
+    background: url("../img/title-pic1.jpg");
     background-position:center center;
     position:fixed;
     width:100%;
@@ -17,7 +17,7 @@ body {
     height: 50px;
     position: relative;
 }
-
+/*
 #loginButtons {
     float: right;
     width: 220px;
@@ -40,105 +40,66 @@ body {
     border-radius: 5px;
     padding: 5px 10px;
     outline: none;
+}*/
+
+.loginForm {
+    height: 283px;
 }
 
-#loginButtons button:hover,
-.form button:not(#exitBtn):hover {
-    background: linear-gradient(#0B445C 5%, #88ABBA 100%);
-    color: #FFFFFF;
+.regForm {
+    height: 410px;
 }
 
-/*  ---- LOGIN AND REGISTRATION DIV ----  */
-.formContainer {
-    background-color: rgba(0, 0, 0, 0.4);
-    margin: auto;
-    width: 350px;
-}
-
-.form {
-    width: 250px;
-    margin: auto;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    position: relative;
-}
-
-/*  ---- LABEL AND INPUT FIELD FORMAT ----  */
-.form input {
-    width: 90%;
-    height: 20px;
-    padding: 5px;
-    margin-bottom: 25px;
-    margin-top: 5px;
-    margin-left: 5px;
-    border: 2px solid #ccc;
-    color: #4f4f4f;
-    font-size: 12px;
-    border-radius: 5px;
-}
-
-.form label {
-    color: white;
-    font-weight: bold;
-    margin-left: 5px;
-    float: left;
-}
-
-/*  ---- INVALID DATA IN INPUT FIELD ----  */
-.form #invalid {
-    border: 4px solid red;
-}
-
-/*  ---- SUCCESSFUL AND UNSUCCESSFUL ALERTS ----  */
-
-.form #success {
-    color: green;
-    font-weight: bold;
-    font-size: 16px;
+.jumbotron {
     text-align: center;
-    margin-top: -5px;
-    margin-bottom: 20px;
+    width: 30rem;
+    border-radius: 0.5rem;
+    top: 25%;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: 4rem auto;
+    background-color: #fff;
+    padding: 2rem;
 }
 
-.form #alert {
-    color: red;
-    font-weight: bold;
-    font-size: 14px;
-    text-align: center;
-    margin-top: -5px;
-    margin-bottom: 20px;
-}
-
-/*  ----- BUTTONS IN LOGIN AND REGISTRATION FORM -----  */
-.form button:not(#exitBtn) {
-    font-size: 16px;
-    background: linear-gradient(#95AFBA 5%, #FFFFFF 100%);
-    border: 1px solid #000000;
-    color: #4E4D4B;
-    font-weight: bold;
-    cursor: pointer;
-    width: 95%;
-    margin-left: 6px;
-    border-radius: 5px;
-    padding: 10px 0;
-    outline: none;
-}
-
-.form #exitBtnContainer {
-    float: right;
+.box input {
     width: 100%;
-    height: 5px;
+    margin-bottom: 1.4rem;
+    padding: 1rem;
+    background-color: #ecf2f4;
+    border-radius: 0.2rem;
+    border: none;
+}
+h2 .login {
+    margin-bottom: 3rem;
+    font-weight: bold;
+    color: #ababab;
+}
+.btn {
+    border-radius: 0.2rem;
+}
+.btn .glyphicon {
+    font-size: 3rem;
+    color: #fff;
+}
+.full-width {
+    background-color: #8eb5e2;
+    width: 100%;
+    -webkit-border-top-right-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
+    -moz-border-radius-topright: 0;
+    -moz-border-radius-bottomright: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
-.form #exitBtn {
-    float: right;
-    width: 5px;
-    height: 5px;
-    color: transparent;
-    margin: -10px -20px 0px 0px;
+.box {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 3rem;
+    margin-left: 3rem;
+    margin-right: 3rem;
 }
 
-.form #exitBtn:hover {
-    background: linear-gradient(#0B445C 5%, #88ABBA 100%);
-    color: transparent;
-}
