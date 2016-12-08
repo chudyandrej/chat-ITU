@@ -5,7 +5,7 @@ import LoginForm from '../components/LoginForm.jsx';
 import RegistrationForm from '../components/RegistrationForm.jsx';
 
 import io from 'socket.io-client';
-var socket = io();
+let socket = io();
 
 
 export default class LoginPage extends React.Component {
@@ -24,7 +24,7 @@ export default class LoginPage extends React.Component {
     }
 
     componentWillMount() {
-        var user = {
+        let user = {
             loggedIn: false,
             userName: "",
             token: null,

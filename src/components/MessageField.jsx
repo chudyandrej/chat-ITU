@@ -1,10 +1,12 @@
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes} from 'react';
 import {Input} from 'react-bootstrap';
 import moment from 'moment';
 import io from 'socket.io-client';
-var socket = io();
 
-export default class MessageField extends Component {
+let socket = io();
+
+
+export default class MessageField extends React.Component {
     constructor(props, context) {
         super(props, context);
 
@@ -12,21 +14,22 @@ export default class MessageField extends Component {
             text: '',
             typing: false
         };
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
     }
 
     handleSubmit(event) {
         const text = event.target.value.trim();
-        if (event.which === 13) {
+        if (event.which === 13) {   //Enter
             event.preventDefault();
-            var message = {
-                username: null,
+            let message = {
+                username: null, //TODO
                 channel: null,
                 text: text,
                 time: moment.utc().format('LLL')
             };
-            socket.emit('new message', message);
+            //socket.emit('new message', message);
+            console.log("message:");
+            console.log(this.state.text);
+            console.log(message);
             this.setState({ text: '', typing: false });
         }
     }
@@ -50,8 +53,8 @@ export default class MessageField extends Component {
                         fontSize: '2em'
                     }}
                     value={this.state.text}
-                    onChange={this.handleChange}
-                    onKeyDown={this.handleSubmit}
+                    onChange={this.handleChange.bind(this)}
+                    onKeyDown={this.handleSubmit.bind(this)}
                     type="text"
                     name="message"
                     ref="messageField"
@@ -63,8 +66,10 @@ export default class MessageField extends Component {
     }
 }
 
+/* Commented out for now
 MessageField.propTypes = {
     channel: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
     socket: PropTypes.object.isRequired
 };
+*/

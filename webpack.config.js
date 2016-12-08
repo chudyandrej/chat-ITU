@@ -19,7 +19,7 @@ let config = {
                 exclude: /node_modules/
             },
             {
-                test: /\.png$|\.gif$/,
+                test: /\.png$|\.gif$|\.jpeg$|\.jpg$/,
                 loader: "url-loader?mimetype=image/png"
             },
         ]

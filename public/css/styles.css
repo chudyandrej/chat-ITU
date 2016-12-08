@@ -1,0 +1,77 @@
+html, body {margin: 0; height: 100%; overflow: hidden}
+
+
+img.img-circle {
+  display:block;
+  position:absolute;
+  top:70px;
+  left:15px;
+  text-align:center;
+}
+
+nav.navbar.navbar-inverse.show {
+  position:absolute;
+  top:0;
+  left:0;
+  width:80px;
+  height:100%;
+}
+
+i.glyphicon.glyphicon-cog {
+  position:relative;
+  top:150px;
+  left:50px;
+  width:50px;
+  height:50px;
+}
+a.logo{
+    position: absolute;
+    left: 0px;
+    top : 0
+}
+.container-fluid{
+    margin:   0px;
+}
+
+#sidebar-wrapper{
+    position: fixed;
+    background-color: #e5e6e8;
+    right: 0px;
+    width: 220px;
+
+    display: block;
+    border: 20px;
+}
+
+
+    #sidebar-wrapper  .item-image,
+    #sidebar-wrapper .item-name,
+    #sidebar-wrapper .item-status {
+        display: inline-block;
+        vertical-align: top;
+        height: 30px;
+        line-height: 30px;
+    }
+    #sidebar-wrapper .item-image img {
+        width: 35px;
+        height: 35px;
+        margin-right: 10px;
+    }
+    #sidebar-wrapper .item-status {
+        text-align: center;
+
+    }
+        #sidebar-wrapper .item-status span {
+            position: absolute;
+            right: 5px;
+            top : 20px;
+
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: green;
+            display: inline-block;
+            margin-left: 5px;
+
+
+        }
