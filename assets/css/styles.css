@@ -1,5 +1,5 @@
 
-
+@import url(http://fonts.googleapis.com/css?family=Poiret+One|Varela+Round);
 .col-md-2, .col-md-10{
     padding:0;
 }
@@ -321,15 +321,27 @@ a.logo{
 
 
 
+
+
+
+
 #sidebar-wrapper{
     position: fixed;
-    background-color: #e5e6e8;
-    right: 0px;
+    right: -160px;
+    top: 125px;
+
+    -webkit-transition: all 0.15s ease-out 0;
+    -moz-transition: all 0.15s ease-out 0;
+    transition: all 0.15s ease-out 0;
+
+
     width: 220px;
     z-index:10;
 
     display: block;
     border: 20px;
+    background-color: #e5e6e8;
+
 }
 
 
@@ -365,3 +377,9 @@ a.logo{
 
 
         }
+
+
+
+#sidebar-wrapper:hover  {
+    right: 0px;
+}
