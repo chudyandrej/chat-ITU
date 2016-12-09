@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="header navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                </div>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav navbar-lef">
+                        <li  role="presentation">
+                            <a class="logo" href="#">
+                                <img  alt="Logo lifeChat" src="assets/img/livechat.png">
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active" role="presentation">
+                            <a href="#"> <i class="glyphicon glyphicon-user"></i> My account</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="side">
+                <img id="profilPhoto" class="img-circle"   alt="Logo lifeChat" src="assets/img/images.jpeg">
+                <img id="settings"   alt="Settings" src="assets/img/setting.png">
+                <img id="contacts"   alt="Add" src="assets/img/contacts.png">
+                <img id="lock-unlock"   alt="Add" src="assets/img/lock.png">
+                <img id="add"   alt="Add" src="assets/img/add.png">
+                <img id="pen"   alt="Add" src="assets/img/pen.png">
+
+            </div>
+            <div class="rightSide">
+                <div id="sidebar-wrapper" class="list-group ">
+                    <button type="button" class="btn btn-default" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="list-group-item sidebar-brand">
+                        <div class="item-image">
+                            <img src="assets/img/person-flat.png" />
+                        </div>
+                        <div class="item-name">
+                            <span>Andrej Chudy</span>
+                        </div>
+                        <div class="item-status">
+                            <span></span>
+                        </div>
+                    </button>
+
+                    <button type="button" class="list-group-item sidebar-brand">
+                        <div class="item-image">
+                            <img src="assets/img/person-flat.png" />
+                        </div>
+                        <div class="item-name">
+                            <span>Andrej Chudy</span>
+                        </div>
+                        <div class="item-status">
+                            <span></span>
+                        </div>
+                    </button>
+                    <button type="button" class="list-group-item sidebar-brand">
+                        <div class="item-image">
+                            <img src="assets/img/person-flat.png" />
+                        </div>
+                        <div class="item-name">
+                            <span>Andrej Chudy</span>
+                        </div>
+                        <div class="item-status">
+                            <span></span>
+                        </div>
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="body container-fluid">
+                <div class="row" id="mainContentWrap">
+                    <div class="container-fluid">
+
+
+
+                        <div class=" chat-window " style="margin-left:10px;">
+                            <div class="panel panel-default">
+                                <div class="panel-heading top-bar">
+                                    <div class="col-md-8 col-xs-8">
+                                        <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat - Miguel</h3>
+                                    </div>
+                                    <div class="col-md-4 col-xs-4" style="text-align: right;">
+                                        <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+                                        <a href="#"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+                                    </div>
+                                </div>
+                                <div class="panel-body msg_container_base">
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-md-10 col-xs-10">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                    tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-md-10 col-xs-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-md-10 col-xs-10 ">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="input-group">
+                                        <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary btn-sm" id="btn-chat">Send</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class=" chat-window " style="margin-left:10px;">
+                            <div class="panel panel-default">
+                                <div class="panel-heading top-bar">
+                                    <div class="col-md-8 col-xs-8">
+                                        <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat - Miguel</h3>
+                                    </div>
+                                    <div class="col-md-4 col-xs-4" style="text-align: right;">
+                                        <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+                                        <a href="#"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+                                    </div>
+                                </div>
+                                <div class="panel-body msg_container_base">
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-md-10 col-xs-10">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                    tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-md-10 col-xs-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-md-10 col-xs-10 ">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="input-group">
+                                        <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary btn-sm" id="btn-chat">Send</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class=" chat-window " style="margin-left:10px;">
+                            <div class="panel panel-default">
+                                <div class="panel-heading top-bar">
+                                    <div class="col-md-8 col-xs-8">
+                                        <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat - Miguel</h3>
+                                    </div>
+                                    <div class="col-md-4 col-xs-4" style="text-align: right;">
+                                        <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+                                        <a href="#"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+                                    </div>
+                                </div>
+                                <div class="panel-body msg_container_base">
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-md-10 col-xs-10">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                    tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-md-10 col-xs-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-md-10 col-xs-10 ">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="input-group">
+                                        <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary btn-sm" id="btn-chat">Send</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        <div class=" chat-window " style="margin-left:10px;">
+                            <div class="panel panel-default">
+                                <div class="panel-heading top-bar">
+                                    <div class="col-md-8 col-xs-8">
+                                        <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat - Miguel</h3>
+                                    </div>
+                                    <div class="col-md-4 col-xs-4" style="text-align: right;">
+                                        <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+                                        <a href="#"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+                                    </div>
+                                </div>
+                                <div class="panel-body msg_container_base">
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-md-10 col-xs-10">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                    tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-md-10 col-xs-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-md-10 col-xs-10 ">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="input-group">
+                                        <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary btn-sm" id="btn-chat">Send</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        <div class=" chat-window " style="margin-left:10px;">
+                            <div class="panel panel-default">
+                                <div class="panel-heading top-bar">
+                                    <div class="col-md-8 col-xs-8">
+                                        <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat - Miguel</h3>
+                                    </div>
+                                    <div class="col-md-4 col-xs-4" style="text-align: right;">
+                                        <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+                                        <a href="#"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+                                    </div>
+                                </div>
+                                <div class="panel-body msg_container_base">
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-md-10 col-xs-10">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                    tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-md-10 col-xs-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_receive">
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                        <div class="col-xs-10 col-md-10">
+                                            <div class="messages msg_receive">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row msg_container base_sent">
+                                        <div class="col-md-10 col-xs-10 ">
+                                            <div class="messages msg_sent">
+                                                <p>that mongodb thing looks good, huh?
+                                                tiny master db, and huge document store</p>
+                                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-xs-2 avatar">
+                                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="input-group">
+                                        <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary btn-sm" id="btn-chat">Send</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+      <div class="foot">
+
+      </div>
+
+    </div> <!-- end container -->
+
+
+
+
+
+
+
+<!--
+
+
+
+    <nav class="navbar navbar-inverse show">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand navbar-link" href="#"> </a>
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-2"></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navcol-2">
+                <ul class="nav navbar-nav"></ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+
+    <img class="img-circle" src="assets/img/images.jpeg" width="50" height="50"><i class="glyphicon glyphicon-cog hidden"></i>
+
+    <div>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                </div>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav navbar-lef">
+                        <li  role="presentation">
+                            <a class="logo" href="#">
+                                <img  alt="W3Schools" src="assets/img/livechat.png" width="60" height="30">
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active" role="presentation">
+                            <a href="#"> <i class="glyphicon glyphicon-user"></i> My account</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+
+    <div id="sidebar-wrapper" class="list-group ">
+        <button type="button" class="btn btn-default" aria-label="Left Align">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="list-group-item sidebar-brand">
+            <div class="item-image">
+                <img src="assets/img/person-flat.png" />
+            </div>
+            <div class="item-name">
+                <span>Andrej Chudy</span>
+            </div>
+            <div class="item-status">
+                <span></span>
+            </div>
+        </button>
+
+        <button type="button" class="list-group-item sidebar-brand">
+            <div class="item-image">
+                <img src="assets/img/person-flat.png" />
+            </div>
+            <div class="item-name">
+                <span>Andrej Chudy</span>
+            </div>
+            <div class="item-status">
+                <span></span>
+            </div>
+        </button>
+        <button type="button" class="list-group-item sidebar-brand">
+            <div class="item-image">
+                <img src="assets/img/person-flat.png" />
+            </div>
+            <div class="item-name">
+                <span>Andrej Chudy</span>
+            </div>
+            <div class="item-status">
+                <span></span>
+            </div>
+        </button>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class=" chat-window " style="margin-left:10px;">
+                <div class="">
+                	<div class="panel panel-default">
+                        <div class="panel-heading top-bar">
+                            <div class="col-md-8 col-xs-8">
+                                <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat - Miguel</h3>
+                            </div>
+                            <div class="col-md-4 col-xs-4" style="text-align: right;">
+                                <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+                                <a href="#"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+                            </div>
+                        </div>
+                        <div class="panel-body msg_container_base">
+
+
+                            <div class="row msg_container base_sent">
+                                <div class="col-md-10 col-xs-10 ">
+                                    <div class="messages msg_sent">
+                                        <p>that mongodb thing looks good, huh?
+                                        tiny master db, and huge document store</p>
+                                        <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-xs-2 avatar">
+                                    <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="input-group">
+                                <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                <span class="input-group-btn">
+                                <button class="btn btn-primary btn-sm" id="btn-chat">Send</button>
+                                </span>
+                            </div>
+                        </div>
+            		</div>
+                </div>
+            </div>
+
+        </div> -->
+
+
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
