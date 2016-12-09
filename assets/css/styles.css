@@ -1,11 +1,8 @@
 
-@import url(http://fonts.googleapis.com/css?family=Poiret+One|Varela+Round);
 .col-md-2, .col-md-10{
     padding:0;
 }
-.panel{
 
-}
 .chat-window{
     max-width:300px; /* or whatever width you want. */
     display: inline-block;
@@ -135,55 +132,73 @@
   text-align:center;
   width: 50px;
   height: 50px;
+  cursor: pointer;
 }
+
 
 #settings{
     position:absolute;
     top:300px;
     left:11px;
-
     width: 45px;
     height: 45px;
+    cursor: pointer;
+}
+#settings:hover{
+    opacity: 0.5;
+    filter: alpha(opacity=100);
 }
 
 #lock-unlock{
     position:absolute;
     top:350px;
     left:11px;
-
     width: 45px;
     height: 45px;
-
-
+    cursor: pointer;
+}
+#lock-unlock:hover{
+    opacity: 0.5;
+    filter: alpha(opacity=100);
 }
 
 #contacts{
     position:absolute;
     top:400px;
     left:15px;
-
     width: 40px;
     height: 40px;
-
+    cursor: pointer;
+}
+#contacts:hover{
+    opacity: 0.5;
+    filter: alpha(opacity=100);
 }
 
 #add {
     position:absolute;
     top:450px;
     left:15px;
-
     width: 40px;
     height: 40px;
+    cursor: pointer;
+}
+#add:hover{
+    opacity: 0.5;
+    filter: alpha(opacity=100);
 }
 #pen {
     position:absolute;
     top:800px;
     left:15px;
-
     width: 40px;
     height: 40px;
+    cursor: pointer;
 }
-
+#pen:hover{
+    opacity: 0.5;
+    filter: alpha(opacity=100);
+}
 
 
 nav.navbar.navbar-inverse.show {
@@ -220,12 +235,6 @@ a.logo{
 }
 
 
-
-
-
-
-/****** TOTO JE TO HLAVNI Andreji******/
-/* FLEX LAYOUT */
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -249,7 +258,6 @@ a.logo{
 }
 
 
-
 /* Vnitrni cast */
 
 .main {
@@ -268,8 +276,6 @@ a.logo{
 .body {
   flex: 1;
 }
-/***** KONEC TOHO HLAVNIHO**** */
-
 
 
 /* toto si už dej jak budeš chtít */
@@ -277,8 +283,8 @@ a.logo{
    display: inline-block;
    font-weight: 100;
    font-size: 30px;
-	line-height: 50px;
-	margin: 0px;
+    line-height: 50px;
+    margin: 0px;
    margin-left: 20px;
 }
 .header a, .side-menu a:active {
@@ -314,15 +320,8 @@ a.logo{
 
 
 .wrap {
-	border: 1px solid black;
+    border: 1px solid black;
 }
-
-
-
-
-
-
-
 
 
 #sidebar-wrapper{
