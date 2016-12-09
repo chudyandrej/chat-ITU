@@ -90,7 +90,7 @@ class LoginForm extends Form {
         return (
             <div className="jumbotron loginForm">
                 {this.state.error ? errorMsg : null}
-                <div className="container">
+                <div>
                     <h2 className="login">Login</h2>
                     <div className="box">
                         <input placeholder="email"

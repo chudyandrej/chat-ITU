@@ -1,41 +1,40 @@
 import React from 'react';
-import ImageLoader from 'react-imageloader';
 
 
 export default class Header extends React.Component {
 
-    static contextTypes = {
-        user: React.PropTypes.object
-    };
-
     render() {
         return (
-            <nav className="navbar navbar-default">
+            <div className="header navbar navbar-default">
                 <div className="container-fluid">
                     <div className="navbar-header">
-                        <button className="navbar-toggle collapsed" style={{dataToggle:"collapse", dataTarget:"#navcol-1"}}>
+                        <button className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1">
                             <span className="sr-only">Toggle navigation</span>
-                        </button>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar">
+
+                    </span></button>
                     </div>
                     <div className="collapse navbar-collapse" id="navcol-1">
                         <ul className="nav navbar-nav navbar-left">
-                            <li  role="presentation">
+                            <li role="presentation">
                                 <a className="logo" href="#">
-                                    <ImageLoader src={require("../../public/img/livechat.png")}/>
+                                    <img alt="Logo lifeChat" src={require("../../public/img/livechat.png")}/>
                                 </a>
                             </li>
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
                             <li className="active" role="presentation">
-                                <a href="#"><i className="glyphicon glyphicon-user"></i> My account</a>
+                                <a href="#"><i className="glyphicon glyphicon-user"/> My account</a>
                             </li>
                             <li role="presentation">
-                                <a href="#"><i className="glyphicon glyphicon-log-out"></i> Logout</a>
+                                <a href="#"><i className="glyphicon glyphicon-log-out"/> Logout</a>
                             </li>
                         </ul>
                     </div>
                 </div>
-            </nav>
+            </div>
         );
     }
 }

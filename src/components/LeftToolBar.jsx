@@ -1,26 +1,34 @@
 import React from 'react';
 
+
 export default class LeftToolBar extends React.Component {
 
     constructor(props) {
         super(props);
     }
 
-
     render() {
         return (
-            <div>
-                <nav className="navbar navbar-inverse show">
-                    <div className="container-fluid">
-                        <div className="navbar-header">
-                            <a className="navbar-brand navbar-link" href="#"> </a>
-                            <button className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-2"></button>
-                        </div>
-                        <div className="collapse navbar-collapse" id="navcol-2">
-                            <ul className="nav navbar-nav"></ul>
-                        </div>
-                    </div>
-                </nav>
+            <div className="side">
+                <div>
+                    <img id="profilPhoto" className="img-circle" alt="Logo lifeChat"
+                         src={require("../../public/img/images.jpeg")}/>
+                </div>
+                <div>
+                    <img id="settings" alt="Settings" src={require("../../public/img/settings.png")}/>
+                </div>
+                <div>
+                    <img id="contacts" alt="Add" src={require("../../public/img/contacts.png")}/>
+                </div>
+                <div>
+                    <img id="lock-unlock" alt="Add" src={require("../../public/img/lock.png")}/>
+                </div>
+                <div>
+                    <img id="add" alt="Add" src={require("../../public/img/add.png")}/>
+                </div>
+                <div>
+                    <img id="pen" alt="Add" src={require("../../public/img/pen.png")}/>
+                </div>
             </div>
         );
     }

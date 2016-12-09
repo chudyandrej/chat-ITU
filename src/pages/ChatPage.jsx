@@ -1,7 +1,5 @@
 import React,{PropTypes} from 'react';
-import MessageField from '../components/MessageField.jsx';
-//import ChatItem from '../components/ChatItem.jsx';
-//import {DropdownButton, MenuItem, Button, Navbar, NavDropdown, Nav, NavItem} from 'react-bootstrap';
+import ChatWindow from '../components/ChatWindow.jsx';
 import LeftToolBar from '../components/LeftToolBar.jsx';
 import RightToolBar from '../components/RightToolBar.jsx';
 import Header from '../components/Header.jsx';
@@ -44,30 +42,21 @@ export default class ChatPage extends React.Component {
         );
         */
 
-        let chat = (
-            <div>
-                <ul style={messageStyle} ref="messagesList">
-
-                </ul>
-                <MessageField />
-            </div>
-        );
 
         return (
-            <div>
-                <div className="left">
-                    <LeftToolBar />
-                </div>
-
+            <div className="wrapper">
                 <Header/>
-
-                <div className="center">
-                    <h1>CHAT PAGE</h1>
-                    {this.state.test ? chat : null}
-                </div>
-
-                <div className="right">
+                <div className="main">
+                    <LeftToolBar />
                     <RightToolBar chat={this.clickHandler.bind(this)}/>
+
+                    <div className="body container-fluid">
+                        <div className="row" id="mainContentWrap">
+                            <div className="container-fluid">
+                                <ChatWindow />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         )

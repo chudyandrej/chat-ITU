@@ -110,7 +110,7 @@ h2 .login {
 }
 
 /* ------------------chat page------------------- */
-
+/*
 .chatPage {
     position: relative;
     width: 100%;
@@ -121,7 +121,7 @@ h2 .login {
 
 .left {
     width: 100px;
-    float:left; /* add this */
+    float:left;
     border: 1px solid red;
 }
 .center {
@@ -132,7 +132,7 @@ h2 .login {
     width: 300px;
     border: 1px solid red;
     float: right;
-    overflow: hidden; /* if you don't want #second to wrap below #first */
+    overflow: hidden;
 }
 
-
+*/
