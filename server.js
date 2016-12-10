@@ -12,7 +12,24 @@ var PORT = process.env.PORT || 3000;
 var onlineUser = {};
 
 
+
 app.use(express.static(__dirname + '/public'));
+
+
+
+function getArrayOnlienUsers(nowSocket){
+    let response = [];
+    for(let userId of Object.keys(onlineUser)){
+        let user = onlineUser[userId];
+        response.push({
+            id : userId,
+            name: onlineUser[userId].name
+        });
+        
+    }
+    return response;
+}
+
 
 
 io.on('connection', function(socket) {
@@ -21,13 +38,15 @@ io.on('connection', function(socket) {
         console.log("Registration")
         db.users.create(message).then((userInstance) =>{
             onlineUser[userInstance.get('id')] = {
-                socektId : socket,
+                name: userInstance.get('name'),
+                socket,
                 rooms : []
             }
             
             socket.emit('registerAllowed', {
                  result: true
             });
+
         }, (error) => {
             console.log(error);
             socket.emit('registerAllowed', {
@@ -44,13 +63,17 @@ io.on('connection', function(socket) {
         console.log(message);
         db.users.authenticate(message).then((userInstance) => {
             onlineUser[userInstance.get('id')] = {
+                name: userInstance.get('name'),
                 socket,
                 rooms : []
             }
 
             socket.emit('loginAllowed', {
-                result: true
+                result: true,
+                name: userInstance.get('name'), 
+                id:userInstance.get('id')
             });
+            io.emit('getUsers' , getArrayOnlienUsers(socket));
 
         }, (error) => {
              socket.emit('loginAllowed', {
@@ -62,8 +85,8 @@ io.on('connection', function(socket) {
     });
 
     socket.on('getUsers', function(message) {
-        console.log("GetUsers");
-        console.log(message);
+       
+        socket.emit('getUsers' , getArrayOnlienUsers(socket));
 
     });
 
@@ -75,12 +98,12 @@ io.on('connection', function(socket) {
                 break;
             }
        }
+        io.emit('getUsers' , getArrayOnlienUsers(socket));
     });
-    console.log("New socket");
+   
 
 
 });
-
 
 setInterval(function() {
 

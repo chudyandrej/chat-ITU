@@ -4,6 +4,8 @@ var cryptojs = require('crypto-js');
 var jwt = require('jsonwebtoken');
 
 
+
+
 module.exports = function(sequelize, DataTypes) {
     var users = sequelize.define('user', {
         name: {
@@ -119,5 +121,6 @@ module.exports = function(sequelize, DataTypes) {
             }
         }
     });
+
     return users;
 };

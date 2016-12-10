@@ -13,7 +13,10 @@ export default class OnlineUser extends React.Component {
     }
 
     openNewChatWindow() {
-        this.props.chat(this.props.id);
+        this.props.chat({
+            id: this.state.id,
+            username: this.state.username
+        });
     }
 
     render () {

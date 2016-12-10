@@ -19,13 +19,15 @@ export default class ChatPage extends React.Component {
     }
 
     openNewChatWindow(data) {
-        this.context.user.socket.emit('getUsers', {chat: "chat"});
         console.log("opening");
         console.log(data);
         let id = this.state.chatWindows.length;
 
         let temp = this.state.chatWindows.slice();
-        temp.push(<ChatWindow key={id} id={id} close={this.closeChatWindow.bind(this)}/>);
+        temp.push(<ChatWindow key={id}
+                              id={id}
+                              username={data.username}
+                              close={this.closeChatWindow.bind(this)}/>);
         this.setState({chatWindows: temp});
     }
 

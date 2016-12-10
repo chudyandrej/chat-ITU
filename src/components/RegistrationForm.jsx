@@ -58,8 +58,6 @@ class RegistrationForm extends Form {
         }
     }
 
-    //TODO check email validity ?
-
     componentWillMount() {
         //create listener
         this.context.user.socket.on('registerAllowed', this._registerAllowed);

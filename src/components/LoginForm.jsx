@@ -31,7 +31,6 @@ export default class LoginForm extends Form {
     }
 
     handleOnChange(type, evt) {
-        console.log("wtf");
         switch (type) {
             case "name":
                 this.setState({username: evt.target.value});
@@ -43,18 +42,18 @@ export default class LoginForm extends Form {
     }
 
     _loginAllowed(response) {
-        console.log("answer");
-        console.log(response.result);
+
         if (response.result) {     //continue to chat
 
             //fill user structure
             //const {user} = this.context;
-            //var user = {
-            //    loggedIn: true,
-            //    userName: result.name,
-            //    token: result.token,
-            //}
-            //user.changeHandler();
+            console.log(response);
+            let userInfo = {
+                loggedIn: true,
+                userName: response.name,
+                id: response.id
+            };
+            this.context.user.changeHandler(userInfo);
 
             hashHistory.push('/chat');
         }
@@ -71,10 +70,10 @@ export default class LoginForm extends Form {
         e.preventDefault();
         this.setState({pending: true});
         let data = {
-            email: "user@user.com", //this.state.username,
-            password: "00000000" //this.state.password
+            email: this.state.username,
+            password: this.state.password
         };
-        console.log(data);
+
         //send data to backend to authenticate
         this.context.user.socket.emit('login', data);
 

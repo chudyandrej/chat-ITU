@@ -26,8 +26,6 @@ export default class LoginPage extends React.Component {
     componentWillMount() {
         let user = {
             loggedIn: false,
-            userName: "",
-            token: null,
             socket: socket,
         };
        this.context.user.changeHandler(user);

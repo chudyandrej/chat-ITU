@@ -1,8 +1,7 @@
 
-
-import SequelizeFile from 'sequelize-file';
+var SequelizeFile = require('sequelize-file');
  
-export const picture = SequelizeFile({
+module.exports = SequelizeFile({
    attribute: 'picture',
    mimetype: /^image/,
    crop: true,

@@ -13,6 +13,7 @@ export default class ChatWindow extends React.Component {
             text: '',
             typing: false, //??
             id: this.props.id,
+            username: this.props.username,
             messages: []
         };
     }
@@ -74,7 +75,7 @@ export default class ChatWindow extends React.Component {
                         <div className="col-md-8 col-xs-8">
                             <h3 className="panel-title">
                                 <span className="glyphicon glyphicon-comment"></span>
-                                Chat - Miguel
+                                Chat - {this.state.username}
                             </h3>
                         </div>
                         <div className="col-md-4 col-xs-4" style={{textAlign: "right"}}>

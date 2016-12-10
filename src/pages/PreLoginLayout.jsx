@@ -17,6 +17,7 @@ export default class PreLoginLayout extends React.Component {
             user: {
                 loggedIn: false,
                 userName: "Default",
+                id: "",
                 token: null,
                 socket: null,
                 changeHandler: this.handlerChange,
@@ -36,9 +37,9 @@ export default class PreLoginLayout extends React.Component {
         this.setState({
             user: {
                 loggedIn: user.loggedIn,
-                userName: user.userName,
-                token: user.token,
-                socket: user.socket,
+                userName: user.userName || this.state.user.userName,
+                id: user.id || this.state.user.id,
+                socket: user.socket || this.state.user.socket,
                 changeHandler: this.handlerChange,
                 logout: this.logout
             }

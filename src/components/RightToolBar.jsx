@@ -18,28 +18,37 @@ export default class RightToolBar extends React.Component {
 
     componentWillMount() {
         //create listener
-        this.context.user.socket.on('getUsers', this._getUsers);
+        this.context.user.socket.on('getUsers', (response)=>{
+            let temp = [];
+            console.log(response);
+
+            for(let user of response) {
+                console.log(user.name);
+                console.log("why");
+                console.log(user.id);
+                console.log(this.context.user.id);
+
+                if (this.context.user.id == user.id) {
+                    continue;
+                }
+                temp.push(<OnlineUser key={user.id}
+                                      id={user.id}
+                                      username={user.name}
+                                      chat={this.openNewChatWindow.bind(this)}/>);
+            }
+
+            this.setState({users: temp});
+        });
     }
 
     componentDidMount() {
-        console.log(this.context.user.socket);
         this.context.user.socket.emit('getUsers', {});
-        this._getUsers();
-    }
-
-    _getUsers(response) {
-        let temp = [];
-
-        for(let i=0; i < 5; i++) {
-            temp.push(<OnlineUser key={i} id={i} username="Andrej Chudy"/>);
-        }
-
-        this.setState({users: temp});
     }
 
     openNewChatWindow(data) {
         this.props.chat(data);
     }
+
 
     render() {
 
