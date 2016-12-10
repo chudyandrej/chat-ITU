@@ -1,17 +1,12 @@
-var Sequelize = require('sequelize');
-var env = process.env.NODE_ENV || 'development'
-var sequelize;
+var Sequelize = require('sequelize')
+var sequelize = new Sequelize('mysql://chat_iis:chatiishesozam@mysql51.websupport.sk:3309/chat_iis');
+sequelize.authenticate().then(function(err) {
+    console.log('Connection has been established successfully.');
+}, function(err) {
+    console.log('Unable to connect to the database:', err);
+});
 
-if (env === 'production') {
-    sequelize = new Sequelize(process.env.DATABASE_URL, {
-        dialect: 'postgres'
-    });
-} else {
-    sequelize = new Sequelize(undefined, undefined, undefined, {
-        'dialect': 'sqlite',
-        'storage': __dirname + '/data/chat-database.sqlite'
-    });
-}
+
 
 var db = {};
 

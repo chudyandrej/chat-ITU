@@ -16,17 +16,24 @@ app.use(express.static(__dirname + '/public'));
 
 
 io.on('connection', function(socket) {
-    console.log("New socket");
+   
     socket.on('join', function(message) {
-        db.users.create(message).then((instanceUser) =>{
+        console.log("Registration")
+        db.users.create(message).then((userInstance) =>{
             onlineUser[userInstance.get('id')] = {
                 socektId : socket,
                 rooms : []
             }
-            mapingSocToUsers[socket.id] = userInstance.get('id');
-            socket.emit('loginAllowed', true);
+            
+            socket.emit('registerAllowed', {
+                 result: true
+            });
         }, (error) => {
-            socket.emit('loginAllowed', false);
+            console.log(error);
+            socket.emit('registerAllowed', {
+                result: false,
+                message: error
+            });
         });
 
 
@@ -37,19 +44,27 @@ io.on('connection', function(socket) {
         console.log(message);
         db.users.authenticate(message).then((userInstance) => {
             onlineUser[userInstance.get('id')] = {
-                socektId : socket,
+                socket,
                 rooms : []
             }
-            mapingSocToUsers[socket.id] = userInstance.get('id');
 
-            socket.emit('loginAllowed', true);
+            socket.emit('loginAllowed', {
+                result: true
+            });
 
-            //TODO emit login successful
         }, (error) => {
-             socket.emit('loginAllowed', false);
-
-            //TODO emit login unsuccessful
+             socket.emit('loginAllowed', {
+                result: false,
+                message: error
+            });
+            
         });
+    });
+
+    socket.on('getUsers', function(message) {
+        console.log("GetUsers");
+        console.log(message);
+
     });
 
     socket.on('disconnect', function() {
@@ -61,9 +76,16 @@ io.on('connection', function(socket) {
             }
        }
     });
+    console.log("New socket");
 
 
 });
+
+
+setInterval(function() {
+
+    console.log(onlineUser);
+}, 1000 * 2);
 
 
 db.sequelize.sync({

@@ -1,4 +1,4 @@
-import React,{PropTypes} from 'react';
+import React from 'react';
 import ChatWindow from '../components/ChatWindow.jsx';
 import LeftToolBar from '../components/LeftToolBar.jsx';
 import RightToolBar from '../components/RightToolBar.jsx';
@@ -6,15 +6,20 @@ import Header from '../components/Header.jsx';
 
 
 export default class ChatPage extends React.Component {
-    constructor(props) {
-        super(props);
+    static contextTypes = {
+        user: React.PropTypes.object
+    };
+
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {
             chatWindows: []
-        }
+        };
     }
 
     openNewChatWindow(data) {
+        this.context.user.socket.emit('getUsers', {chat: "chat"});
         console.log("opening");
         console.log(data);
         let id = this.state.chatWindows.length;

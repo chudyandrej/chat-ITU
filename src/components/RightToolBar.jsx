@@ -1,59 +1,52 @@
 import React from 'react';
+import OnlineUser from './OnlineUser.jsx';
 
 
 export default class RightToolBar extends React.Component {
 
-    constructor(props) {
-        super(props);
+    static contextTypes = {
+        user: React.PropTypes.object
+    };
+
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+            users: []
+        }
+    }
+
+    componentWillMount() {
+        //create listener
+        this.context.user.socket.on('getUsers', this._getUsers);
+    }
+
+    componentDidMount() {
+        console.log(this.context.user.socket);
+        this.context.user.socket.emit('getUsers', {});
+        this._getUsers();
+    }
+
+    _getUsers(response) {
+        let temp = [];
+
+        for(let i=0; i < 5; i++) {
+            temp.push(<OnlineUser key={i} id={i} username="Andrej Chudy"/>);
+        }
+
+        this.setState({users: temp});
     }
 
     openNewChatWindow(data) {
-        console.log("1");
         this.props.chat(data);
     }
 
     render() {
-        console.log(this.props.chat);
+
         return (
         <div className="rightSide">
             <div id="sidebar-wrapper" className="list-group">
-                <button type="button"
-                        onClick={this.openNewChatWindow.bind(this, 1)}
-                        className="list-group-item sidebar-brand">
-                    <div className="item-image">
-                        <img src={require("../../public/img/person-flat.png")}/>
-                    </div>
-                    <div className="item-name">
-                        <span>Andrej Chudy</span>
-                    </div>
-                    <div className="item-status">
-                        <span></span>
-                    </div>
-                </button>
-
-                <button type="button" className="list-group-item sidebar-brand">
-                    <div className="item-image">
-                        <img src={require("../../public/img/person-flat.png")}/>
-                    </div>
-                    <div className="item-name">
-                        <span>Andrej Chudy</span>
-                    </div>
-                    <div className="item-status">
-                        <span></span>
-                    </div>
-                </button>
-
-                <button type="button" className="list-group-item sidebar-brand">
-                    <div className="item-image">
-                        <img src={require("../../public/img/person-flat.png")}/>
-                    </div>
-                    <div className="item-name">
-                        <span>Andrej Chudy</span>
-                    </div>
-                    <div className="item-status">
-                        <span></span>
-                    </div>
-                </button>
+                {this.state.users}
             </div>
         </div>
 

@@ -14,10 +14,10 @@ class RegistrationForm extends Form {
         super(props, context);
 
         this.state = {
-            username: null,
-            password: null,
-            passwordCheck: null,
-            email: null,
+            username: "",
+            password: "",
+            passwordCheck: "",
+            email: "",
             valid: true,
             validUsername: true,
             weakPassword: false,
@@ -65,8 +65,9 @@ class RegistrationForm extends Form {
         this.context.user.socket.on('registerAllowed', this._registerAllowed);
     }
 
-    _registerAllowed(result) {
-        if (result.status) {     //continue to login
+    _registerAllowed(response) {
+        console.log(response);
+        if (response.result) {     //continue to login
             this.setState({
                 buttonName: "Login",
                 registerSuccess: true
@@ -82,7 +83,7 @@ class RegistrationForm extends Form {
     register(e) {
         e.preventDefault();
         let data = {
-            username: this.state.username,
+            name: this.state.username,
             password: this.state.password,
             email: this.state.email
         };
@@ -90,13 +91,21 @@ class RegistrationForm extends Form {
         //send data to backend
         //TODO send data only if it is valid!
 
-        if (this.state.buttonName == "Register") {
+        console.log(data);
+        if (this.state.buttonName === "Register") {
             this.context.user.socket.emit('join', data);
         }
         else {   //successful registration
             this.props.registerSuccess()
         }
     }
+
+    _handleKeyPress(e) {
+        if (e.key === 'Enter') {
+            this.register(e);
+        }
+    }
+
 
     render() {
 
@@ -112,21 +121,25 @@ class RegistrationForm extends Form {
                     <input placeholder="username"
                            type="text"
                            value={this.state.username}
-                           onChange={this.handleChange.bind(this, "name")}/>
+                           onKeyPress={this._handleKeyPress.bind(this)}
+                           onChange={this.handleChange.bind(this, "username")}/>
 
                     <input placeholder="password"
                            type="password"
                            value={this.state.password}
+                           onKeyPress={this._handleKeyPress.bind(this)}
                            onChange={this.handleChange.bind(this, "password")}/>
 
                     <input placeholder="password"
                            type="password"
                            id={this.state.valid ? "valid" : "invalid"}
+                           onKeyPress={this._handleKeyPress.bind(this)}
                            onChange={ this.handleChange.bind(this, "passwordCheck") }
                            onBlur={ this.checkPasswordMatch.bind(this) } />
 
                     <input placeholder="email"
                            type="text"
+                           onKeyPress={this._handleKeyPress.bind(this)}
                            onChange={ this.handleChange.bind(this, "email") }/>
 
                     <button onClick={this.register.bind(this)}

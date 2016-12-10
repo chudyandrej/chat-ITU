@@ -18,7 +18,8 @@ export default class LoginForm extends Form {
             username: "",
             password: "",
             pending: false,
-            error: false
+            error: false,
+            errorMsg: null
         };
 
         this._loginAllowed = this._loginAllowed.bind(this);
@@ -29,9 +30,9 @@ export default class LoginForm extends Form {
         this.context.user.socket.on('loginAllowed', this._loginAllowed);
     }
 
-    handleChange(name, evt) {
-        this.console.log("tu");
-        switch (name) {
+    handleOnChange(type, evt) {
+        console.log("wtf");
+        switch (type) {
             case "name":
                 this.setState({username: evt.target.value});
                 break;
@@ -41,11 +42,10 @@ export default class LoginForm extends Form {
         }
     }
 
-    _loginAllowed(result) {
+    _loginAllowed(response) {
         console.log("answer");
-        console.log(result);
-        if (result.status) {     //continue to chat
-            token = result.token;
+        console.log(response.result);
+        if (response.result) {     //continue to chat
 
             //fill user structure
             //const {user} = this.context;
@@ -60,7 +60,8 @@ export default class LoginForm extends Form {
         }
         else {          //wrong username or password
             this.setState({
-                //valid: false
+                error: true,
+                errorMsg: response.error
             });
 
         }
@@ -70,14 +71,14 @@ export default class LoginForm extends Form {
         e.preventDefault();
         this.setState({pending: true});
         let data = {
-            email: "nieco",//this.state.username,
-            password: "niecopasswd"//this.state.password
+            email: "user@user.com", //this.state.username,
+            password: "00000000" //this.state.password
         };
         console.log(data);
         //send data to backend to authenticate
         this.context.user.socket.emit('login', data);
 
-       // hashHistory.push('/chat'); //JUST DEBUG
+        //hashHistory.push('/chat');
     }
 
     _handleKeyPress(e) {
@@ -87,7 +88,7 @@ export default class LoginForm extends Form {
     }
 
     render() {
-        let errorMsg = <strong className="alert alert-danger">Wrong username or password!</strong>;
+        let errorMsg = <strong className="alert alert-danger">{this.state.errorMsg}</strong>;
 
         return (
             <div className="jumbotron loginForm">
@@ -99,12 +100,12 @@ export default class LoginForm extends Form {
                                type="text"
                                value={this.state.username}
                                onKeyPress={this._handleKeyPress.bind(this)}
-                               onChange={this.handleChange.bind(this, "name")}/>
+                               onChange={this.handleOnChange.bind(this, "name")}/>
                         <input placeholder="password"
                                type="password"
                                value={this.state.password}
                                onKeyPress={this._handleKeyPress.bind(this)}
-                               onChange={this.handleChange.bind(this, "password")}/>
+                               onChange={this.handleOnChange.bind(this, "password")}/>
                         <button onClick={this.login.bind(this)}
                                 className="btn btn-default full-width">
                             <ImageLoader src={require("../../public/img/login.png")}/>

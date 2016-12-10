@@ -30,7 +30,7 @@ export default class LoginPage extends React.Component {
             token: null,
             socket: socket,
         };
-       this.context.user.changeHandler(user)
+       this.context.user.changeHandler(user);
     }
 
     closeForm() {

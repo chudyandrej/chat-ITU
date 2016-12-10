@@ -4,8 +4,6 @@ import io from 'socket.io-client';
 
 import Message from './Message.jsx';
 
-let socket = io();
-
 
 export default class ChatWindow extends React.Component {
     constructor(props, context) {
