@@ -19,9 +19,9 @@ export default class OnlineUser extends React.Component {
         });
     }
 
-    render () {
+    render() {
 
-        let imgURL = "https://chat-itu.herokuapp.com/"+this.state.id;
+        let imgURL = "https://chat-itu.herokuapp.com/" + this.state.id;
 
         return (
             <button type="button"

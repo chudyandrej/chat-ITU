@@ -25,17 +25,17 @@ export default class ChatWindow extends React.Component {
         //put cursor to input box
         this.refs.input.focus();
 
-        if(this.props.msg !== null) {
+        if (this.props.msg !== null) {
             this.showMessage(this.props.msg, false);
         }
 
-        this.context.user.socket.on('message', (msg)=>{
+        this.context.user.socket.on('message', (msg) => {
             console.log("message received window");
             console.log(this.state.id);
             console.log(msg);
 
             //check if the message is for this window
-            if(this.state.id == msg.id) {
+            if (this.state.id == msg.id) {
                 console.log("found in window");
                 console.log(msg);
                 this.showMessage(msg, false);
@@ -77,7 +77,7 @@ export default class ChatWindow extends React.Component {
 
         let message = {
             to: [this.state.toWhoInfo.id], //TODO add multiple IDs of multiple people
-            from: {id: this.context.user.id, username: this.context.user.userName},
+            from: {id: this.context.user.id, username: this.context.user.username},
             id: this.state.id,
             text: this.state.text,
             time: moment.utc().format('LLL')

@@ -30,6 +30,10 @@ export default class LoginForm extends Form {
         this.context.user.socket.on('loginAllowed', this._loginAllowed);
     }
 
+    componentDidMount() {
+        this.refs.email.focus();
+    }
+
     handleOnChange(type, evt) {
         switch (type) {
             case "name":
@@ -76,8 +80,6 @@ export default class LoginForm extends Form {
 
         //send data to backend to authenticate
         this.context.user.socket.emit('login', data);
-
-        //hashHistory.push('/chat');
     }
 
     _handleKeyPress(e) {
@@ -96,6 +98,7 @@ export default class LoginForm extends Form {
                     <h2 className="login">Login</h2>
                     <div className="box">
                         <input placeholder="email"
+                               ref="email"
                                type="text"
                                value={this.state.username}
                                onKeyPress={this._handleKeyPress.bind(this)}

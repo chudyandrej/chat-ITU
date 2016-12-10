@@ -3,6 +3,14 @@ import React from 'react';
 
 export default class Header extends React.Component {
 
+    static contextTypes = {
+        user: React.PropTypes.object
+    };
+
+    constructor(props, context) {
+        super(props, context);
+    }
+
     render() {
         return (
             <div className="header navbar navbar-default">
@@ -25,11 +33,14 @@ export default class Header extends React.Component {
                             </li>
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
-                            <li className="active" role="presentation">
+                            <li role="presentation">
                                 <a href="#"><i className="glyphicon glyphicon-user"/> My account</a>
                             </li>
                             <li role="presentation">
-                                <a href="#"><i className="glyphicon glyphicon-log-out"/> Logout</a>
+                                <a href="#" onClick={this.context.user.logout}>
+                                    <i className="glyphicon glyphicon-log-out"/>
+                                    Logout
+                                </a>
                             </li>
                         </ul>
                     </div>

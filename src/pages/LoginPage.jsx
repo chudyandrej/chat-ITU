@@ -47,8 +47,6 @@ export default class LoginPage extends React.Component {
             signUpClicked: false,
             signInClicked: true
         });
-
-        console.log(this.context.user);
     }
 
     signUpClicked() {
@@ -75,9 +73,6 @@ export default class LoginPage extends React.Component {
                                 onClick={ this.signUpClicked.bind(this) }>Sign Up</button>
                     </div>
                 </div>
-                {/*<div id="title">
-                 <h1><a href="./index.html">Welcome to our CHAT</a></h1>
-                 </div>*/}
 
                 <TransitionGroup>
                     { this.state.signInClicked ? <LoginForm /> : null}

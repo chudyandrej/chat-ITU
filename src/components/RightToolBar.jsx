@@ -18,11 +18,11 @@ export default class RightToolBar extends React.Component {
 
     componentWillMount() {
         //create listener
-        this.context.user.socket.on('getUsers', (response)=>{
+        this.context.user.socket.on('getUsers', (response) => {
             let temp = [];
             console.log(response);
 
-            for(let user of response) {
+            for (let user of response) {
 
                 if (this.context.user.id == user.id) {
                     continue;
@@ -45,16 +45,14 @@ export default class RightToolBar extends React.Component {
         this.props.chat(data);
     }
 
-
     render() {
 
         return (
-        <div className="rightSide">
-            <div id="sidebar-wrapper" className="list-group">
-                {this.state.users}
+            <div className="rightSide">
+                <div id="sidebar-wrapper" className="list-group">
+                    {this.state.users}
+                </div>
             </div>
-        </div>
-
         );
     }
 }

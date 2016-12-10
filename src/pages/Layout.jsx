@@ -1,4 +1,5 @@
 import React from 'react';
+import {hashHistory} from 'react-router';
 
 
 export default class Layout extends React.Component {
@@ -9,19 +10,16 @@ export default class Layout extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-
-        //this.context.user.socket.emit('getUsers', {layout: "layout"});
     }
 
-
-    componentWillMount(){
+    componentWillMount() {
         console.log("checking if user is still signed in"); //DEBUG
-        //if (!this.context.user.loggedIn){
-        //    hashHistory.push('/');
-        //}
+        if (!this.context.user.loggedIn) {
+            hashHistory.push('/');
+        }
     }
 
-    render () {
+    render() {
         return (
             <div>
                 {this.props.children}

@@ -21,13 +21,13 @@ export default class ChatPage extends React.Component {
     }
 
     componentDidMount() {
-        this.context.user.socket.on('message', (msg)=>{
+        this.context.user.socket.on('message', (msg) => {
             console.log("message received chat page");
             console.log(msg);
 
             let found = false;
-            for(let window of this.state.chatWindows) {
-                if(window.props.id == msg.id) {
+            for (let window of this.state.chatWindows) {
+                if (window.props.id == msg.id) {
                     console.log("found");
                     found = true;
 
@@ -43,13 +43,14 @@ export default class ChatPage extends React.Component {
         });
     }
 
-    openNewChatWindow(data, msg=null) {
+    openNewChatWindow(data, msg = null) {
         console.log("opening");
         console.log(data);
 
         let temp = this.state.chatWindows.slice();
         temp.push(<ChatWindow key={this.state.windowNumber}
-                              id={msg === null ? Math.random().toString() : msg.id}  //generate unique hash to address chat windows
+            //generate unique hash to address chat windows
+                              id={msg === null ? Math.random().toString() : msg.id}
                               to={data}  // name and id of user message is for
                               msg={msg === null ? null : msg}
                               close={this.closeChatWindow.bind(this)}/>);
@@ -64,15 +65,16 @@ export default class ChatPage extends React.Component {
     closeChatWindow(id) {
         console.log("closing");
         console.log(id);
-        for(let window of this.state.chatWindows) {
-           if(window.props.id === id) {
-               console.log("found");
-               let temp = this.state.chatWindows.slice();
-               let index = temp.indexOf(window);
-               temp.splice(index, 1);
-               this.setState({chatWindows: temp});
-               break;
-           }
+
+        for (let window of this.state.chatWindows) {
+            if (window.props.id === id) {
+                console.log("found");
+                let temp = this.state.chatWindows.slice();
+                let index = temp.indexOf(window);
+                temp.splice(index, 1);
+                this.setState({chatWindows: temp});
+                break;
+            }
         }
     }
 

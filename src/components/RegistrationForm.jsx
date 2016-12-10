@@ -19,8 +19,6 @@ class RegistrationForm extends Form {
             passwordCheck: "",
             email: "",
             valid: true,
-            validUsername: true,
-            weakPassword: false,
             registerSuccess: false,
             buttonName: "Register",
 
@@ -36,8 +34,6 @@ class RegistrationForm extends Form {
                 this.setState({ username: evt.target.value });
                 break;
             case "password":
-                //TODO check length of password
-                //TODO if short =>  this.state.weakPassword = true
                 this.setState({ password: evt.target.value });
                 break;
             case "passwordCheck":
@@ -63,6 +59,10 @@ class RegistrationForm extends Form {
         this.context.user.socket.on('registerAllowed', this._registerAllowed);
     }
 
+    componentDidMount() {
+        this.refs.username.focus();
+    }
+
     _registerAllowed(response) {
         console.log(response);
         if (response.result) {     //continue to login
@@ -73,7 +73,7 @@ class RegistrationForm extends Form {
         }
         else {          //username already exists
             this.set.state({
-                validUsername: false
+                error: true
             })
         }
     }
@@ -94,7 +94,7 @@ class RegistrationForm extends Form {
             this.context.user.socket.emit('join', data);
         }
         else {   //successful registration
-            this.props.registerSuccess()
+            //TODO
         }
     }
 
@@ -118,6 +118,7 @@ class RegistrationForm extends Form {
 
                     <input placeholder="username"
                            type="text"
+                           ref="username"
                            value={this.state.username}
                            onKeyPress={this._handleKeyPress.bind(this)}
                            onChange={this.handleChange.bind(this, "username")}/>

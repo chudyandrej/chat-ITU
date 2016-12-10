@@ -13,7 +13,7 @@ export default class Message extends React.Component {
 
     render() {
 
-        let imgURL = "https://chat-itu.herokuapp.com/"+this.props.userID;
+        let imgURL = "https://chat-itu.herokuapp.com/" + this.props.userID;
 
         let avatar = (
             <div className="col-md-2 col-xs-2 avatar">
