@@ -8,7 +8,7 @@ var io = require('socket.io')(http);
 var cryptojs = require('crypto-js');
 
 var PORT = process.env.PORT || 3000;
-var PORT2 = process.env.PORT || 3001;
+
 var onlineUser = {};
 
 
@@ -28,8 +28,8 @@ function getArrayOnlienUsers(){
     return response;
 }
 
-app.get('/test', function(req, res) {
-    res.status(200).send("Ahojjj");  
+app.get('/test', function (req, res) {
+     res.sendFile(__dirname+ '/photos/images.jpeg');
 });
 
 
@@ -123,11 +123,12 @@ setInterval(function() {
 db.sequelize.sync({
     //force: true
 }).then(function() {
-    http.listen(PORT, function() {
+    let server =  app.listen(PORT, function() {
         console.log('Express listening on port ' + PORT + '!');
     });
-    app.listen(PORT2, function() {
+    http.listen(server, function() {
         console.log('Express listening on port ' + PORT + '!');
     });
+   
 
 });

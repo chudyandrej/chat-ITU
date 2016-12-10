@@ -22,22 +22,42 @@ export default class ChatPage extends React.Component {
 
     componentDidMount() {
         this.context.user.socket.on('message', (msg)=>{
-            console.log("message received");
+            console.log("message received chat page");
             console.log(msg);
-            
+
+            let found = false;
+            for(let window of this.state.chatWindows) {
+                if(window.props.id == msg.id) {
+                    console.log("found");
+                    found = true;
+
+                }
+            }
+            if (!found) {
+                let data = {
+                    id: msg.from.id,  //TODO add support of multiple IDs
+                    username: msg.from.username
+                };
+                this.openNewChatWindow(data, msg);
+            }
         });
     }
 
-    openNewChatWindow(data) {
+    openNewChatWindow(data, msg=null) {
         console.log("opening");
         console.log(data);
 
         let temp = this.state.chatWindows.slice();
         temp.push(<ChatWindow key={this.state.windowNumber}
-                              id={Math.random().toString()}  //generate unique hash to address chat windows
+                              id={msg === null ? Math.random().toString() : msg.id}  //generate unique hash to address chat windows
                               to={data}  // name and id of user message is for
+                              msg={msg === null ? null : msg}
                               close={this.closeChatWindow.bind(this)}/>);
-        this.setState({windowNumber: this.state.windowNumber + 1, chatWindows: temp});
+
+        this.setState({
+            windowNumber: this.state.windowNumber + 1,
+            chatWindows: temp
+        });
         console.log(temp[0].props.id);
     }
 
@@ -54,7 +74,6 @@ export default class ChatPage extends React.Component {
                break;
            }
         }
-        //this.state.chatWindows.splice(data, 1);
     }
 
     render() {

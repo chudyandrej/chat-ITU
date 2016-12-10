@@ -44618,23 +44618,69 @@
 	    _createClass(ChatPage, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	            var _this2 = this;
+	
 	            this.context.user.socket.on('message', function (msg) {
-	                console.log("message received");
+	                console.log("message received chat page");
 	                console.log(msg);
+	
+	                var found = false;
+	                var _iteratorNormalCompletion = true;
+	                var _didIteratorError = false;
+	                var _iteratorError = undefined;
+	
+	                try {
+	                    for (var _iterator = _this2.state.chatWindows[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                        var window = _step.value;
+	
+	                        if (window.props.id == msg.id) {
+	                            console.log("found");
+	                            found = true;
+	                        }
+	                    }
+	                } catch (err) {
+	                    _didIteratorError = true;
+	                    _iteratorError = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion && _iterator.return) {
+	                            _iterator.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError) {
+	                            throw _iteratorError;
+	                        }
+	                    }
+	                }
+	
+	                if (!found) {
+	                    var data = {
+	                        id: msg.from.id, //TODO add support of multiple IDs
+	                        username: msg.from.username
+	                    };
+	                    _this2.openNewChatWindow(data, msg);
+	                }
 	            });
 	        }
 	    }, {
 	        key: 'openNewChatWindow',
 	        value: function openNewChatWindow(data) {
+	            var msg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+	
 	            console.log("opening");
 	            console.log(data);
 	
 	            var temp = this.state.chatWindows.slice();
 	            temp.push(_react2.default.createElement(_ChatWindow2.default, { key: this.state.windowNumber,
-	                id: Math.random().toString() //generate unique hash to address chat windows
+	                id: msg === null ? Math.random().toString() : msg.id //generate unique hash to address chat windows
 	                , to: data // name and id of user message is for
-	                , close: this.closeChatWindow.bind(this) }));
-	            this.setState({ windowNumber: this.state.windowNumber + 1, chatWindows: temp });
+	                , msg: msg === null ? null : msg,
+	                close: this.closeChatWindow.bind(this) }));
+	
+	            this.setState({
+	                windowNumber: this.state.windowNumber + 1,
+	                chatWindows: temp
+	            });
 	            console.log(temp[0].props.id);
 	        }
 	    }, {
@@ -44642,13 +44688,13 @@
 	        value: function closeChatWindow(id) {
 	            console.log("closing");
 	            console.log(id);
-	            var _iteratorNormalCompletion = true;
-	            var _didIteratorError = false;
-	            var _iteratorError = undefined;
+	            var _iteratorNormalCompletion2 = true;
+	            var _didIteratorError2 = false;
+	            var _iteratorError2 = undefined;
 	
 	            try {
-	                for (var _iterator = this.state.chatWindows[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                    var window = _step.value;
+	                for (var _iterator2 = this.state.chatWindows[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    var window = _step2.value;
 	
 	                    if (window.props.id === id) {
 	                        console.log("found");
@@ -44659,18 +44705,17 @@
 	                        break;
 	                    }
 	                }
-	                //this.state.chatWindows.splice(data, 1);
 	            } catch (err) {
-	                _didIteratorError = true;
-	                _iteratorError = err;
+	                _didIteratorError2 = true;
+	                _iteratorError2 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion && _iterator.return) {
-	                        _iterator.return();
+	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                        _iterator2.return();
 	                    }
 	                } finally {
-	                    if (_didIteratorError) {
-	                        throw _iteratorError;
+	                    if (_didIteratorError2) {
+	                        throw _iteratorError2;
 	                    }
 	                }
 	            }
@@ -44775,8 +44820,53 @@
 	    _createClass(ChatWindow, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	            var _this2 = this;
+	
 	            //put cursor to input box
 	            this.refs.input.focus();
+	
+	            if (this.props.msg !== null) {
+	                this.showMessage(this.props.msg, false);
+	            }
+	
+	            this.context.user.socket.on('message', function (msg) {
+	                console.log("message received window");
+	                console.log(_this2.state.id);
+	                console.log(msg);
+	
+	                //check if the message is for this window
+	                if (_this2.state.id == msg.id) {
+	                    console.log("found in window");
+	                    console.log(msg);
+	                    _this2.showMessage(msg, false);
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            this.scrollDown();
+	        }
+	    }, {
+	        key: 'scrollDown',
+	        value: function scrollDown() {
+	            var element = document.getElementById(this.state.id);
+	            element.scrollTop += 200;
+	        }
+	    }, {
+	        key: 'showMessage',
+	        value: function showMessage(message, sent) {
+	            console.log("message:");
+	            console.log(this.state.text);
+	            console.log(message);
+	
+	            var temp = this.state.messages.slice();
+	            temp.push(_react2.default.createElement(_Message2.default, { key: this.state.messages.length,
+	                sent: sent,
+	                text: message.text,
+	                time: message.time }));
+	
+	            this.setState({ messages: temp });
 	        }
 	    }, {
 	        key: 'handleSubmit',
@@ -44788,25 +44878,16 @@
 	
 	            var message = {
 	                to: [this.state.toWhoInfo.id], //TODO add multiple IDs of multiple people
-	                from: this.context.user.username,
-	                hash: this.state.id,
+	                from: { id: this.context.user.id, username: this.context.user.userName },
+	                id: this.state.id,
 	                text: this.state.text,
 	                time: _moment2.default.utc().format('LLL')
 	            };
 	            //socket.emit('new message', message);
-	            console.log("message:");
-	            console.log(this.state.text);
-	            console.log(message);
 	            this.setState({ text: '' });
 	            this.refs.input.value = "";
 	
-	            var temp = this.state.messages.slice();
-	            temp.push(_react2.default.createElement(_Message2.default, { key: this.state.messages.length,
-	                sent: true,
-	                text: message.text,
-	                time: message.time }));
-	            this.setState({ messages: temp });
-	
+	            this.showMessage(message, true);
 	            this.context.user.socket.emit("message", message);
 	        }
 	    }, {
@@ -44864,7 +44945,7 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'panel-body msg_container_base' },
+	                        { className: 'panel-body msg_container_base', id: this.state.id },
 	                        this.state.messages
 	                    ),
 	                    _react2.default.createElement(

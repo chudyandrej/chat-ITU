@@ -26,6 +26,48 @@ export default class ChatWindow extends React.Component {
     componentDidMount() {
         //put cursor to input box
         this.refs.input.focus();
+
+        if(this.props.msg !== null) {
+            this.showMessage(this.props.msg, false);
+        }
+
+        this.context.user.socket.on('message', (msg)=>{
+            console.log("message received window");
+            console.log(this.state.id);
+            console.log(msg);
+
+            //check if the message is for this window
+            if(this.state.id == msg.id) {
+                console.log("found in window");
+                console.log(msg);
+                this.showMessage(msg, false);
+            }
+        });
+    }
+
+    componentDidUpdate() {
+        this.scrollDown()
+    }
+
+    scrollDown() {
+        let element = document.getElementById(this.state.id);
+        element.scrollTop += 200;
+    }
+
+    showMessage(message, sent) {
+        console.log("message:");
+        console.log(this.state.text);
+        console.log(message);
+
+        let temp = this.state.messages.slice();
+        temp.push(
+            <Message key={this.state.messages.length}
+                     sent={sent}
+                     text={message.text}
+                     time={message.time}/>
+        );
+
+        this.setState({messages: temp});
     }
 
     handleSubmit(event) {
@@ -36,27 +78,16 @@ export default class ChatWindow extends React.Component {
 
         let message = {
             to: [this.state.toWhoInfo.id], //TODO add multiple IDs of multiple people
-            from: this.context.user.username,
-            hash: this.state.id,
+            from: {id: this.context.user.id, username: this.context.user.userName},
+            id: this.state.id,
             text: this.state.text,
             time: moment.utc().format('LLL')
         };
         //socket.emit('new message', message);
-        console.log("message:");
-        console.log(this.state.text);
-        console.log(message);
         this.setState({text: ''});
         this.refs.input.value = "";
 
-        let temp = this.state.messages.slice();
-        temp.push(
-            <Message key={this.state.messages.length}
-                     sent={true}
-                     text={message.text}
-                     time={message.time}/>
-        );
-        this.setState({messages: temp});
-
+        this.showMessage(message, true);
         this.context.user.socket.emit("message", message);
     }
 
@@ -97,7 +128,8 @@ export default class ChatWindow extends React.Component {
                                   id="chat_window_1"/>
                         </div>
                     </div>
-                    <div className="panel-body msg_container_base">
+
+                    <div className="panel-body msg_container_base" id={this.state.id}>
                         {this.state.messages}
                     </div>
 
