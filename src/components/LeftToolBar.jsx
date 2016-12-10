@@ -3,16 +3,23 @@ import React from 'react';
 
 export default class LeftToolBar extends React.Component {
 
+    static contextTypes = {
+        user: React.PropTypes.object
+    };
+
     constructor(props) {
         super(props);
     }
 
     render() {
+
+        let imgURL = "https://chat-itu.herokuapp.com/" + this.context.user.id;
+
         return (
             <div className="side">
                 <div>
-                    <img id="profilPhoto" className="img-circle" alt="Logo lifeChat"
-                         src={require("../../public/img/images.jpeg")}/>
+                    <img id="profilPhoto" className="img-circle" alt="profilPhoto"
+                         src={imgURL || require("../../public/img/images.jpeg")}/>
                 </div>
                 <div>
                     <img id="settings" alt="Settings" src={require("../../public/img/settings.png")}/>

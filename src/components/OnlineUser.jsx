@@ -20,12 +20,15 @@ export default class OnlineUser extends React.Component {
     }
 
     render () {
+
+        let imgURL = "https://chat-itu.herokuapp.com/"+this.state.id;
+
         return (
             <button type="button"
                     onClick={this.openNewChatWindow.bind(this)}
                     className="list-group-item sidebar-brand">
                 <div className="item-image">
-                    <img src={require("../../public/img/person-flat.png")}/>
+                    <img className="img-circle" src={imgURL || require("../../public/img/person-flat.png")}/>
                 </div>
                 <div className="item-name">
                     <span>{this.state.username}</span>

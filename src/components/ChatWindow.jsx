@@ -60,6 +60,7 @@ export default class ChatWindow extends React.Component {
         let temp = this.state.messages.slice();
         temp.push(
             <Message key={this.state.messages.length}
+                     userID={message.from.id}
                      sent={sent}
                      text={message.text}
                      time={message.time}/>

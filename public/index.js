@@ -44857,6 +44857,7 @@
 	
 	            var temp = this.state.messages.slice();
 	            temp.push(_react2.default.createElement(_Message2.default, { key: this.state.messages.length,
+	                userID: message.from.id,
 	                sent: sent,
 	                text: message.text,
 	                time: message.time }));
@@ -59742,10 +59743,12 @@
 	        key: "render",
 	        value: function render() {
 	
+	            var imgURL = "https://chat-itu.herokuapp.com/" + this.props.userID;
+	
 	            var avatar = _react2.default.createElement(
 	                "div",
 	                { className: "col-md-2 col-xs-2 avatar" },
-	                _react2.default.createElement("img", { src: __webpack_require__(/*! ../../public/img/avatar.jpg */ 403),
+	                _react2.default.createElement("img", { src: imgURL || __webpack_require__(/*! ../../public/img/avatar.jpg */ 403),
 	                    className: "img-responsive" })
 	            );
 	
@@ -59829,14 +59832,17 @@
 	    _createClass(LeftToolBar, [{
 	        key: "render",
 	        value: function render() {
+	
+	            var imgURL = "https://chat-itu.herokuapp.com/" + this.context.user.id;
+	
 	            return _react2.default.createElement(
 	                "div",
 	                { className: "side" },
 	                _react2.default.createElement(
 	                    "div",
 	                    null,
-	                    _react2.default.createElement("img", { id: "profilPhoto", className: "img-circle", alt: "Logo lifeChat",
-	                        src: __webpack_require__(/*! ../../public/img/images.jpeg */ 405) })
+	                    _react2.default.createElement("img", { id: "profilPhoto", className: "img-circle", alt: "profilPhoto",
+	                        src: imgURL || __webpack_require__(/*! ../../public/img/images.jpeg */ 405) })
 	                ),
 	                _react2.default.createElement(
 	                    "div",
@@ -59870,6 +59876,9 @@
 	    return LeftToolBar;
 	}(_react2.default.Component);
 	
+	LeftToolBar.contextTypes = {
+	    user: _react2.default.PropTypes.object
+	};
 	exports.default = LeftToolBar;
 
 /***/ },
@@ -60103,6 +60112,9 @@
 	    }, {
 	        key: "render",
 	        value: function render() {
+	
+	            var imgURL = "https://chat-itu.herokuapp.com/" + this.state.id;
+	
 	            return _react2.default.createElement(
 	                "button",
 	                { type: "button",
@@ -60111,7 +60123,7 @@
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "item-image" },
-	                    _react2.default.createElement("img", { src: __webpack_require__(/*! ../../public/img/person-flat.png */ 413) })
+	                    _react2.default.createElement("img", { className: "img-circle", src: imgURL || __webpack_require__(/*! ../../public/img/person-flat.png */ 413) })
 	                ),
 	                _react2.default.createElement(
 	                    "div",
