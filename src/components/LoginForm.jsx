@@ -5,7 +5,7 @@ import ImageLoader from 'react-imageloader';
 import Form from './Form.jsx';
 
 
-class LoginForm extends Form {
+export default class LoginForm extends Form {
 
     static contextTypes = {
         user: React.PropTypes.object
@@ -15,8 +15,8 @@ class LoginForm extends Form {
         super(props, context);
 
         this.state = {
-            username: null,
-            password: null,
+            username: "",
+            password: "",
             pending: false,
             error: false
         };
@@ -24,24 +24,26 @@ class LoginForm extends Form {
         this._loginAllowed = this._loginAllowed.bind(this);
     }
 
-    handleUsernameChange(evt) {
-        this.setState({
-            username: evt.target.value
-        });
-    }
-
-    handlePasswordChange(evt) {
-        this.setState({
-            password: evt.target.value
-        });
-    }
-
     componentWillMount() {
         //create listener
         this.context.user.socket.on('loginAllowed', this._loginAllowed);
     }
 
+    handleChange(name, evt) {
+        this.console.log("tu");
+        switch (name) {
+            case "name":
+                this.setState({username: evt.target.value});
+                break;
+            case "password":
+                this.setState({password: evt.target.value});
+                break;
+        }
+    }
+
     _loginAllowed(result) {
+        console.log("answer");
+        console.log(result);
         if (result.status) {     //continue to chat
             token = result.token;
 
@@ -68,14 +70,14 @@ class LoginForm extends Form {
         e.preventDefault();
         this.setState({pending: true});
         let data = {
-            email: this.state.username,
-            password: this.state.password
+            email: "nieco",//this.state.username,
+            password: "niecopasswd"//this.state.password
         };
-
+        console.log(data);
         //send data to backend to authenticate
-        //this.context.user.socket.emit('login', data);
+        this.context.user.socket.emit('login', data);
 
-        hashHistory.push('/chat'); //JUST DEBUG
+       // hashHistory.push('/chat'); //JUST DEBUG
     }
 
     _handleKeyPress(e) {
@@ -97,12 +99,12 @@ class LoginForm extends Form {
                                type="text"
                                value={this.state.username}
                                onKeyPress={this._handleKeyPress.bind(this)}
-                               onChange={this.handleUsernameChange.bind(this, "name")}/>
+                               onChange={this.handleChange.bind(this, "name")}/>
                         <input placeholder="password"
                                type="password"
                                value={this.state.password}
                                onKeyPress={this._handleKeyPress.bind(this)}
-                               onChange={this.handlePasswordChange.bind(this, "password")}/>
+                               onChange={this.handleChange.bind(this, "password")}/>
                         <button onClick={this.login.bind(this)}
                                 className="btn btn-default full-width">
                             <ImageLoader src={require("../../public/img/login.png")}/>
@@ -113,5 +115,3 @@ class LoginForm extends Form {
         )
     }
 }
-
-export default LoginForm;

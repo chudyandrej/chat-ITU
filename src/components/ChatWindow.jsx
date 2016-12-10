@@ -1,5 +1,4 @@
-import React, {PropTypes} from 'react';
-import {Input} from 'react-bootstrap';
+import React from 'react';
 import moment from 'moment';
 import io from 'socket.io-client';
 
@@ -14,30 +13,59 @@ export default class ChatWindow extends React.Component {
 
         this.state = {
             text: '',
-            typing: false
+            typing: false, //??
+            id: this.props.id,
+            messages: []
         };
     }
 
+    componentDidMount() {
+        //put cursor to input box
+        this.refs.input.focus();
+    }
+
     handleSubmit(event) {
-        const text = event.target.value.trim();
-        if (event.which === 13) {   //Enter
-            event.preventDefault();
-            let message = {
-                username: null, //TODO
-                channel: null,
-                text: text,
-                time: moment.utc().format('LLL')
-            };
-            //socket.emit('new message', message);
-            console.log("message:");
-            console.log(this.state.text);
-            console.log(message);
-            this.setState({text: '', typing: false});
+        event.preventDefault();
+        if (this.state.text === "") {
+            return;
+        }
+
+        let message = {
+            username: null, //TODO
+            channel: null,
+            text: this.state.text,
+            time: moment.utc().format('LLL')
+        };
+        //socket.emit('new message', message);
+        console.log("message:");
+        console.log(this.state.text);
+        console.log(message);
+        this.setState({text: ''});
+        this.refs.input.value = "";
+
+        let temp = this.state.messages.slice();
+        temp.push(
+            <Message key={this.state.messages.length}
+                     sent={true}
+                     text={message.text}
+                     time={message.time}/>
+        );
+        this.setState({messages: temp});
+    }
+
+    handleKeyPress(e) {
+        if (e.key === 'Enter') {
+            this.handleSubmit(e);
         }
     }
 
     handleChange(event) {
         this.setState({text: event.target.value});
+        //TODO timeout for typing = true ? will we even use typing var?
+    }
+
+    closeWindow() {
+        this.props.close(this.state.id);
     }
 
     render() {
@@ -52,26 +80,33 @@ export default class ChatWindow extends React.Component {
                             </h3>
                         </div>
                         <div className="col-md-4 col-xs-4" style={{textAlign: "right"}}>
-                            <a href="#">
-                                <span id="minim_chat_window" className="glyphicon glyphicon-minus icon_minim"></span>
-                            </a>
-                            <a href="#">
-                                <span className="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span>
-                            </a>
+                            <span style={{cursor: "pointer"}}
+                                  id="minim_chat_window"
+                                  className="glyphicon glyphicon-minus icon_minim"/>
+
+                            <span style={{cursor: "pointer"}}
+                                  onClick={this.closeWindow.bind(this)}
+                                  className="glyphicon glyphicon-remove icon_close"
+                                  id="chat_window_1"/>
                         </div>
                     </div>
                     <div className="panel-body msg_container_base">
-                        <Message />
+                        {this.state.messages}
                     </div>
 
                     <div className="panel-footer">
                         <div className="input-group">
                             <input id="btn-input"
                                    type="text"
+                                   ref="input"
                                    className="form-control input-sm chat_input"
-                                   placeholder="Write your message here..." />
+                                   placeholder="Write your message here..."
+                                   onKeyPress={this.handleKeyPress.bind(this)}
+                                   onChange={this.handleChange.bind(this)}/>
                             <span className="input-group-btn">
-                                <button className="btn btn-primary btn-sm" id="btn-chat">Send</button>
+                                <button className="btn btn-primary btn-sm"
+                                        id="btn-chat"
+                                        onClick={this.handleSubmit.bind(this)}>Send</button>
                             </span>
                         </div>
                     </div>

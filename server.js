@@ -9,73 +9,65 @@ var cryptojs = require('crypto-js');
 
 var PORT = process.env.PORT || 3000;
 
+var onlineUser = {};
+
 
 app.use(express.static(__dirname + '/public'));
 
-function checkTokenValidity(token) {
-    return new Promise(function(resolve, reject) {
-        db.token.findOne({
-            where: {
-                tokenHash: cryptojs.MD5(token).toString()
-            }
-        }).then(function(tokenInstance) {
-            if (!tokenInstance) {
-                reject();
-            }
-            resolve(tokenInstance);
-        }, function(e) {
-            reject(e);
-        });
-    });
-}
 
 io.on('connection', function(socket) {
-
-    socket.on('join', function(message) { //reg user to portal
-        var body = _.pick(message, 'name', 'email', 'password');
-        db.user.create(body).then(function(user) {
-            //TODO emit message
-        }, function(e) {
-            //TODO emit error message
+    console.log("New socket");
+    socket.on('join', function(message) {
+        db.users.create(message).then((instanceUser) =>{
+            onlineUser[userInstance.get('id')] = {
+                socektId : socket,
+                rooms : []
+            }
+            mapingSocToUsers[socket.id] = userInstance.get('id');
+            socket.emit('loginAllowed', true);
+        }, (error) => {
+            socket.emit('loginAllowed', false);
         });
+
+
     });
 
-    socket.on('login', function(message) { //reg user to portal
-        var body = _.pick(message, 'email', 'password');
-        var userInstance;
+    socket.on('login', function(message) {
+        console.log("Login");
+        console.log(message);
+        db.users.authenticate(message).then((userInstance) => {
+            onlineUser[userInstance.get('id')] = {
+                socektId : socket,
+                rooms : []
+            }
+            mapingSocToUsers[socket.id] = userInstance.get('id');
 
-        db.user.authenticate(body).then(function(user) {
-            userInstance = user;
-            var token = user.genetateToken('authentication');
+            socket.emit('loginAllowed', true);
 
-            return db.token.create({
-                token
-            });
-        }).then(function(tokenInstance) {
-            //TODO send OK status, token
-        }).catch(function(e) {
-            //TODO send error status
-        });
-    });
+            //TODO emit login successful
+        }, (error) => {
+             socket.emit('loginAllowed', false);
 
-    socket.on('logout', function(message) {
-        checkTokenValidity(message.token).then(function(tokenInstance) {
-            tokenInstance.destroy().then(function() {
-                //TODO successful
-            }, function() {
-                //TODO unsuccessful
-            });
+            //TODO emit login unsuccessful
         });
     });
 
     socket.on('disconnect', function() {
-        //TODO
+        for(userId of Object.keys(onlineUser)){
+            let user = onlineUser[userId];
+            if (user.socket.id === socket.id){
+                delete onlineUser[userId]
+                break;
+            }
+       }
     });
+
 
 });
 
+
 db.sequelize.sync({
-    force: true
+    //force: true
 }).then(function() {
     http.listen(PORT, function() {
         console.log('Express listening on port ' + PORT + '!');

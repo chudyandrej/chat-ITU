@@ -10,50 +10,40 @@ export default class ChatPage extends React.Component {
         super(props);
 
         this.state = {
-            test: false
+            chatWindows: []
         }
     }
 
-    clickHandler() {
-       this.setState({test: true});
+    openNewChatWindow(data) {
+        console.log("opening");
+        console.log(data);
+        let id = this.state.chatWindows.length;
+
+        let temp = this.state.chatWindows.slice();
+        temp.push(<ChatWindow key={id} id={id} close={this.closeChatWindow.bind(this)}/>);
+        this.setState({chatWindows: temp});
+    }
+
+    closeChatWindow(data) {
+        console.log("closing");
+        console.log(data);
+        //console.log(data);
+        //this.state.chatWindows.splice(data, 1);
     }
 
     render() {
-        let messageStyle = {wordWrap: 'break-word', margin: '0', overflowY: 'auto',
-                            padding: '0', paddingBottom: '1em', flexGrow: '1', order: '1'};
-
-        /*let headerStyle = {background: '#FFFFFF', color: 'black', flexGrow: '0',
-                           order: '0', fontSize: '2.3em', paddingLeft: '0.2em'};
-
-        let old = (
-            <div style={{margin: '0', padding: '0', height: '100%', width: '100%'}}>
-                <div className="mainChatPage">
-                    <header style={headerStyle}>
-                        <div>
-                            <h1>Chanel name</h1>
-                        </div>
-                    </header>
-                    <ul style={messageStyle} ref="messagesList">
-                        <ChatItem/>
-                    </ul>
-                    <MessageField />
-                </div>
-            </div>
-        );
-        */
-
 
         return (
             <div className="wrapper">
                 <Header/>
                 <div className="main">
                     <LeftToolBar />
-                    <RightToolBar chat={this.clickHandler.bind(this)}/>
+                    <RightToolBar chat={this.openNewChatWindow.bind(this)}/>
 
                     <div className="body container-fluid">
                         <div className="row" id="mainContentWrap">
                             <div className="container-fluid">
-                                <ChatWindow />
+                                {this.state.chatWindows}
                             </div>
                         </div>
                     </div>
