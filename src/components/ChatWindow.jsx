@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import io from 'socket.io-client';
 
 import Message from './Message.jsx';
 
@@ -16,7 +15,6 @@ export default class ChatWindow extends React.Component {
 
         this.state = {
             text: '',
-            typing: false, //??
             id: this.props.id,  //identificator of window
             toWhoInfo: this.props.to,
             messages: []

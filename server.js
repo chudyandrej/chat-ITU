@@ -28,9 +28,13 @@ function getArrayOnlienUsers(){
     return response;
 }
 
-app.get('/test', function (req, res) {
-     res.sendFile(__dirname+ '/photos/images.jpeg');
-});
+for (let i = 0; i < 4; i++){
+    app.get('/' + i, function (req, res) {
+        res.sendFile(__dirname+ '/photos/'+ i +'.jpg');
+    });
+}
+
+
 
 
 

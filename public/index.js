@@ -44783,10 +44783,6 @@
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
-	var _socket = __webpack_require__(/*! socket.io-client */ 248);
-	
-	var _socket2 = _interopRequireDefault(_socket);
-	
 	var _Message = __webpack_require__(/*! ./Message.jsx */ 402);
 	
 	var _Message2 = _interopRequireDefault(_Message);
@@ -44809,7 +44805,6 @@
 	
 	        _this.state = {
 	            text: '',
-	            typing: false, //??
 	            id: _this.props.id, //identificator of window
 	            toWhoInfo: _this.props.to,
 	            messages: []
