@@ -44609,32 +44609,71 @@
 	        var _this = _possibleConstructorReturn(this, (ChatPage.__proto__ || Object.getPrototypeOf(ChatPage)).call(this, props, context));
 	
 	        _this.state = {
+	            windowNumber: 0,
 	            chatWindows: []
 	        };
 	        return _this;
 	    }
 	
 	    _createClass(ChatPage, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.context.user.socket.on('message', function (msg) {
+	                console.log("message received");
+	                console.log(msg);
+	            });
+	        }
+	    }, {
 	        key: 'openNewChatWindow',
 	        value: function openNewChatWindow(data) {
 	            console.log("opening");
 	            console.log(data);
-	            var id = this.state.chatWindows.length;
 	
 	            var temp = this.state.chatWindows.slice();
-	            temp.push(_react2.default.createElement(_ChatWindow2.default, { key: id,
-	                id: id,
-	                username: data.username,
-	                close: this.closeChatWindow.bind(this) }));
-	            this.setState({ chatWindows: temp });
+	            temp.push(_react2.default.createElement(_ChatWindow2.default, { key: this.state.windowNumber,
+	                id: Math.random().toString() //generate unique hash to address chat windows
+	                , to: data // name and id of user message is for
+	                , close: this.closeChatWindow.bind(this) }));
+	            this.setState({ windowNumber: this.state.windowNumber + 1, chatWindows: temp });
+	            console.log(temp[0].props.id);
 	        }
 	    }, {
 	        key: 'closeChatWindow',
-	        value: function closeChatWindow(data) {
+	        value: function closeChatWindow(id) {
 	            console.log("closing");
-	            console.log(data);
-	            //console.log(data);
-	            //this.state.chatWindows.splice(data, 1);
+	            console.log(id);
+	            var _iteratorNormalCompletion = true;
+	            var _didIteratorError = false;
+	            var _iteratorError = undefined;
+	
+	            try {
+	                for (var _iterator = this.state.chatWindows[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                    var window = _step.value;
+	
+	                    if (window.props.id === id) {
+	                        console.log("found");
+	                        var temp = this.state.chatWindows.slice();
+	                        var index = temp.indexOf(window);
+	                        temp.splice(index, 1);
+	                        this.setState({ chatWindows: temp });
+	                        break;
+	                    }
+	                }
+	                //this.state.chatWindows.splice(data, 1);
+	            } catch (err) {
+	                _didIteratorError = true;
+	                _iteratorError = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion && _iterator.return) {
+	                        _iterator.return();
+	                    }
+	                } finally {
+	                    if (_didIteratorError) {
+	                        throw _iteratorError;
+	                    }
+	                }
+	            }
 	        }
 	    }, {
 	        key: 'render',
@@ -44726,8 +44765,8 @@
 	        _this.state = {
 	            text: '',
 	            typing: false, //??
-	            id: _this.props.id,
-	            username: _this.props.username,
+	            id: _this.props.id, //identificator of window
+	            toWhoInfo: _this.props.to,
 	            messages: []
 	        };
 	        return _this;
@@ -44748,8 +44787,9 @@
 	            }
 	
 	            var message = {
-	                username: null, //TODO
-	                channel: null,
+	                to: [this.state.toWhoInfo.id], //TODO add multiple IDs of multiple people
+	                from: this.context.user.username,
+	                hash: this.state.id,
 	                text: this.state.text,
 	                time: _moment2.default.utc().format('LLL')
 	            };
@@ -44766,6 +44806,8 @@
 	                text: message.text,
 	                time: message.time }));
 	            this.setState({ messages: temp });
+	
+	            this.context.user.socket.emit("message", message);
 	        }
 	    }, {
 	        key: 'handleKeyPress',
@@ -44805,7 +44847,7 @@
 	                                { className: 'panel-title' },
 	                                _react2.default.createElement('span', { className: 'glyphicon glyphicon-comment' }),
 	                                'Chat - ',
-	                                this.state.username
+	                                this.state.toWhoInfo.username
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -44859,6 +44901,9 @@
 	    return ChatWindow;
 	}(_react2.default.Component);
 	
+	ChatWindow.contextTypes = {
+	    user: _react2.default.PropTypes.object
+	};
 	exports.default = ChatWindow;
 
 /***/ },
@@ -59868,10 +59913,6 @@
 	                    for (var _iterator = response[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	                        var user = _step.value;
 	
-	                        console.log(user.name);
-	                        console.log("why");
-	                        console.log(user.id);
-	                        console.log(_this2.context.user.id);
 	
 	                        if (_this2.context.user.id == user.id) {
 	                            continue;

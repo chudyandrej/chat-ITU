@@ -6,14 +6,19 @@ import Message from './Message.jsx';
 
 
 export default class ChatWindow extends React.Component {
+
+    static contextTypes = {
+        user: React.PropTypes.object
+    };
+
     constructor(props, context) {
         super(props, context);
 
         this.state = {
             text: '',
             typing: false, //??
-            id: this.props.id,
-            username: this.props.username,
+            id: this.props.id,  //identificator of window
+            toWhoInfo: this.props.to,
             messages: []
         };
     }
@@ -30,8 +35,9 @@ export default class ChatWindow extends React.Component {
         }
 
         let message = {
-            username: null, //TODO
-            channel: null,
+            to: [this.state.toWhoInfo.id], //TODO add multiple IDs of multiple people
+            from: this.context.user.username,
+            hash: this.state.id,
             text: this.state.text,
             time: moment.utc().format('LLL')
         };
@@ -50,6 +56,8 @@ export default class ChatWindow extends React.Component {
                      time={message.time}/>
         );
         this.setState({messages: temp});
+
+        this.context.user.socket.emit("message", message);
     }
 
     handleKeyPress(e) {
@@ -75,7 +83,7 @@ export default class ChatWindow extends React.Component {
                         <div className="col-md-8 col-xs-8">
                             <h3 className="panel-title">
                                 <span className="glyphicon glyphicon-comment"></span>
-                                Chat - {this.state.username}
+                                Chat - {this.state.toWhoInfo.username}
                             </h3>
                         </div>
                         <div className="col-md-4 col-xs-4" style={{textAlign: "right"}}>

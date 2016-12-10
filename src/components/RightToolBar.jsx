@@ -23,10 +23,6 @@ export default class RightToolBar extends React.Component {
             console.log(response);
 
             for(let user of response) {
-                console.log(user.name);
-                console.log("why");
-                console.log(user.id);
-                console.log(this.context.user.id);
 
                 if (this.context.user.id == user.id) {
                     continue;

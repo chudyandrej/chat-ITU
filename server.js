@@ -8,16 +8,15 @@ var io = require('socket.io')(http);
 var cryptojs = require('crypto-js');
 
 var PORT = process.env.PORT || 3000;
-
+var PORT2 = process.env.PORT || 3001;
 var onlineUser = {};
-
 
 
 app.use(express.static(__dirname + '/public'));
 
 
 
-function getArrayOnlienUsers(nowSocket){
+function getArrayOnlienUsers(){
     let response = [];
     for(let userId of Object.keys(onlineUser)){
         let user = onlineUser[userId];
@@ -25,10 +24,13 @@ function getArrayOnlienUsers(nowSocket){
             id : userId,
             name: onlineUser[userId].name
         });
-        
     }
     return response;
 }
+
+app.get('/test', function(req, res) {
+    res.status(200).send("Ahojjj");  
+});
 
 
 
@@ -54,8 +56,6 @@ io.on('connection', function(socket) {
                 message: error
             });
         });
-
-
     });
 
     socket.on('login', function(message) {
@@ -73,7 +73,7 @@ io.on('connection', function(socket) {
                 name: userInstance.get('name'), 
                 id:userInstance.get('id')
             });
-            io.emit('getUsers' , getArrayOnlienUsers(socket));
+            io.emit('getUsers' , getArrayOnlienUsers());
 
         }, (error) => {
              socket.emit('loginAllowed', {
@@ -85,10 +85,19 @@ io.on('connection', function(socket) {
     });
 
     socket.on('getUsers', function(message) {
-       
-        socket.emit('getUsers' , getArrayOnlienUsers(socket));
+        socket.emit('getUsers' , getArrayOnlienUsers());
 
     });
+
+    socket.on('message', function(message) {
+        for(userId of message.to){
+            onlineUser[userId].socket.emit('message', message);
+        }
+        socket.emit('getUsers' , getArrayOnlienUsers());
+
+    });
+
+
 
     socket.on('disconnect', function() {
         for(userId of Object.keys(onlineUser)){
@@ -98,7 +107,7 @@ io.on('connection', function(socket) {
                 break;
             }
        }
-        io.emit('getUsers' , getArrayOnlienUsers(socket));
+        io.emit('getUsers' , getArrayOnlienUsers());
     });
    
 
@@ -117,4 +126,8 @@ db.sequelize.sync({
     http.listen(PORT, function() {
         console.log('Express listening on port ' + PORT + '!');
     });
+    app.listen(PORT2, function() {
+        console.log('Express listening on port ' + PORT + '!');
+    });
+
 });

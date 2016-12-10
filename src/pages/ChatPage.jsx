@@ -6,6 +6,7 @@ import Header from '../components/Header.jsx';
 
 
 export default class ChatPage extends React.Component {
+
     static contextTypes = {
         user: React.PropTypes.object
     };
@@ -14,27 +15,45 @@ export default class ChatPage extends React.Component {
         super(props, context);
 
         this.state = {
+            windowNumber: 0,
             chatWindows: []
         };
+    }
+
+    componentDidMount() {
+        this.context.user.socket.on('message', (msg)=>{
+            console.log("message received");
+            console.log(msg);
+            
+        });
     }
 
     openNewChatWindow(data) {
         console.log("opening");
         console.log(data);
-        let id = this.state.chatWindows.length;
 
         let temp = this.state.chatWindows.slice();
-        temp.push(<ChatWindow key={id}
-                              id={id}
-                              username={data.username}
+        temp.push(<ChatWindow key={this.state.windowNumber}
+                              id={Math.random().toString()}  //generate unique hash to address chat windows
+                              to={data}  // name and id of user message is for
                               close={this.closeChatWindow.bind(this)}/>);
-        this.setState({chatWindows: temp});
+        this.setState({windowNumber: this.state.windowNumber + 1, chatWindows: temp});
+        console.log(temp[0].props.id);
     }
 
-    closeChatWindow(data) {
+    closeChatWindow(id) {
         console.log("closing");
-        console.log(data);
-        //console.log(data);
+        console.log(id);
+        for(let window of this.state.chatWindows) {
+           if(window.props.id === id) {
+               console.log("found");
+               let temp = this.state.chatWindows.slice();
+               let index = temp.indexOf(window);
+               temp.splice(index, 1);
+               this.setState({chatWindows: temp});
+               break;
+           }
+        }
         //this.state.chatWindows.splice(data, 1);
     }
 
