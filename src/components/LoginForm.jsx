@@ -62,11 +62,11 @@ export default class LoginForm extends Form {
             hashHistory.push('/chat');
         }
         else {          //wrong username or password
+            console.log(response);
             this.setState({
                 error: true,
-                errorMsg: response.error
+                errorMsg: response.message
             });
-
         }
     }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import ImageLoader from 'react-imageloader';
+import {hashHistory} from 'react-router';
 
 import Form from './Form.jsx';
 
@@ -19,10 +20,9 @@ class RegistrationForm extends Form {
             passwordCheck: "",
             email: "",
             valid: true,
-            registerSuccess: false,
-            buttonName: "Register",
 
-            error: false
+            error: false,
+            errorMsg: null
         };
 
         this._registerAllowed = this._registerAllowed.bind(this);
@@ -66,15 +66,13 @@ class RegistrationForm extends Form {
     _registerAllowed(response) {
         console.log(response);
         if (response.result) {     //continue to login
-            this.setState({
-                buttonName: "Login",
-                registerSuccess: true
-            })
+            hashHistory.push('/chat');
         }
         else {          //username already exists
-            this.set.state({
-                error: true
-            })
+            this.setState({
+                error: true,
+                errorMsg: response.message
+            });
         }
     }
 
@@ -87,15 +85,7 @@ class RegistrationForm extends Form {
         };
 
         //send data to backend
-        //TODO send data only if it is valid!
-
-        console.log(data);
-        if (this.state.buttonName === "Register") {
-            this.context.user.socket.emit('join', data);
-        }
-        else {   //successful registration
-            //TODO
-        }
+        this.context.user.socket.emit('join', data);
     }
 
     _handleKeyPress(e) {
@@ -107,7 +97,7 @@ class RegistrationForm extends Form {
 
     render() {
 
-        let errorMsg = <strong className="alert alert-danger">Wrong username or password!</strong>;
+        let errorMsg = <strong className="alert alert-danger">{this.state.errorMsg}</strong>;
 
         return (
         <div className="jumbotron regForm">

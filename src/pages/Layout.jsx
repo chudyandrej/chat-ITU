@@ -14,7 +14,8 @@ export default class Layout extends React.Component {
 
     componentWillMount() {
         console.log("checking if user is still signed in"); //DEBUG
-        if (!this.context.user.loggedIn) {
+        if (this.context.user.socket === null && !this.context.user.loggedIn) {
+            //if context.user.socket is null, user did refresh the site
             hashHistory.push('/');
         }
     }

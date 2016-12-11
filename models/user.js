@@ -53,8 +53,8 @@ module.exports = function(sequelize, DataTypes) {
             authenticate: function(body) {
                 return new Promise(function(resolve, reject) {
 
-                    if (typeof body.email !== 'string' || typeof body.password !== 'string') {
-                        return reject();
+                    if (!_.isString(body.email) || !_.isString(body.password)) {
+                        return reject("Email or password is not string!");
                     }
                     users.findOne({
                         where: {
@@ -62,15 +62,16 @@ module.exports = function(sequelize, DataTypes) {
                         }
                     }).then(function(user) {
                         if (!user || !bcrypt.compareSync(body.password, user.get('password_hash'))) {
-                            return reject();
+                            return reject("Authentification has failed!");
                         }
                         resolve(user);
 
                     }, function(e) {
-                        return reject();
+                        return reject(e);
                     });
                 });
             },
+
             findByToken: function(token) {
                 return new Promise(function(resolve, reject) {
                     try {

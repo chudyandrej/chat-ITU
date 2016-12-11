@@ -33,7 +33,6 @@ export default class PreLoginLayout extends React.Component {
     }
 
     handlerChange(user) {
-        console.log("user's changed");
         this.setState({
             user: {
                 loggedIn: user.loggedIn,
@@ -47,6 +46,7 @@ export default class PreLoginLayout extends React.Component {
     }
 
     logout() {
+        this.state.user.socket.emit("disconnect");
         this.setState({
             user: {
                 loggedIn: false,
