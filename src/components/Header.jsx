@@ -18,11 +18,11 @@ export default class Header extends React.Component {
                     <div className="navbar-header">
                         <button className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1">
                             <span className="sr-only">Toggle navigation</span>
-                            <span className="icon-bar"></span>
-                            <span className="icon-bar"></span>
-                            <span className="icon-bar">
+                            <span className="icon-bar"/>
+                            <span className="icon-bar"/>
+                            <span className="icon-bar"/>
+                        </button>
 
-                    </span></button>
                     </div>
                     <div className="collapse navbar-collapse" id="navcol-1">
                         <ul className="nav navbar-nav navbar-left">
@@ -34,13 +34,14 @@ export default class Header extends React.Component {
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
                             <li role="presentation">
-                                <a href="#"><i className="glyphicon glyphicon-user"/> My account</a>
+                                <img className="hover-img"
+                                     id="user"
+                                     src={require("../../public/img/user.png")}/>
                             </li>
-                            <li role="presentation">
-                                <a href="#" onClick={this.context.user.logout}>
-                                    <i className="glyphicon glyphicon-log-out"/>
-                                    Logout
-                                </a>
+                            <li role="presentation" onClick={this.context.user.logout}>
+                                <img className="hover-img"
+                                     id="user"
+                                     src={require("../../public/img/log-out.png")}/>
                             </li>
                         </ul>
                     </div>

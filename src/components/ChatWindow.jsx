@@ -148,22 +148,31 @@ export default class ChatWindow extends React.Component {
             <div className=" chat-window " style={{marginLeft: "10px"}}>
                 <div className="panel panel-default">
                     <div className="panel-heading top-bar">
-                        <div className="col-md-8 col-xs-8">
+                        <div className="col-md-9 col-xs-9">
                             <h3 className="panel-title">
-                                <span className="glyphicon glyphicon-comment"></span>
-                                Chat - {this.state.toWhoInfo.username}
+                                <div>
+                                    <img alt="Add"
+                                         id="chat-window"
+                                         src={require("../../public/img/chat-window.png")}/>
+                                </div>
+                                {this.state.toWhoInfo.username}
                             </h3>
                         </div>
-                        <div className="col-md-4 col-xs-4" style={{textAlign: "right"}}>
-                            <span style={{cursor: "pointer"}}
-                                  onClick={this.addUsers.bind(this)}
-                                  id="minim_chat_window"
-                                  className="glyphicon glyphicon-minus icon_minim"/>
+                        <div className="col-md-3 col-xs-3" style={{textAlign: "right"}}>
 
-                            <span style={{cursor: "pointer"}}
-                                  onClick={this.closeWindow.bind(this)}
-                                  className="glyphicon glyphicon-remove icon_close"
-                                  id="chat_window_1"/>
+                            <div onClick={this.addUsers.bind(this)}>
+                                <img alt="Add"
+                                     id="addUser-btn"
+                                     className="hover-img addUser-btn"
+                                     src={require("../../public/img/addUser.png")}/>
+                            </div>
+
+                            <div onClick={this.closeWindow.bind(this)}>
+                                <img alt="Cancel"
+                                     id="cancel-btn"
+                                     className="hover-img"
+                                     src={require("../../public/img/cancel.png")}/>
+                            </div>
                         </div>
                     </div>
 

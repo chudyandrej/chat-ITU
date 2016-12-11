@@ -52,6 +52,9 @@ export default class RightToolBar extends React.Component {
         return (
             <div className="rightSide">
                 <div id="sidebar-wrapper" className="list-group">
+                    <div>
+                        <img id="transmitter" alt="Transmitter" src={require("../../public/img/transmitter.png")}/>
+                    </div>
                     {this.state.users}
                 </div>
             </div>
