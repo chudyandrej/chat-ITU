@@ -12,9 +12,28 @@ var PORT = process.env.PORT || 3000;
 
 var onlineUser = {}
 
-onlineUser['2'] = {
-    name: 'Andrej Chudz'
+onlineUser['9'] = {
+    name: 'Lucka Hlavata'
 }
+onlineUser['10'] = {
+    name: 'Merak Drozda'
+}
+onlineUser['11'] = {
+    name: 'Natália Drozdová'
+}
+onlineUser['12'] = {
+    name: 'Petra Zvarková'
+}
+onlineUser['13'] = {
+    name: 'Mima Kozatá'
+}
+onlineUser['13'] = {
+    name: 'Peter Humenay'
+}
+onlineUser['13'] = {
+    name: 'Biba Múdra'
+}
+
 
 app.use(express.static(__dirname + '/public'));
 
@@ -38,9 +57,10 @@ for (let i = 0; i < 4; i++){
     });
 }
 
+app.post('/test' , function (req, res) {
+    console.log(req);
 
-
-
+});
 
 io.on('connection', function(socket) {
    
@@ -101,9 +121,11 @@ io.on('connection', function(socket) {
     });
 
     socket.on('message', function(message) {
+        console.log(message);
         for(userId of message.to){
             onlineUser[userId].socket.emit('message', message);
         }
+        
         socket.emit('getUsers' , getArrayOnlienUsers());
 
     });
@@ -125,10 +147,6 @@ io.on('connection', function(socket) {
 
 });
 
-setInterval(function() {
-
-    console.log(onlineUser);
-}, 1000 * 2);
 
 
 db.sequelize.sync({

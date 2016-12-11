@@ -13,7 +13,8 @@ export default class AddUsersGroupMsg extends React.Component {
         super(props, context);
 
         this.state = {
-            users: []
+            users: [],
+            usersToAdd: []
         }
     }
 
@@ -21,7 +22,6 @@ export default class AddUsersGroupMsg extends React.Component {
         if (this.context.user.socket === null) { return; } //user did refresh the page => socket is null
         this.context.user.socket.on('getUsers', (response) => {
             let temp = [];
-            console.log("add users ll");
             console.log(response);
 
             for (let user of response) {
@@ -30,12 +30,11 @@ export default class AddUsersGroupMsg extends React.Component {
                     //if it's my id, ignore, I don't wanna be shown in online users list :D
                     continue;
                 }
-                console.log("add users ll");
                 console.log(user);
                 temp.push(<OnlineUser key={user.id}
                                       id={user.id}
                                       username={user.name}
-                                      add={null}/>);
+                                      add={this.addUser.bind(this)}/>);
             }
 
             this.setState({users: temp});
@@ -51,7 +50,30 @@ export default class AddUsersGroupMsg extends React.Component {
     }
 
     close() {
-        this.props.close(false);
+        this.props.addUser(false);
+    }
+
+    addUser(data) {
+        //makes list of users who will be added to a conversation
+        let userIDs = [];
+        let removeUserFlag = false;
+
+        for (let userID of this.state.usersToAdd) {
+            if (userID === data.id) {
+                removeUserFlag = true;
+            }
+            else {
+                userIDs.push(userID)
+            }
+        }
+        if (!removeUserFlag) {
+            userIDs.push(data.id);
+        }
+        this.setState({usersToAdd: userIDs});
+    }
+
+    submitUsers() {
+        this.props.addUser(false, this.state.usersToAdd);
     }
 
 
@@ -72,10 +94,15 @@ export default class AddUsersGroupMsg extends React.Component {
                     afterClose={this.close.bind(this)}
                     dialogStyles={myBigGreenDialog}
                     ref="dialogWithCallBacks"
-                    title="Add users to the conversation">
+                    title="Add a user">
                     <div className="list-group modal-users">
                         {this.state.users}
                     </div>
+                    <button type='button'
+                            className='btn btn-primary'
+                            onClick={this.submitUsers.bind(this)}>
+                        Submit
+                    </button>
                 </SkyLight>
             </div>
         );

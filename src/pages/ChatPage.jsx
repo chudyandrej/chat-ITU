@@ -4,6 +4,7 @@ import ChatWindow from '../components/ChatWindow.jsx';
 import Header from '../components/Header.jsx';
 import LeftToolBar from '../components/LeftToolBar.jsx';
 import RightToolBar from '../components/RightToolBar.jsx';
+import moment from 'moment';
 
 
 export default class ChatPage extends React.Component {
@@ -18,6 +19,7 @@ export default class ChatPage extends React.Component {
         this.state = {
             windowNumber: 0,
             addUsers: false,
+            windowInfo: null,
             chatWindows: [],
             //IDs of users, I have opened chat window with
             //group messages are not taken into account
@@ -31,27 +33,60 @@ export default class ChatPage extends React.Component {
             console.log("message received chat page");
             console.log(msg);
 
-            let found = false;
-            for (let window of this.state.chatWindows) {
-                if (window.props.id == msg.id) {
-                    //if window is already opened, ignore the message,
-                    //it will be handled by chat window itself
-                    found = true;
+            if (msg.to.length === 1) {
+                console.log("single conversation");
+                //non group conversation
+                //if window is already opened, ignore the message,
+                //it will be handled by chat window itself
+                if (this.state.usersChattingWith.indexOf(String(msg.from.id)) === -1) {
+                    console.log("not found user");
+                    let data = {
+                        id: msg.from.id,
+                        username: msg.from.username
+                    };
+                    this.openNewChatWindow(data, msg);
                 }
             }
-            if (!found) { //if window is not opened, open one
-                let data = {
-                    id: msg.from.id,  //TODO add support of multiple IDs (invitation to group conversation)
-                    username: msg.from.username
-                };
-                this.openNewChatWindow(data, msg);
+            else {  //group conversation
+                let found = false;
+                for (let window of this.state.chatWindows) {
+                    if (window.props.id == msg.id) {
+                        found = true;
+                    }
+                }
+                if (!found) { //if window is not opened, open one
+                    let data = {
+                        id: msg.from.id,
+                        username: msg.from.username
+                    };
+                    this.openNewChatWindow(data, msg);
+                }
             }
         });
     }
 
-    addUsersGroupMsg(show) {
-        this.setState({addUsers: show});
+    addUsersGroupMsg(show, data=null, windowInfo=null) {
+        this.setState({addUsers: show, windowInfo: windowInfo});
 
+        if (data != null) {
+            console.log("data, IDs of users");
+            console.log(data);
+
+            let to = this.state.windowInfo.to.slice();
+            to.push(this.context.user.id);
+            let message = {
+                serviceMsg: true,
+                to: to,
+                from: {id: this.context.user.id, username: this.context.user.username},
+                id: this.state.windowInfo.id,
+                text: data,
+                time: moment.utc().format('LLL')
+            };
+
+            this.context.user.socket.emit("message", message);
+            console.log("message sent");
+            this.setState({addUsers: false, windowInfo: null});
+        }
     }
 
     openNewChatWindow(data, msg = null) {
@@ -65,7 +100,7 @@ export default class ChatPage extends React.Component {
 
         let temp = this.state.chatWindows.slice();
         temp.push(<ChatWindow key={this.state.windowNumber}
-            //generate unique hash to address chat windows
+                              //generate unique hash to address chat windows
                               id={msg === null ? Math.random().toString() : msg.id}
                               to={data}  // name and id of user message is for
                               msg={msg === null ? null : msg}
@@ -96,13 +131,6 @@ export default class ChatPage extends React.Component {
         temp.splice(temp.indexOf(window), 1);
         this.setState({chatWindows: temp, usersChattingWith: users});
 
-        /*for (let window of this.state.chatWindows) {
-            if (window.props.id === data.id) {
-                console.log("found");
-
-                break;
-            }
-        }*/
     }
 
     render() {
@@ -113,7 +141,7 @@ export default class ChatPage extends React.Component {
                 <div className="main">
                     <LeftToolBar />
                     <RightToolBar chat={this.openNewChatWindow.bind(this)}/>
-                    {this.state.addUsers ? <AddUsersGroupMsg close={this.addUsersGroupMsg.bind(this)}/> : null}
+                    {this.state.addUsers ? <AddUsersGroupMsg addUser={this.addUsersGroupMsg.bind(this)}/> : null}
                     <div className="body container-fluid">
                         <div className="row" id="mainContentWrap">
                             <div className="container-fluid">

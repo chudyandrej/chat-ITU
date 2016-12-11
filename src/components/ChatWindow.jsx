@@ -16,7 +16,9 @@ export default class ChatWindow extends React.Component {
         this.state = {
             text: '',
             id: this.props.id,  //identificator of window
-            toWhoInfo: this.props.to,
+            toWhoInfo: this.props.to, //object of the first user window was initialized with
+            //id of users in group conversation, except the first id (when window was created), it is in toWhoInfo
+            groupIDs: [],
             messages: []
         };
     }
@@ -27,6 +29,12 @@ export default class ChatWindow extends React.Component {
 
         if (this.props.msg !== null) {
             this.showMessage(this.props.msg, false);
+            /*console.log("initialization of message");
+            if (this.props.msg.to.length > 1) {
+                console.log("saving multiple users");
+                console.log(this.props.msg.to);
+                this.setState({groupIDs: this.props.msg.to});
+            }*/
         }
 
         this.context.user.socket.on('message', (msg) => {
@@ -34,11 +42,27 @@ export default class ChatWindow extends React.Component {
             console.log(this.state.id);
             console.log(msg);
 
-            //check if the message is for this window
-            if (this.state.id == msg.id) {
-                console.log("found in window");
-                console.log(msg);
-                this.showMessage(msg, false);
+            if (msg.serviceMsg) {
+                console.log("got service message");
+                let allIDs = this.state.groupIDs.concat(msg.text);
+                this.setState({groupIDs: allIDs});
+                console.log(msg.text);
+                return;
+            }
+
+            if (msg.to.length === 1) {
+                //non group conversation  //TODO problem when group message?
+                console.log("single msg window");
+                if (this.state.toWhoInfo.id == msg.from.id) {
+                    this.showMessage(msg, false);
+                }
+            }
+            else {  //group conversation
+                //check if the message is for this window
+                console.log("group msg window");
+                if (this.state.id == msg.id) {
+                    this.showMessage(msg, false);
+                }
             }
         });
     }
@@ -75,7 +99,13 @@ export default class ChatWindow extends React.Component {
             return;
         }
 
+        //let allReceivers = [this.state.toWhoInfo.id, this.context.user.id];
+        //if (this.state.groupIDs.length > 0) {
+        //    allReceivers = allReceivers.concat(this.state.groupIDs);
+        //}
+
         let message = {
+            //serviceMsg: false,
             to: [this.state.toWhoInfo.id], //TODO add multiple IDs of multiple people
             from: {id: this.context.user.id, username: this.context.user.username},
             id: this.state.id,
@@ -102,7 +132,7 @@ export default class ChatWindow extends React.Component {
     }
 
     addUsers() {
-        this.props.addUsers(true);
+        this.props.addUsers(true, null, {id: this.state.id, to: [this.state.toWhoInfo.id]}); //TODO concat more users
     }
 
     closeWindow() {
@@ -151,9 +181,12 @@ export default class ChatWindow extends React.Component {
                                    onKeyPress={this.handleKeyPress.bind(this)}
                                    onChange={this.handleChange.bind(this)}/>
                             <span className="input-group-btn">
-                                <button className="btn btn-primary btn-sm"
-                                        id="btn-chat"
-                                        onClick={this.handleSubmit.bind(this)}>Send</button>
+
+                            <div onClick={this.handleSubmit.bind(this)}>>
+                                <img className="hover-img send-btn"
+                                     alt="Send"
+                                     src={require("../../public/img/send-message.png")}/>
+                            </div>
                             </span>
                         </div>
                     </div>
