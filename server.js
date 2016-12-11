@@ -9,8 +9,12 @@ var cryptojs = require('crypto-js');
 
 var PORT = process.env.PORT || 3000;
 
-var onlineUser = {};
 
+var onlineUser = {}
+
+onlineUser['2'] = {
+    name: 'Andrej Chudz'
+}
 
 app.use(express.static(__dirname + '/public'));
 
@@ -54,10 +58,13 @@ io.on('connection', function(socket) {
             });
 
         }, (error) => {
-            console.log(error);
+            let errorMsg = error.errors[0].message + " -> " + error.errors[0].path;
+            if (!error.errors[0].message || !error.errors[0].path) {
+                errorMsg = error;
+            }
             socket.emit('registerAllowed', {
                 result: false,
-                message: error
+                message: errorMsg
             });
         });
     });
@@ -104,14 +111,14 @@ io.on('connection', function(socket) {
 
 
     socket.on('disconnect', function() {
-        for(userId of Object.keys(onlineUser)){
-            let user = onlineUser[userId];
-            if (user.socket.id === socket.id){
-                delete onlineUser[userId]
-                break;
-            }
-       }
-        io.emit('getUsers' , getArrayOnlienUsers());
+       //  for(userId of Object.keys(onlineUser)){
+       //      let user = onlineUser[userId];
+       //      if (user.socket.id === socket.id){
+       //          delete onlineUser[userId]
+       //          break;
+       //      }
+       // }
+       //  io.emit('getUsers' , getArrayOnlienUsers());
     });
    
 

@@ -1,8 +1,9 @@
 import React from 'react';
+import AddUsersGroupMsg from '../components/AddUsersGroupMsg.jsx';
 import ChatWindow from '../components/ChatWindow.jsx';
+import Header from '../components/Header.jsx';
 import LeftToolBar from '../components/LeftToolBar.jsx';
 import RightToolBar from '../components/RightToolBar.jsx';
-import Header from '../components/Header.jsx';
 
 
 export default class ChatPage extends React.Component {
@@ -16,11 +17,16 @@ export default class ChatPage extends React.Component {
 
         this.state = {
             windowNumber: 0,
-            chatWindows: []
+            addUsers: false,
+            chatWindows: [],
+            //IDs of users, I have opened chat window with
+            //group messages are not taken into account
+            usersChattingWith: []
         };
     }
 
     componentDidMount() {
+        //listener on new messages
         this.context.user.socket.on('message', (msg) => {
             console.log("message received chat page");
             console.log(msg);
@@ -28,14 +34,14 @@ export default class ChatPage extends React.Component {
             let found = false;
             for (let window of this.state.chatWindows) {
                 if (window.props.id == msg.id) {
-                    console.log("found");
+                    //if window is already opened, ignore the message,
+                    //it will be handled by chat window itself
                     found = true;
-
                 }
             }
-            if (!found) {
+            if (!found) { //if window is not opened, open one
                 let data = {
-                    id: msg.from.id,  //TODO add support of multiple IDs
+                    id: msg.from.id,  //TODO add support of multiple IDs (invitation to group conversation)
                     username: msg.from.username
                 };
                 this.openNewChatWindow(data, msg);
@@ -43,9 +49,19 @@ export default class ChatPage extends React.Component {
         });
     }
 
+    addUsersGroupMsg(show) {
+        this.setState({addUsers: show});
+
+    }
+
     openNewChatWindow(data, msg = null) {
         console.log("opening");
         console.log(data);
+
+        if (this.state.usersChattingWith.indexOf(data.id) !== -1) {
+            //windows with the user is already opened => ignore request
+            return;
+        }
 
         let temp = this.state.chatWindows.slice();
         temp.push(<ChatWindow key={this.state.windowNumber}
@@ -53,29 +69,40 @@ export default class ChatPage extends React.Component {
                               id={msg === null ? Math.random().toString() : msg.id}
                               to={data}  // name and id of user message is for
                               msg={msg === null ? null : msg}
+                              addUsers={this.addUsersGroupMsg.bind(this)}
                               close={this.closeChatWindow.bind(this)}/>);
+
+        //save id of user I've opened a window to chat with him
+        let users = this.state.usersChattingWith.slice();
+        users.push(data.id);
 
         this.setState({
             windowNumber: this.state.windowNumber + 1,
-            chatWindows: temp
+            chatWindows: temp,
+            usersChattingWith: users
         });
-        console.log(temp[0].props.id);
     }
 
-    closeChatWindow(id) {
+    closeChatWindow(data) {
         console.log("closing");
-        console.log(id);
+        console.log(data.id);
 
-        for (let window of this.state.chatWindows) {
-            if (window.props.id === id) {
+        //save id of user I've opened a window to chat with him
+        let users = this.state.usersChattingWith.slice();
+        users.splice(users.indexOf(data.withUser), 1);
+
+        //close the window
+        let temp = this.state.chatWindows.slice();
+        temp.splice(temp.indexOf(window), 1);
+        this.setState({chatWindows: temp, usersChattingWith: users});
+
+        /*for (let window of this.state.chatWindows) {
+            if (window.props.id === data.id) {
                 console.log("found");
-                let temp = this.state.chatWindows.slice();
-                let index = temp.indexOf(window);
-                temp.splice(index, 1);
-                this.setState({chatWindows: temp});
+
                 break;
             }
-        }
+        }*/
     }
 
     render() {
@@ -86,7 +113,7 @@ export default class ChatPage extends React.Component {
                 <div className="main">
                     <LeftToolBar />
                     <RightToolBar chat={this.openNewChatWindow.bind(this)}/>
-
+                    {this.state.addUsers ? <AddUsersGroupMsg close={this.addUsersGroupMsg.bind(this)}/> : null}
                     <div className="body container-fluid">
                         <div className="row" id="mainContentWrap">
                             <div className="container-fluid">

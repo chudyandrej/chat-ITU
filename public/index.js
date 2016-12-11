@@ -44573,9 +44573,17 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _AddUsersGroupMsg = __webpack_require__(/*! ../components/AddUsersGroupMsg.jsx */ 416);
+	
+	var _AddUsersGroupMsg2 = _interopRequireDefault(_AddUsersGroupMsg);
+	
 	var _ChatWindow = __webpack_require__(/*! ../components/ChatWindow.jsx */ 295);
 	
 	var _ChatWindow2 = _interopRequireDefault(_ChatWindow);
+	
+	var _Header = __webpack_require__(/*! ../components/Header.jsx */ 414);
+	
+	var _Header2 = _interopRequireDefault(_Header);
 	
 	var _LeftToolBar = __webpack_require__(/*! ../components/LeftToolBar.jsx */ 404);
 	
@@ -44584,10 +44592,6 @@
 	var _RightToolBar = __webpack_require__(/*! ../components/RightToolBar.jsx */ 411);
 	
 	var _RightToolBar2 = _interopRequireDefault(_RightToolBar);
-	
-	var _Header = __webpack_require__(/*! ../components/Header.jsx */ 414);
-	
-	var _Header2 = _interopRequireDefault(_Header);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -44607,7 +44611,11 @@
 	
 	        _this.state = {
 	            windowNumber: 0,
-	            chatWindows: []
+	            addUsers: false,
+	            chatWindows: [],
+	            //IDs of users, I have opened chat window with
+	            //group messages are not taken into account
+	            usersChattingWith: []
 	        };
 	        return _this;
 	    }
@@ -44617,6 +44625,7 @@
 	        value: function componentDidMount() {
 	            var _this2 = this;
 	
+	            //listener on new messages
 	            this.context.user.socket.on('message', function (msg) {
 	                console.log("message received chat page");
 	                console.log(msg);
@@ -44628,10 +44637,11 @@
 	
 	                try {
 	                    for (var _iterator = _this2.state.chatWindows[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                        var window = _step.value;
+	                        var _window = _step.value;
 	
-	                        if (window.props.id == msg.id) {
-	                            console.log("found");
+	                        if (_window.props.id == msg.id) {
+	                            //if window is already opened, ignore the message,
+	                            //it will be handled by chat window itself
 	                            found = true;
 	                        }
 	                    }
@@ -44651,13 +44661,19 @@
 	                }
 	
 	                if (!found) {
+	                    //if window is not opened, open one
 	                    var data = {
-	                        id: msg.from.id, //TODO add support of multiple IDs
+	                        id: msg.from.id, //TODO add support of multiple IDs (invitation to group conversation)
 	                        username: msg.from.username
 	                    };
 	                    _this2.openNewChatWindow(data, msg);
 	                }
 	            });
+	        }
+	    }, {
+	        key: 'addUsersGroupMsg',
+	        value: function addUsersGroupMsg(show) {
+	            this.setState({ addUsers: show });
 	        }
 	    }, {
 	        key: 'openNewChatWindow',
@@ -44667,57 +44683,51 @@
 	            console.log("opening");
 	            console.log(data);
 	
+	            if (this.state.usersChattingWith.indexOf(data.id) !== -1) {
+	                //windows with the user is already opened => ignore request
+	                return;
+	            }
+	
 	            var temp = this.state.chatWindows.slice();
 	            temp.push(_react2.default.createElement(_ChatWindow2.default, { key: this.state.windowNumber
 	                //generate unique hash to address chat windows
 	                , id: msg === null ? Math.random().toString() : msg.id,
 	                to: data // name and id of user message is for
 	                , msg: msg === null ? null : msg,
+	                addUsers: this.addUsersGroupMsg.bind(this),
 	                close: this.closeChatWindow.bind(this) }));
+	
+	            //save id of user I've opened a window to chat with him
+	            var users = this.state.usersChattingWith.slice();
+	            users.push(data.id);
 	
 	            this.setState({
 	                windowNumber: this.state.windowNumber + 1,
-	                chatWindows: temp
+	                chatWindows: temp,
+	                usersChattingWith: users
 	            });
-	            console.log(temp[0].props.id);
 	        }
 	    }, {
 	        key: 'closeChatWindow',
-	        value: function closeChatWindow(id) {
+	        value: function closeChatWindow(data) {
 	            console.log("closing");
-	            console.log(id);
+	            console.log(data.id);
 	
-	            var _iteratorNormalCompletion2 = true;
-	            var _didIteratorError2 = false;
-	            var _iteratorError2 = undefined;
+	            //save id of user I've opened a window to chat with him
+	            var users = this.state.usersChattingWith.slice();
+	            users.splice(users.indexOf(data.withUser), 1);
 	
-	            try {
-	                for (var _iterator2 = this.state.chatWindows[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                    var window = _step2.value;
+	            //close the window
+	            var temp = this.state.chatWindows.slice();
+	            temp.splice(temp.indexOf(window), 1);
+	            this.setState({ chatWindows: temp, usersChattingWith: users });
 	
-	                    if (window.props.id === id) {
-	                        console.log("found");
-	                        var temp = this.state.chatWindows.slice();
-	                        var index = temp.indexOf(window);
-	                        temp.splice(index, 1);
-	                        this.setState({ chatWindows: temp });
-	                        break;
-	                    }
+	            /*for (let window of this.state.chatWindows) {
+	                if (window.props.id === data.id) {
+	                    console.log("found");
+	                     break;
 	                }
-	            } catch (err) {
-	                _didIteratorError2 = true;
-	                _iteratorError2 = err;
-	            } finally {
-	                try {
-	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                        _iterator2.return();
-	                    }
-	                } finally {
-	                    if (_didIteratorError2) {
-	                        throw _iteratorError2;
-	                    }
-	                }
-	            }
+	            }*/
 	        }
 	    }, {
 	        key: 'render',
@@ -44732,6 +44742,7 @@
 	                    { className: 'main' },
 	                    _react2.default.createElement(_LeftToolBar2.default, null),
 	                    _react2.default.createElement(_RightToolBar2.default, { chat: this.openNewChatWindow.bind(this) }),
+	                    this.state.addUsers ? _react2.default.createElement(_AddUsersGroupMsg2.default, { close: this.addUsersGroupMsg.bind(this) }) : null,
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'body container-fluid' },
@@ -44899,9 +44910,18 @@
 	            //TODO timeout for typing = true ? will we even use typing var?
 	        }
 	    }, {
+	        key: 'addUsers',
+	        value: function addUsers() {
+	            this.props.addUsers(true);
+	        }
+	    }, {
 	        key: 'closeWindow',
 	        value: function closeWindow() {
-	            this.props.close(this.state.id);
+	            var data = {
+	                id: this.state.id, //window ID
+	                withUser: this.state.toWhoInfo.id //id of a user I chat with, excludes group conversations
+	            };
+	            this.props.close(data);
 	        }
 	    }, {
 	        key: 'render',
@@ -44930,6 +44950,7 @@
 	                            'div',
 	                            { className: 'col-md-4 col-xs-4', style: { textAlign: "right" } },
 	                            _react2.default.createElement('span', { style: { cursor: "pointer" },
+	                                onClick: this.addUsers.bind(this),
 	                                id: 'minim_chat_window',
 	                                className: 'glyphicon glyphicon-minus icon_minim' }),
 	                            _react2.default.createElement('span', { style: { cursor: "pointer" },
@@ -60002,6 +60023,7 @@
 	
 	
 	                        if (_this2.context.user.id == user.id) {
+	                            //if it's my id, ignore, I don't wanna be shown in online users list :D
 	                            continue;
 	                        }
 	                        temp.push(_react2.default.createElement(_OnlineUser2.default, { key: user.id,
@@ -60098,7 +60120,8 @@
 	
 	        _this.state = {
 	            id: _this.props.id, //user's ID
-	            username: _this.props.username
+	            username: _this.props.username,
+	            rightBar: typeof _this.props.add === "undefined"
 	        };
 	        return _this;
 	    }
@@ -60112,16 +60135,29 @@
 	            });
 	        }
 	    }, {
+	        key: "addUser",
+	        value: function addUser() {
+	            this.props.add({
+	                id: this.state.id,
+	                username: this.state.username
+	            });
+	        }
+	    }, {
 	        key: "render",
 	        value: function render() {
 	
 	            var imgURL = "https://chat-itu.herokuapp.com/" + this.state.id;
+	            var onlineStatus = _react2.default.createElement(
+	                "div",
+	                { className: "item-status" },
+	                _react2.default.createElement("span", null)
+	            );
 	
 	            return _react2.default.createElement(
 	                "button",
 	                { type: "button",
-	                    onClick: this.openNewChatWindow.bind(this),
-	                    className: "list-group-item sidebar-brand" },
+	                    onClick: this.state.rightBar ? this.openNewChatWindow.bind(this) : this.addUser.bind(this),
+	                    className: "list-group-item" },
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "item-image" },
@@ -60136,11 +60172,7 @@
 	                        this.state.username
 	                    )
 	                ),
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "item-status" },
-	                    _react2.default.createElement("span", null)
-	                )
+	                this.state.rightBar ? onlineStatus : null
 	            );
 	        }
 	    }]);
@@ -60282,6 +60314,516 @@
 /***/ function(module, exports) {
 
 	module.exports = "data:image/png;base64,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"
+
+/***/ },
+/* 416 */
+/*!*********************************************!*\
+  !*** ./src/components/AddUsersGroupMsg.jsx ***!
+  \*********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _OnlineUser = __webpack_require__(/*! ./OnlineUser.jsx */ 412);
+	
+	var _OnlineUser2 = _interopRequireDefault(_OnlineUser);
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactSkylight = __webpack_require__(/*! react-skylight */ 417);
+	
+	var _reactSkylight2 = _interopRequireDefault(_reactSkylight);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var AddUsersGroupMsg = function (_React$Component) {
+	    _inherits(AddUsersGroupMsg, _React$Component);
+	
+	    function AddUsersGroupMsg(props, context) {
+	        _classCallCheck(this, AddUsersGroupMsg);
+	
+	        var _this = _possibleConstructorReturn(this, (AddUsersGroupMsg.__proto__ || Object.getPrototypeOf(AddUsersGroupMsg)).call(this, props, context));
+	
+	        _this.state = {
+	            users: []
+	        };
+	        return _this;
+	    }
+	
+	    _createClass(AddUsersGroupMsg, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this2 = this;
+	
+	            if (this.context.user.socket === null) {
+	                return;
+	            } //user did refresh the page => socket is null
+	            this.context.user.socket.on('getUsers', function (response) {
+	                var temp = [];
+	                console.log("add users ll");
+	                console.log(response);
+	
+	                var _iteratorNormalCompletion = true;
+	                var _didIteratorError = false;
+	                var _iteratorError = undefined;
+	
+	                try {
+	                    for (var _iterator = response[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	                        var user = _step.value;
+	
+	
+	                        if (_this2.context.user.id == user.id) {
+	                            //if it's my id, ignore, I don't wanna be shown in online users list :D
+	                            continue;
+	                        }
+	                        console.log("add users ll");
+	                        console.log(user);
+	                        temp.push(_react2.default.createElement(_OnlineUser2.default, { key: user.id,
+	                            id: user.id,
+	                            username: user.name,
+	                            add: null }));
+	                    }
+	                } catch (err) {
+	                    _didIteratorError = true;
+	                    _iteratorError = err;
+	                } finally {
+	                    try {
+	                        if (!_iteratorNormalCompletion && _iterator.return) {
+	                            _iterator.return();
+	                        }
+	                    } finally {
+	                        if (_didIteratorError) {
+	                            throw _iteratorError;
+	                        }
+	                    }
+	                }
+	
+	                _this2.setState({ users: temp });
+	                console.log(temp);
+	            });
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.refs.dialogWithCallBacks.show();
+	
+	            //emit server to get online users
+	            this.context.user.socket.emit('getUsers', {});
+	        }
+	    }, {
+	        key: 'close',
+	        value: function close() {
+	            this.props.close(false);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var myBigGreenDialog = {
+	                backgroundColor: '#00897B',
+	                color: '#ffffff',
+	                width: '400px',
+	                height: '200px',
+	                marginTop: '-300px',
+	                marginLeft: '-35%'
+	            };
+	
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    _reactSkylight2.default,
+	                    {
+	                        afterClose: this.close.bind(this),
+	                        dialogStyles: myBigGreenDialog,
+	                        ref: 'dialogWithCallBacks',
+	                        title: 'Add users to the conversation' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'list-group modal-users' },
+	                        this.state.users
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return AddUsersGroupMsg;
+	}(_react2.default.Component);
+	
+	AddUsersGroupMsg.contextTypes = {
+	    user: _react2.default.PropTypes.object
+	};
+	exports.default = AddUsersGroupMsg;
+
+/***/ },
+/* 417 */
+/*!***************************************!*\
+  !*** ./~/react-skylight/lib/index.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _skylight = __webpack_require__(/*! ./skylight */ 418);
+	
+	Object.defineProperty(exports, 'default', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_skylight).default;
+	  }
+	});
+	
+	var _skylightstateless = __webpack_require__(/*! ./skylightstateless */ 419);
+	
+	Object.defineProperty(exports, 'SkyLightStateless', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_skylightstateless).default;
+	  }
+	});
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ },
+/* 418 */
+/*!******************************************!*\
+  !*** ./~/react-skylight/lib/skylight.js ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _skylightstateless = __webpack_require__(/*! ./skylightstateless */ 419);
+	
+	var _skylightstateless2 = _interopRequireDefault(_skylightstateless);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var isOpening = function isOpening(s1, s2) {
+	  return !s1.isVisible && s2.isVisible;
+	};
+	var isClosing = function isClosing(s1, s2) {
+	  return s1.isVisible && !s2.isVisible;
+	};
+	
+	var SkyLight = (function (_React$Component) {
+	  _inherits(SkyLight, _React$Component);
+	
+	  function SkyLight(props) {
+	    _classCallCheck(this, SkyLight);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SkyLight).call(this, props));
+	
+	    _this.state = { isVisible: false };
+	    return _this;
+	  }
+	
+	  _createClass(SkyLight, [{
+	    key: 'componentWillUpdate',
+	    value: function componentWillUpdate(nextProps, nextState) {
+	      if (isOpening(this.state, nextState) && this.props.beforeOpen) {
+	        this.props.beforeOpen();
+	      }
+	
+	      if (isClosing(this.state, nextState) && this.props.beforeClose) {
+	        this.props.beforeClose();
+	      }
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps, prevState) {
+	      if (isOpening(prevState, this.state) && this.props.afterOpen) {
+	        this.props.afterOpen();
+	      }
+	
+	      if (isClosing(prevState, this.state) && this.props.afterClose) {
+	        this.props.afterClose();
+	      }
+	    }
+	  }, {
+	    key: 'show',
+	    value: function show() {
+	      this.setState({ isVisible: true });
+	    }
+	  }, {
+	    key: 'hide',
+	    value: function hide() {
+	      this.setState({ isVisible: false });
+	    }
+	  }, {
+	    key: '_onOverlayClicked',
+	    value: function _onOverlayClicked() {
+	      if (this.props.hideOnOverlayClicked) {
+	        this.hide();
+	      }
+	
+	      if (this.props.onOverlayClicked) {
+	        this.props.onOverlayClicked();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      return _react2.default.createElement(_skylightstateless2.default, _extends({}, this.props, {
+	        isVisible: this.state.isVisible,
+	        onOverlayClicked: function onOverlayClicked() {
+	          return _this2._onOverlayClicked();
+	        },
+	        onCloseClicked: function onCloseClicked() {
+	          return _this2.hide();
+	        }
+	      }));
+	    }
+	  }]);
+	
+	  return SkyLight;
+	})(_react2.default.Component);
+	
+	exports.default = SkyLight;
+	
+	SkyLight.displayName = 'SkyLight';
+	
+	SkyLight.propTypes = _extends({}, _skylightstateless2.default.sharedPropTypes, {
+	  afterClose: _react2.default.PropTypes.func,
+	  afterOpen: _react2.default.PropTypes.func,
+	  beforeClose: _react2.default.PropTypes.func,
+	  beforeOpen: _react2.default.PropTypes.func,
+	  hideOnOverlayClicked: _react2.default.PropTypes.bool
+	});
+	
+	SkyLight.defaultProps = _extends({}, _skylightstateless2.default.defaultProps, {
+	  hideOnOverlayClicked: false
+	});
+
+/***/ },
+/* 419 */
+/*!***************************************************!*\
+  !*** ./~/react-skylight/lib/skylightstateless.js ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _styles = __webpack_require__(/*! ./styles */ 420);
+	
+	var _styles2 = _interopRequireDefault(_styles);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var SkyLightStateless = (function (_React$Component) {
+	  _inherits(SkyLightStateless, _React$Component);
+	
+	  function SkyLightStateless() {
+	    _classCallCheck(this, SkyLightStateless);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(SkyLightStateless).apply(this, arguments));
+	  }
+	
+	  _createClass(SkyLightStateless, [{
+	    key: 'onOverlayClicked',
+	    value: function onOverlayClicked() {
+	      if (this.props.onOverlayClicked) {
+	        this.props.onOverlayClicked();
+	      }
+	    }
+	  }, {
+	    key: 'onCloseClicked',
+	    value: function onCloseClicked() {
+	      if (this.props.onCloseClicked) {
+	        this.props.onCloseClicked();
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      var mergeStyles = function mergeStyles(key) {
+	        return Object.assign({}, _styles2.default[key], _this2.props[key]);
+	      };
+	      var isVisible = this.props.isVisible;
+	
+	      var dialogStyles = mergeStyles('dialogStyles');
+	      var overlayStyles = mergeStyles('overlayStyles');
+	      var closeButtonStyle = mergeStyles('closeButtonStyle');
+	      var titleStyle = mergeStyles('titleStyle');
+	      overlayStyles.display = dialogStyles.display = 'block';
+	
+	      var overlay = undefined;
+	      if (this.props.showOverlay) {
+	        overlay = _react2.default.createElement('div', { className: 'skylight-overlay',
+	          onClick: function onClick() {
+	            return _this2.onOverlayClicked();
+	          },
+	          style: overlayStyles
+	        });
+	      }
+	
+	      return isVisible ? _react2.default.createElement(
+	        'section',
+	        { className: 'skylight-wrapper' },
+	        overlay,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'skylight-dialog', style: dialogStyles },
+	          _react2.default.createElement(
+	            'a',
+	            { role: 'button', className: 'skylight-close-button',
+	              onClick: function onClick() {
+	                return _this2.onCloseClicked();
+	              },
+	              style: closeButtonStyle
+	            },
+	            '×'
+	          ),
+	          _react2.default.createElement(
+	            'h2',
+	            { style: titleStyle },
+	            this.props.title
+	          ),
+	          this.props.children
+	        )
+	      ) : _react2.default.createElement('div', null);
+	    }
+	  }]);
+	
+	  return SkyLightStateless;
+	})(_react2.default.Component);
+	
+	exports.default = SkyLightStateless;
+	
+	SkyLightStateless.displayName = 'SkyLightStateless';
+	
+	SkyLightStateless.sharedPropTypes = {
+	  closeButtonStyle: _react2.default.PropTypes.object,
+	  dialogStyles: _react2.default.PropTypes.object,
+	  onCloseClicked: _react2.default.PropTypes.func,
+	  onOverlayClicked: _react2.default.PropTypes.func,
+	  overlayStyles: _react2.default.PropTypes.object,
+	  showOverlay: _react2.default.PropTypes.bool,
+	  title: _react2.default.PropTypes.string,
+	  titleStyle: _react2.default.PropTypes.object
+	};
+	
+	SkyLightStateless.propTypes = _extends({}, SkyLightStateless.sharedPropTypes, {
+	  isVisible: _react2.default.PropTypes.bool
+	});
+	
+	SkyLightStateless.defaultProps = {
+	  title: '',
+	  showOverlay: true,
+	  overlayStyles: _styles2.default.overlayStyles,
+	  dialogStyles: _styles2.default.dialogStyles,
+	  closeButtonStyle: _styles2.default.closeButtonStyle
+	};
+
+/***/ },
+/* 420 */
+/*!****************************************!*\
+  !*** ./~/react-skylight/lib/styles.js ***!
+  \****************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var styles = {
+	  overlayStyles: {
+	    position: 'fixed',
+	    top: '0px',
+	    left: '0px',
+	    width: '100%',
+	    height: '100%',
+	    zIndex: '99',
+	    backgroundColor: 'rgba(0,0,0,0.3)'
+	  },
+	  dialogStyles: {
+	    width: '50%',
+	    height: '400px',
+	    position: 'fixed',
+	    top: '50%',
+	    left: '50%',
+	    marginTop: '-200px',
+	    marginLeft: '-25%',
+	    backgroundColor: '#fff',
+	    borderRadius: '2px',
+	    zIndex: '100',
+	    padding: '15px',
+	    boxShadow: '0px 0px 4px rgba(0,0,0,.14),0px 4px 8px rgba(0,0,0,.28)'
+	  },
+	  title: {
+	    marginTop: '0px'
+	  },
+	  closeButtonStyle: {
+	    cursor: 'pointer',
+	    position: 'absolute',
+	    fontSize: '1.8em',
+	    right: '10px',
+	    top: '0px'
+	  }
+	};
+	
+	exports.default = styles;
 
 /***/ }
 /******/ ]);

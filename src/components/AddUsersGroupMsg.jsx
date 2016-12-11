@@ -1,8 +1,9 @@
-import React from 'react';
 import OnlineUser from './OnlineUser.jsx';
+import React from 'react';
+import SkyLight from 'react-skylight';
 
 
-export default class RightToolBar extends React.Component {
+export default class AddUsersGroupMsg extends React.Component {
 
     static contextTypes = {
         user: React.PropTypes.object
@@ -17,10 +18,10 @@ export default class RightToolBar extends React.Component {
     }
 
     componentWillMount() {
-        //create listener
         if (this.context.user.socket === null) { return; } //user did refresh the page => socket is null
         this.context.user.socket.on('getUsers', (response) => {
             let temp = [];
+            console.log("add users ll");
             console.log(response);
 
             for (let user of response) {
@@ -29,31 +30,53 @@ export default class RightToolBar extends React.Component {
                     //if it's my id, ignore, I don't wanna be shown in online users list :D
                     continue;
                 }
+                console.log("add users ll");
+                console.log(user);
                 temp.push(<OnlineUser key={user.id}
                                       id={user.id}
                                       username={user.name}
-                                      chat={this.openNewChatWindow.bind(this)}/>);
+                                      add={null}/>);
             }
 
             this.setState({users: temp});
+            console.log(temp);
         });
     }
 
     componentDidMount() {
+        this.refs.dialogWithCallBacks.show();
+
+        //emit server to get online users
         this.context.user.socket.emit('getUsers', {});
     }
 
-    openNewChatWindow(data) {
-        this.props.chat(data);
+    close() {
+        this.props.close(false);
     }
+
 
     render() {
 
+        let myBigGreenDialog = {
+            backgroundColor: '#00897B',
+            color: '#ffffff',
+            width: '400px',
+            height: '200px',
+            marginTop: '-300px',
+            marginLeft: '-35%',
+        };
+
         return (
-            <div className="rightSide">
-                <div id="sidebar-wrapper" className="list-group">
-                    {this.state.users}
-                </div>
+            <div>
+                <SkyLight
+                    afterClose={this.close.bind(this)}
+                    dialogStyles={myBigGreenDialog}
+                    ref="dialogWithCallBacks"
+                    title="Add users to the conversation">
+                    <div className="list-group modal-users">
+                        {this.state.users}
+                    </div>
+                </SkyLight>
             </div>
         );
     }

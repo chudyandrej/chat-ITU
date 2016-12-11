@@ -378,3 +378,35 @@ a.logo{
 #sidebar-wrapper:hover  {
     right: 0px;
 }
+
+
+
+.item-image,
+.item-name,
+.item-status{
+  display: inline-block;  
+  height: 30px;
+  line-height: 30px;
+
+}
+
+.item-image img {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+}
+.item-status {
+    text-align: center;
+    margin-left: 20px;
+
+}
+.item-status span {
+
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
+    display: inline-block;
+}
+
+

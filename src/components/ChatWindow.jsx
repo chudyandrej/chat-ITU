@@ -101,8 +101,16 @@ export default class ChatWindow extends React.Component {
         //TODO timeout for typing = true ? will we even use typing var?
     }
 
+    addUsers() {
+        this.props.addUsers(true);
+    }
+
     closeWindow() {
-        this.props.close(this.state.id);
+        let data = {
+            id: this.state.id, //window ID
+            withUser: this.state.toWhoInfo.id //id of a user I chat with, excludes group conversations
+        };
+        this.props.close(data);
     }
 
     render() {
@@ -118,6 +126,7 @@ export default class ChatWindow extends React.Component {
                         </div>
                         <div className="col-md-4 col-xs-4" style={{textAlign: "right"}}>
                             <span style={{cursor: "pointer"}}
+                                  onClick={this.addUsers.bind(this)}
                                   id="minim_chat_window"
                                   className="glyphicon glyphicon-minus icon_minim"/>
 
