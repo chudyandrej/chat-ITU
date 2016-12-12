@@ -6,6 +6,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var cryptojs = require('crypto-js');
+var unique = require('array-unique');
+
 
 var PORT = process.env.PORT || 3000;
 
@@ -100,8 +102,10 @@ io.on('connection', function(socket) {
 
     socket.on('message', function(message) {
         console.log(message);
-        for(userId of message.to){
-            if (!_.isUndefined(onlineUser[userId].socket)){
+        let toUsers = unique(message.to);
+        console.log(toUsers);
+        for(userId of toUsers){
+            if (!_.isUndefined(onlineUser[userId]) && !_.isUndefined(onlineUser[userId].socket)){
                 onlineUser[userId].socket.emit('message', message);
             }
         }
