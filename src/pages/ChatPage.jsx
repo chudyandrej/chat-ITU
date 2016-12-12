@@ -51,13 +51,26 @@ export default class ChatPage extends React.Component {
                 let found = false;
                 for (let window of this.state.chatWindows) {
                     if (window.props.id == msg.id) {
+                        console.log("found group conversation");
                         found = true;
                     }
                 }
                 if (!found) { //if window is not opened, open one
+                    console.log("opening new group conversation");
+                    console.log(msg.to);
+
+                    //hack, exclude my ID, and add sender ID  << school project, no time on details ...
+                    let allIDs = [];
+                    for(let id of msg.to) {
+                        if (id != this.context.user.id) {
+                            allIDs.push(id)
+                        }
+                    }
+                    allIDs.push(msg.from.id);
+
                     let data = {
-                        id: msg.from.id,
-                        username: msg.from.username
+                        id: allIDs,    //it's array
+                        username: "Group conversation"
                     };
                     this.openNewChatWindow(data, msg);
                 }
@@ -76,6 +89,7 @@ export default class ChatPage extends React.Component {
             to.push(this.context.user.id);
             let message = {
                 serviceMsg: true,
+                myID: this.context.user.id,
                 to: to,
                 from: {id: this.context.user.id, username: this.context.user.username},
                 id: this.state.windowInfo.id,
@@ -102,7 +116,7 @@ export default class ChatPage extends React.Component {
         temp.push(<ChatWindow key={this.state.windowNumber}
                               //generate unique hash to address chat windows
                               id={msg === null ? Math.random().toString() : msg.id}
-                              to={data}  // name and id of user message is for
+                              to={data}  // name and id of user message is for /
                               msg={msg === null ? null : msg}
                               addUsers={this.addUsersGroupMsg.bind(this)}
                               close={this.closeChatWindow.bind(this)}/>);

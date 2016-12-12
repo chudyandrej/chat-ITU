@@ -44661,6 +44661,7 @@
 	                            var window = _step.value;
 	
 	                            if (window.props.id == msg.id) {
+	                                console.log("found group conversation");
 	                                found = true;
 	                            }
 	                        }
@@ -44681,9 +44682,43 @@
 	
 	                    if (!found) {
 	                        //if window is not opened, open one
+	                        console.log("opening new group conversation");
+	                        console.log(msg.to);
+	
+	                        //hack, exclude my ID, and add sender ID  << school project, no time on details ...
+	                        var allIDs = [];
+	                        var _iteratorNormalCompletion2 = true;
+	                        var _didIteratorError2 = false;
+	                        var _iteratorError2 = undefined;
+	
+	                        try {
+	                            for (var _iterator2 = msg.to[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                                var id = _step2.value;
+	
+	                                if (id != _this2.context.user.id) {
+	                                    allIDs.push(id);
+	                                }
+	                            }
+	                        } catch (err) {
+	                            _didIteratorError2 = true;
+	                            _iteratorError2 = err;
+	                        } finally {
+	                            try {
+	                                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	                                    _iterator2.return();
+	                                }
+	                            } finally {
+	                                if (_didIteratorError2) {
+	                                    throw _iteratorError2;
+	                                }
+	                            }
+	                        }
+	
+	                        allIDs.push(msg.from.id);
+	
 	                        var _data = {
-	                            id: msg.from.id,
-	                            username: msg.from.username
+	                            id: allIDs, //it's array
+	                            username: "Group conversation"
 	                        };
 	                        _this2.openNewChatWindow(_data, msg);
 	                    }
@@ -44706,6 +44741,7 @@
 	                to.push(this.context.user.id);
 	                var message = {
 	                    serviceMsg: true,
+	                    myID: this.context.user.id,
 	                    to: to,
 	                    from: { id: this.context.user.id, username: this.context.user.username },
 	                    id: this.state.windowInfo.id,
@@ -44735,7 +44771,7 @@
 	            temp.push(_react2.default.createElement(_ChatWindow2.default, { key: this.state.windowNumber
 	                //generate unique hash to address chat windows
 	                , id: msg === null ? Math.random().toString() : msg.id,
-	                to: data // name and id of user message is for
+	                to: data // name and id of user message is for /
 	                , msg: msg === null ? null : msg,
 	                addUsers: this.addUsersGroupMsg.bind(this),
 	                close: this.closeChatWindow.bind(this) }));
@@ -44762,13 +44798,13 @@
 	
 	            //close the window
 	            var temp = this.state.chatWindows.slice();
-	            var _iteratorNormalCompletion2 = true;
-	            var _didIteratorError2 = false;
-	            var _iteratorError2 = undefined;
+	            var _iteratorNormalCompletion3 = true;
+	            var _didIteratorError3 = false;
+	            var _iteratorError3 = undefined;
 	
 	            try {
-	                for (var _iterator2 = this.state.chatWindows[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-	                    var window = _step2.value;
+	                for (var _iterator3 = this.state.chatWindows[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	                    var window = _step3.value;
 	
 	                    if (window.props.id === data.id) {
 	                        temp.splice(temp.indexOf(window), 1);
@@ -44776,16 +44812,16 @@
 	                    }
 	                }
 	            } catch (err) {
-	                _didIteratorError2 = true;
-	                _iteratorError2 = err;
+	                _didIteratorError3 = true;
+	                _iteratorError3 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-	                        _iterator2.return();
+	                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	                        _iterator3.return();
 	                    }
 	                } finally {
-	                    if (_didIteratorError2) {
-	                        throw _iteratorError2;
+	                    if (_didIteratorError3) {
+	                        throw _iteratorError3;
 	                    }
 	                }
 	            }
@@ -45017,6 +45053,7 @@
 	                _react2.default.createElement(
 	                    _reactSkylight2.default,
 	                    {
+	                        hideOnOverlayClicked: true,
 	                        afterClose: this.close.bind(this),
 	                        dialogStyles: myBigGreenDialog,
 	                        ref: 'dialogWithCallBacks' },
@@ -45558,6 +45595,7 @@
 	        var _this = _possibleConstructorReturn(this, (ChatWindow.__proto__ || Object.getPrototypeOf(ChatWindow)).call(this, props, context));
 	
 	        _this.state = {
+	            initAsGroup: Array.isArray(_this.props.to.id),
 	            text: '',
 	            id: _this.props.id, //identificator of window
 	            toWhoInfo: _this.props.to, //object of the first user window was initialized with
@@ -45565,6 +45603,9 @@
 	            groupIDs: [],
 	            messages: []
 	        };
+	        console.log("this conversation is initialized as group");
+	        console.log(Array.isArray(_this.props.to.id));
+	        console.log(_this.props.to);
 	        return _this;
 	    }
 	
@@ -45593,6 +45634,10 @@
 	
 	                if (msg.serviceMsg) {
 	                    console.log("got service message");
+	                    if (msg.myID == _this2.context.user.id && msg.id != _this2.state.id) {
+	                        //this message is sent to all my windows, so add new receivers only to the right one
+	                        return;
+	                    }
 	                    var allIDs = _this2.state.groupIDs.concat(msg.text);
 	                    _this2.setState({ groupIDs: allIDs });
 	                    console.log(msg.text);
@@ -45650,14 +45695,16 @@
 	                return;
 	            }
 	
-	            //let allReceivers = [this.state.toWhoInfo.id, this.context.user.id];
-	            //if (this.state.groupIDs.length > 0) {
-	            //    allReceivers = allReceivers.concat(this.state.groupIDs);
-	            //}
+	            var allReceivers = this.state.initAsGroup ? this.state.toWhoInfo.id : [this.state.toWhoInfo.id];
+	            console.log("sending msg");
+	            console.log(allReceivers);
+	            if (this.state.groupIDs.length > 0) {
+	                allReceivers = allReceivers.concat(this.state.groupIDs);
+	            }
 	
 	            var message = {
 	                //serviceMsg: false,
-	                to: [this.state.toWhoInfo.id], //TODO add multiple IDs of multiple people
+	                to: allReceivers, //TODO add multiple IDs of multiple people
 	                from: { id: this.context.user.id, username: this.context.user.username },
 	                id: this.state.id,
 	                text: this.state.text,
@@ -45685,7 +45732,15 @@
 	    }, {
 	        key: 'addUsers',
 	        value: function addUsers(evt) {
-	            this.props.addUsers(true, null, { id: this.state.id, to: [this.state.toWhoInfo.id], x: evt.clientX, y: evt.clientY }); //TODO concat more users
+	            var to = [];
+	            if (this.state.initAsGroup) {
+	                //all of the users is already in toWhoInfo <= hack, not worthy of time == school project
+	                to = this.state.toWhoInfo.id;
+	            } else {
+	                to = [this.state.toWhoInfo.id];
+	                to = to.concat(this.state.groupIDs);
+	            }
+	            this.props.addUsers(true, null, { id: this.state.id, to: to, x: evt.clientX, y: evt.clientY });
 	        }
 	    }, {
 	        key: 'closeWindow',
@@ -45721,7 +45776,7 @@
 	                                        id: 'chat-window',
 	                                        src: __webpack_require__(/*! ../../public/img/chat-window.png */ 412) })
 	                                ),
-	                                this.state.toWhoInfo.username
+	                                this.state.groupIDs.length === 0 ? this.state.toWhoInfo.username : "Group conversation"
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -60657,7 +60712,7 @@
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -60668,6 +60723,10 @@
 	var _react = __webpack_require__(/*! react */ 1);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _UserProfile = __webpack_require__(/*! ./UserProfile.jsx */ 427);
+	
+	var _UserProfile2 = _interopRequireDefault(_UserProfile);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -60683,69 +60742,79 @@
 	    function Header(props, context) {
 	        _classCallCheck(this, Header);
 	
-	        return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props, context));
+	        var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props, context));
+	
+	        _this.state = { showProfile: false };
+	        return _this;
 	    }
 	
 	    _createClass(Header, [{
-	        key: "render",
+	        key: 'userProfile',
+	        value: function userProfile() {
+	            this.setState({ showProfile: !this.state.showProfile });
+	        }
+	    }, {
+	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                "div",
-	                { className: "header navbar navbar-default" },
+	                'div',
+	                { className: 'header navbar navbar-default' },
 	                _react2.default.createElement(
-	                    "div",
-	                    { className: "container-fluid" },
+	                    'div',
+	                    { className: 'container-fluid' },
 	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "navbar-header" },
+	                        'div',
+	                        { className: 'navbar-header' },
 	                        _react2.default.createElement(
-	                            "button",
-	                            { className: "navbar-toggle collapsed", "data-toggle": "collapse", "data-target": "#navcol-1" },
+	                            'button',
+	                            { className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#navcol-1' },
 	                            _react2.default.createElement(
-	                                "span",
-	                                { className: "sr-only" },
-	                                "Toggle navigation"
+	                                'span',
+	                                { className: 'sr-only' },
+	                                'Toggle navigation'
 	                            ),
-	                            _react2.default.createElement("span", { className: "icon-bar" }),
-	                            _react2.default.createElement("span", { className: "icon-bar" }),
-	                            _react2.default.createElement("span", { className: "icon-bar" })
+	                            _react2.default.createElement('span', { className: 'icon-bar' }),
+	                            _react2.default.createElement('span', { className: 'icon-bar' }),
+	                            _react2.default.createElement('span', { className: 'icon-bar' })
 	                        )
 	                    ),
 	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "collapse navbar-collapse", id: "navcol-1" },
+	                        'div',
+	                        { className: 'collapse navbar-collapse', id: 'navcol-1' },
 	                        _react2.default.createElement(
-	                            "ul",
-	                            { className: "nav navbar-nav navbar-left" },
+	                            'ul',
+	                            { className: 'nav navbar-nav navbar-left' },
 	                            _react2.default.createElement(
-	                                "li",
-	                                { role: "presentation" },
+	                                'li',
+	                                { role: 'presentation' },
 	                                _react2.default.createElement(
-	                                    "a",
-	                                    { className: "logo", href: "#" },
-	                                    _react2.default.createElement("img", { alt: "Logo lifeChat", src: __webpack_require__(/*! ../../public/img/livechat.png */ 417) })
+	                                    'a',
+	                                    { className: 'logo', href: '#' },
+	                                    _react2.default.createElement('img', { alt: 'Logo lifeChat', src: __webpack_require__(/*! ../../public/img/livechat.png */ 417) })
 	                                )
 	                            )
 	                        ),
+	                        this.state.showProfile ? _react2.default.createElement(_UserProfile2.default, { close: this.userProfile.bind(this) }) : null,
 	                        _react2.default.createElement(
-	                            "ul",
-	                            { className: "nav navbar-nav navbar-right" },
+	                            'ul',
+	                            { className: 'nav navbar-nav navbar-right' },
 	                            _react2.default.createElement(
-	                                "li",
-	                                { role: "presentation" },
-	                                _react2.default.createElement("img", { className: "hover-img",
-	                                    id: "user",
+	                                'li',
+	                                { role: 'presentation' },
+	                                _react2.default.createElement('img', { className: 'hover-img',
+	                                    id: 'user',
+	                                    onClick: this.userProfile.bind(this),
 	                                    src: __webpack_require__(/*! ../../public/img/user.png */ 418) }),
-	                                "My account"
+	                                'My account'
 	                            ),
 	                            _react2.default.createElement(
-	                                "li",
-	                                { role: "presentation" },
-	                                _react2.default.createElement("img", { className: "hover-img",
-	                                    id: "user",
+	                                'li',
+	                                { role: 'presentation' },
+	                                _react2.default.createElement('img', { className: 'hover-img',
+	                                    id: 'user',
 	                                    onClick: this.context.user.logout,
 	                                    src: __webpack_require__(/*! ../../public/img/log-out.png */ 419) }),
-	                                "Logout"
+	                                'Logout'
 	                            )
 	                        )
 	                    )
@@ -61045,6 +61114,96 @@
 /***/ function(module, exports) {
 
 	module.exports = "data:image/png;base64,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"
+
+/***/ },
+/* 427 */
+/*!****************************************!*\
+  !*** ./src/components/UserProfile.jsx ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactSkylight = __webpack_require__(/*! react-skylight */ 298);
+	
+	var _reactSkylight2 = _interopRequireDefault(_reactSkylight);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var UserProfile = function (_React$Component) {
+	    _inherits(UserProfile, _React$Component);
+	
+	    function UserProfile(props, context) {
+	        _classCallCheck(this, UserProfile);
+	
+	        return _possibleConstructorReturn(this, (UserProfile.__proto__ || Object.getPrototypeOf(UserProfile)).call(this, props, context));
+	    }
+	
+	    _createClass(UserProfile, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.refs.dialogWithCallBacks.show();
+	        }
+	    }, {
+	        key: 'close',
+	        value: function close() {
+	            this.props.close();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	
+	            var imgURL = "https://chat-itu.herokuapp.com/" + this.context.user.id;
+	
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    _reactSkylight2.default,
+	                    {
+	                        hideOnOverlayClicked: true,
+	                        afterClose: this.close.bind(this),
+	                        ref: 'dialogWithCallBacks',
+	                        title: 'User Profile' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            'h1',
+	                            null,
+	                            this.context.user.userName
+	                        )
+	                    ),
+	                    _react2.default.createElement('img', { className: 'img',
+	                        src: parseInt(this.context.user.id) ? imgURL : __webpack_require__(/*! ../../public/img/person-flat.png */ 297) })
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return UserProfile;
+	}(_react2.default.Component);
+	
+	UserProfile.contextTypes = {
+	    user: _react2.default.PropTypes.object
+	};
+	exports.default = UserProfile;
 
 /***/ }
 /******/ ]);

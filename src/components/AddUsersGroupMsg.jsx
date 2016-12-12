@@ -97,6 +97,7 @@ export default class AddUsersGroupMsg extends React.Component {
         return (
             <div>
                 <SkyLight
+                    hideOnOverlayClicked
                     afterClose={this.close.bind(this)}
                     dialogStyles={myBigGreenDialog}
                     ref="dialogWithCallBacks">

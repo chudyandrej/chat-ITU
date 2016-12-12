@@ -14,6 +14,7 @@ export default class ChatWindow extends React.Component {
         super(props, context);
 
         this.state = {
+            initAsGroup: Array.isArray(this.props.to.id),
             text: '',
             id: this.props.id,  //identificator of window
             toWhoInfo: this.props.to, //object of the first user window was initialized with
@@ -21,6 +22,9 @@ export default class ChatWindow extends React.Component {
             groupIDs: [],
             messages: []
         };
+        console.log("this conversation is initialized as group");
+        console.log(Array.isArray(this.props.to.id));
+        console.log(this.props.to);
     }
 
     componentDidMount() {
@@ -44,6 +48,10 @@ export default class ChatWindow extends React.Component {
 
             if (msg.serviceMsg) {
                 console.log("got service message");
+                if (msg.myID == this.context.user.id && msg.id != this.state.id) {
+                    //this message is sent to all my windows, so add new receivers only to the right one
+                    return;
+                }
                 let allIDs = this.state.groupIDs.concat(msg.text);
                 this.setState({groupIDs: allIDs});
                 console.log(msg.text);
@@ -99,14 +107,16 @@ export default class ChatWindow extends React.Component {
             return;
         }
 
-        //let allReceivers = [this.state.toWhoInfo.id, this.context.user.id];
-        //if (this.state.groupIDs.length > 0) {
-        //    allReceivers = allReceivers.concat(this.state.groupIDs);
-        //}
+        let allReceivers = this.state.initAsGroup ? this.state.toWhoInfo.id : [this.state.toWhoInfo.id];
+        console.log("sending msg");
+        console.log(allReceivers);
+        if (this.state.groupIDs.length > 0) {
+            allReceivers = allReceivers.concat(this.state.groupIDs);
+        }
 
         let message = {
             //serviceMsg: false,
-            to: [this.state.toWhoInfo.id], //TODO add multiple IDs of multiple people
+            to: allReceivers, //TODO add multiple IDs of multiple people
             from: {id: this.context.user.id, username: this.context.user.username},
             id: this.state.id,
             text: this.state.text,
@@ -131,11 +141,19 @@ export default class ChatWindow extends React.Component {
     }
 
     addUsers(evt) {
+        let to = [];
+        if (this.state.initAsGroup) {
+            //all of the users is already in toWhoInfo <= hack, not worthy of time == school project
+            to = this.state.toWhoInfo.id
+        } else {
+            to = [this.state.toWhoInfo.id];
+            to = to.concat(this.state.groupIDs);
+        }
         this.props.addUsers(
             true,
             null,
-            {id: this.state.id, to: [this.state.toWhoInfo.id], x: evt.clientX, y: evt.clientY}
-            ); //TODO concat more users
+            {id: this.state.id, to: to, x: evt.clientX, y: evt.clientY}
+            );
     }
 
     closeWindow() {
@@ -158,7 +176,7 @@ export default class ChatWindow extends React.Component {
                                          id="chat-window"
                                          src={require("../../public/img/chat-window.png")}/>
                                 </div>
-                                {this.state.toWhoInfo.username}
+                                {this.state.groupIDs.length === 0 ? this.state.toWhoInfo.username : "Group conversation"}
                             </h3>
                         </div>
                         <div className="col-md-3 col-xs-3" style={{textAlign: "right"}}>
