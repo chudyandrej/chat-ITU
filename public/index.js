@@ -44658,9 +44658,9 @@
 	
 	                    try {
 	                        for (var _iterator = _this2.state.chatWindows[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	                            var _window = _step.value;
+	                            var window = _step.value;
 	
-	                            if (_window.props.id == msg.id) {
+	                            if (window.props.id == msg.id) {
 	                                found = true;
 	                            }
 	                        }
@@ -44756,13 +44756,13 @@
 	            console.log("closing");
 	            console.log(data.id);
 	
-	            //save id of user I've opened a window to chat with him
+	            //remove id of user I've been chatting with
 	            var users = this.state.usersChattingWith.slice();
 	            users.splice(users.indexOf(data.withUser), 1);
 	
 	            //close the window
 	            var temp = this.state.chatWindows.slice();
-	            temp.splice(temp.indexOf(window), 1);
+	            temp.splice(temp.indexOf(data.id), 1);
 	            this.setState({ chatWindows: temp, usersChattingWith: users });
 	        }
 	    }, {
@@ -45085,6 +45085,7 @@
 	        key: "render",
 	        value: function render() {
 	            //just developers' photos :D
+	            //TODO on 46 line should be "< 4", but for school presentation it was removed
 	            var imgURL = "https://chat-itu.herokuapp.com/" + this.state.id;
 	
 	            var onlineStatus = _react2.default.createElement(
@@ -45101,7 +45102,7 @@
 	                _react2.default.createElement(
 	                    "div",
 	                    { className: "item-image" },
-	                    _react2.default.createElement("img", { className: "img-circle", src: parseInt(this.state.id) < 4 ? imgURL : __webpack_require__(/*! ../../public/img/person-flat.png */ 297) })
+	                    _react2.default.createElement("img", { className: "img-circle", src: parseInt(this.state.id) ? imgURL : __webpack_require__(/*! ../../public/img/person-flat.png */ 297) })
 	                ),
 	                _react2.default.createElement(
 	                    "div",
@@ -60526,12 +60527,13 @@
 	        key: 'render',
 	        value: function render() {
 	            //just developer's photos :D
+	            //TODO on 46 line should be "< 4", but for school presentation it was removed
 	            var imgURL = "https://chat-itu.herokuapp.com/" + this.props.userID;
 	
 	            var avatar = _react2.default.createElement(
 	                'div',
 	                { className: 'col-md-2 col-xs-2 avatar' },
-	                _react2.default.createElement('img', { src: parseInt(this.props.userID) < 4 ? imgURL : __webpack_require__(/*! ../../public/img/avatar.jpg */ 411),
+	                _react2.default.createElement('img', { src: parseInt(this.props.userID) ? imgURL : __webpack_require__(/*! ../../public/img/avatar.jpg */ 411),
 	                    className: 'img-responsive' })
 	            );
 	
@@ -60800,6 +60802,7 @@
 	        key: "render",
 	        value: function render() {
 	            //just developer's photos :D
+	            //TODO on 46 line should be "< 4", but for school presentation it was removed
 	            var imgURL = "https://chat-itu.herokuapp.com/" + this.context.user.id;
 	
 	            return _react2.default.createElement(
@@ -60809,7 +60812,7 @@
 	                    "div",
 	                    null,
 	                    _react2.default.createElement("img", { id: "profilPhoto", className: "img-circle", alt: "profilPhoto",
-	                        src: parseInt(this.context.user.id) < 4 ? imgURL : __webpack_require__(/*! ../../public/img/avatar.jpg */ 411) })
+	                        src: parseInt(this.context.user.id) ? imgURL : __webpack_require__(/*! ../../public/img/avatar.jpg */ 411) })
 	                ),
 	                _react2.default.createElement(
 	                    "div",

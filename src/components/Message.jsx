@@ -15,11 +15,12 @@ export default class Message extends React.Component {
 
     render() {
         //just developer's photos :D
+        //TODO on 46 line should be "< 4", but for school presentation it was removed
         let imgURL = "https://chat-itu.herokuapp.com/" + this.props.userID;
 
         let avatar = (
             <div className="col-md-2 col-xs-2 avatar">
-                <img src={parseInt(this.props.userID) < 4 ? imgURL :  require("../../public/img/avatar.jpg")}
+                <img src={parseInt(this.props.userID) ? imgURL :  require("../../public/img/avatar.jpg")}
                      className="img-responsive"/>
             </div>
         );

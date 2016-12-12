@@ -12,31 +12,7 @@ var PORT = process.env.PORT || 3000;
 
 var onlineUser = {}
 
-onlineUser['9'] = {
-    name: 'Lucka Hlavata'
-}
-onlineUser['10'] = {
-    name: 'Merak Drozda'
-}
-onlineUser['11'] = {
-    name: 'Natália Drozdová'
-}
-onlineUser['12'] = {
-    name: 'Petra Zvarková'
-}
-onlineUser['13'] = {
-    name: 'Mima Kozatá'
-}
-onlineUser['13'] = {
-    name: 'Peter Humenay'
-}
-onlineUser['13'] = {
-    name: 'Biba Múdra'
-}
-
-
 app.use(express.static(__dirname + '/public'));
-
 
 
 function getArrayOnlienUsers(){
@@ -51,7 +27,7 @@ function getArrayOnlienUsers(){
     return response;
 }
 
-for (let i = 0; i < 4; i++){
+for (let i = 0; i < 7; i++){
     app.get('/' + i, function (req, res) {
         res.sendFile(__dirname+ '/photos/'+ i +'.jpg');
     });
@@ -133,14 +109,14 @@ io.on('connection', function(socket) {
 
 
     socket.on('disconnect', function() {
-       //  for(userId of Object.keys(onlineUser)){
-       //      let user = onlineUser[userId];
-       //      if (user.socket.id === socket.id){
-       //          delete onlineUser[userId]
-       //          break;
-       //      }
-       // }
-       //  io.emit('getUsers' , getArrayOnlienUsers());
+        for(userId of Object.keys(onlineUser)){
+            let user = onlineUser[userId];
+            if (user.socket.id === socket.id){
+                delete onlineUser[userId]
+                break;
+            }
+        }
+        io.emit('getUsers' , getArrayOnlienUsers());
     });
    
 

@@ -13,13 +13,14 @@ export default class LeftToolBar extends React.Component {
 
     render() {
         //just developer's photos :D
+        //TODO on 46 line should be "< 4", but for school presentation it was removed
         let imgURL = "https://chat-itu.herokuapp.com/" + this.context.user.id;
 
         return (
             <div className="side">
                 <div>
                     <img id="profilPhoto" className="img-circle" alt="profilPhoto"
-                         src={parseInt(this.context.user.id) < 4 ? imgURL : require("../../public/img/avatar.jpg")}/>
+                         src={parseInt(this.context.user.id) ? imgURL : require("../../public/img/avatar.jpg")}/>
                 </div>
                 <div>
                     <img id="settings" alt="Settings" src={require("../../public/img/settings.png")}/>

@@ -29,6 +29,7 @@ export default class OnlineUser extends React.Component {
 
     render() {
         //just developers' photos :D
+        //TODO on 46 line should be "< 4", but for school presentation it was removed
         let imgURL = "https://chat-itu.herokuapp.com/" + this.state.id;
 
         let onlineStatus = (
@@ -42,7 +43,7 @@ export default class OnlineUser extends React.Component {
                     onClick={this.state.rightBar ? this.openNewChatWindow.bind(this) : this.addUser.bind(this)}
                     className="list-group-item">
                 <div className="item-image">
-                    <img className="img-circle" src={parseInt(this.state.id) < 4 ? imgURL : require("../../public/img/person-flat.png")}/>
+                    <img className="img-circle" src={parseInt(this.state.id) ? imgURL : require("../../public/img/person-flat.png")}/>
                 </div>
                 <div className="item-name">
                     <span>{this.state.username}</span>

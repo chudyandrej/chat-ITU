@@ -122,13 +122,13 @@ export default class ChatPage extends React.Component {
         console.log("closing");
         console.log(data.id);
 
-        //save id of user I've opened a window to chat with him
+        //remove id of user I've been chatting with
         let users = this.state.usersChattingWith.slice();
         users.splice(users.indexOf(data.withUser), 1);
 
         //close the window
         let temp = this.state.chatWindows.slice();
-        temp.splice(temp.indexOf(window), 1);
+        temp.splice(temp.indexOf(data.id), 1);
         this.setState({chatWindows: temp, usersChattingWith: users});
     }
 
