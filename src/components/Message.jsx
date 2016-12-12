@@ -30,7 +30,7 @@ export default class Message extends React.Component {
                 <div className="col-md-10 col-xs-10">
                     <div className={"messages msg_" + this.state.sendReceived}>
                         <p>{ ReactEmoji.emojify(this.props.text) }</p>
-                        <time>{this.state.time}</time>
+                        <time>{this.props.time}</time>
                     </div>
                 </div>
                 {this.props.sent ? avatar : null}

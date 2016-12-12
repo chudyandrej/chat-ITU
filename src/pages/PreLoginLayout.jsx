@@ -1,4 +1,5 @@
 import React from 'react';
+import {hashHistory} from 'react-router';
 
 
 export default class PreLoginLayout extends React.Component {
@@ -56,7 +57,8 @@ export default class PreLoginLayout extends React.Component {
                 changeHandler: this.handlerChange,
                 logout: this.logout
             }
-        })
+        });
+        hashHistory.push('/');
     }
 
     render() {

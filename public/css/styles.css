@@ -470,3 +470,15 @@ a.logo{
 }
 
 
+.add_users_panel{
+   
+    margin: 0;
+   
+    max-height:300px;
+    min-height: 300px;
+    min-width: 300px;
+    overflow-y: auto;
+    float: left;
+    
+}
+

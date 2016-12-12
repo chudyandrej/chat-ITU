@@ -191,7 +191,7 @@ export default class ChatWindow extends React.Component {
                                    onChange={this.handleChange.bind(this)}/>
                             <span className="input-group-btn">
 
-                            <div onClick={this.handleSubmit.bind(this)}>>
+                            <div onClick={this.handleSubmit.bind(this)}>
                                 <img className="hover-img send-btn"
                                      alt="Send"
                                      src={require("../../public/img/send-message.png")}/>

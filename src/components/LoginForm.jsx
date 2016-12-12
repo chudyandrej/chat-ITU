@@ -93,9 +93,8 @@ export default class LoginForm extends Form {
 
         return (
             <div className="jumbotron loginForm">
-                {this.state.error ? errorMsg : null}
                 <div>
-                    <h2 className="login">Login</h2>
+                    {this.state.error ? errorMsg : <h2 className="login">Login</h2>}
                     <div className="box">
                         <input placeholder="email"
                                ref="email"

@@ -80,10 +80,10 @@ export default class AddUsersGroupMsg extends React.Component {
     render() {
 
         let myBigGreenDialog = {
-            backgroundColor: '#00897B',
-            color: '#ffffff',
-            width: '400px',
-            height: '200px',
+            backgroundColor: '#708cd8',
+            color: '#fffff',
+            width: '335px',
+            height: '380x',
             marginTop: '-300px',
             marginLeft: '-35%',
         };
@@ -93,16 +93,19 @@ export default class AddUsersGroupMsg extends React.Component {
                 <SkyLight
                     afterClose={this.close.bind(this)}
                     dialogStyles={myBigGreenDialog}
-                    ref="dialogWithCallBacks"
-                    title="Add a user">
-                    <div className="list-group modal-users">
-                        {this.state.users}
+                    ref="dialogWithCallBacks">
+
+                    <div className="panel-body add_users_panel">
+                        <div className="list-group modal-users">
+                            {this.state.users}
+                        </div>
                     </div>
-                    <button type='button'
-                            className='btn btn-primary'
-                            onClick={this.submitUsers.bind(this)}>
-                        Submit
-                    </button>
+
+                    <div onClick={this.submitUsers.bind(this)}>
+                        <img className="hover-img send-btn"
+                             alt="Submit"
+                             src={require("../../public/img/checked.png")}/>
+                    </div>
                 </SkyLight>
             </div>
         );

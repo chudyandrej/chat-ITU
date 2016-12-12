@@ -101,9 +101,8 @@ class RegistrationForm extends Form {
 
         return (
         <div className="jumbotron regForm">
-            {this.state.error ? errorMsg : null}
             <div>
-                <h2 className="login">Registration</h2>
+                {this.state.error ? errorMsg : <h2 className="login">Registration</h2>}
                 <div className="box">
 
                     <input placeholder="username"
