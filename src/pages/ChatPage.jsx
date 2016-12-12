@@ -128,7 +128,13 @@ export default class ChatPage extends React.Component {
 
         //close the window
         let temp = this.state.chatWindows.slice();
-        temp.splice(temp.indexOf(data.id), 1);
+        for(let window of this.state.chatWindows) {
+            if(window.props.id === data.id) {
+                temp.splice(temp.indexOf(window), 1);
+                break;
+            }
+        }
+
         this.setState({chatWindows: temp, usersChattingWith: users});
     }
 
