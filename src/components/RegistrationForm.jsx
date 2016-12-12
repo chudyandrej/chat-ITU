@@ -29,18 +29,18 @@ class RegistrationForm extends Form {
     }
 
     handleChange(type, evt) {
-        switch (type){
+        switch (type) {
             case "username":
-                this.setState({ username: evt.target.value });
+                this.setState({username: evt.target.value});
                 break;
             case "password":
-                this.setState({ password: evt.target.value });
+                this.setState({password: evt.target.value});
                 break;
             case "passwordCheck":
-                this.setState({ passwordCheck: evt.target.value });
+                this.setState({passwordCheck: evt.target.value});
                 break;
             case "email":
-                this.setState({ email: evt.target.value });
+                this.setState({email: evt.target.value});
                 break;
         }
     }
@@ -64,7 +64,6 @@ class RegistrationForm extends Form {
     }
 
     _registerAllowed(response) {
-        console.log(response);
         if (response.result) {     //continue to login
             hashHistory.push('/chat');
         }
@@ -100,43 +99,43 @@ class RegistrationForm extends Form {
         let errorMsg = <strong className="alert alert-danger">{this.state.errorMsg}</strong>;
 
         return (
-        <div className="jumbotron regForm">
-            <div>
-                {this.state.error ? errorMsg : <h2 className="login">Registration</h2>}
-                <div className="box">
+            <div className="jumbotron regForm">
+                <div>
+                    {this.state.error ? errorMsg : <h2 className="login">Registration</h2>}
+                    <div className="box">
 
-                    <input placeholder="username"
-                           type="text"
-                           ref="username"
-                           value={this.state.username}
-                           onKeyPress={this._handleKeyPress.bind(this)}
-                           onChange={this.handleChange.bind(this, "username")}/>
+                        <input placeholder="username"
+                               type="text"
+                               ref="username"
+                               value={this.state.username}
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               onChange={this.handleChange.bind(this, "username")}/>
 
-                    <input placeholder="password"
-                           type="password"
-                           value={this.state.password}
-                           onKeyPress={this._handleKeyPress.bind(this)}
-                           onChange={this.handleChange.bind(this, "password")}/>
+                        <input placeholder="password"
+                               type="password"
+                               value={this.state.password}
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               onChange={this.handleChange.bind(this, "password")}/>
 
-                    <input placeholder="password"
-                           type="password"
-                           id={this.state.valid ? "valid" : "invalid"}
-                           onKeyPress={this._handleKeyPress.bind(this)}
-                           onChange={ this.handleChange.bind(this, "passwordCheck") }
-                           onBlur={ this.checkPasswordMatch.bind(this) } />
+                        <input placeholder="password"
+                               type="password"
+                               id={this.state.valid ? "valid" : "invalid"}
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               onChange={ this.handleChange.bind(this, "passwordCheck") }
+                               onBlur={ this.checkPasswordMatch.bind(this) }/>
 
-                    <input placeholder="email"
-                           type="text"
-                           onKeyPress={this._handleKeyPress.bind(this)}
-                           onChange={ this.handleChange.bind(this, "email") }/>
+                        <input placeholder="email"
+                               type="text"
+                               onKeyPress={this._handleKeyPress.bind(this)}
+                               onChange={ this.handleChange.bind(this, "email") }/>
 
-                    <button onClick={this.register.bind(this)}
-                            className="btn btn-default full-width">
-                        <ImageLoader src={require("../../public/img/login.png")}/>
-                    </button>
+                        <button onClick={this.register.bind(this)}
+                                className="btn btn-default full-width">
+                            <ImageLoader src={require("../../public/img/login.png")}/>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
         );
     }
 }

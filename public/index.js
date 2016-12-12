@@ -28601,7 +28601,6 @@
 	
 	                //fill user structure
 	                //const {user} = this.context;
-	                console.log(response);
 	                var userInfo = {
 	                    loggedIn: true,
 	                    username: response.name,
@@ -28612,7 +28611,6 @@
 	                _reactRouter.hashHistory.push('/chat');
 	            } else {
 	                //wrong username or password
-	                console.log(response);
 	                this.setState({
 	                    error: true,
 	                    errorMsg: response.message
@@ -36878,7 +36876,6 @@
 	    }, {
 	        key: '_registerAllowed',
 	        value: function _registerAllowed(response) {
-	            console.log(response);
 	            if (response.result) {
 	                //continue to login
 	                _reactRouter.hashHistory.push('/chat');
@@ -44633,16 +44630,13 @@
 	
 	            //listener on new messages
 	            this.context.user.socket.on('message', function (msg) {
-	                console.log("message received chat page");
-	                console.log(msg);
 	
 	                if (msg.to.length === 1) {
-	                    console.log("single conversation");
 	                    //non group conversation
 	                    //if window is already opened, ignore the message,
 	                    //it will be handled by chat window itself
 	                    if (_this2.state.usersChattingWith.indexOf(String(msg.from.id)) === -1) {
-	                        console.log("not found user");
+	
 	                        var data = {
 	                            id: msg.from.id,
 	                            username: msg.from.username
@@ -44661,7 +44655,6 @@
 	                            var window = _step.value;
 	
 	                            if (window.props.id == msg.id) {
-	                                console.log("found group conversation");
 	                                found = true;
 	                            }
 	                        }
@@ -44682,9 +44675,6 @@
 	
 	                    if (!found) {
 	                        //if window is not opened, open one
-	                        console.log("opening new group conversation");
-	                        console.log(msg.to);
-	
 	                        //hack, exclude my ID, and add sender ID  << school project, no time on details ...
 	                        var allIDs = [];
 	                        var _iteratorNormalCompletion2 = true;
@@ -44734,9 +44724,6 @@
 	            this.setState({ addUsers: show, windowInfo: windowInfo });
 	
 	            if (data != null) {
-	                console.log("data, IDs of users");
-	                console.log(data);
-	
 	                var to = this.state.windowInfo.to.slice();
 	                to.push(this.context.user.id);
 	                var message = {
@@ -44750,7 +44737,6 @@
 	                };
 	
 	                this.context.user.socket.emit("message", message);
-	                console.log("message sent");
 	                this.setState({ addUsers: false, windowInfo: null });
 	            }
 	        }
@@ -44758,9 +44744,6 @@
 	        key: 'openNewChatWindow',
 	        value: function openNewChatWindow(data) {
 	            var msg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-	
-	            console.log("opening");
-	            console.log(data);
 	
 	            if (this.state.usersChattingWith.indexOf(data.id) !== -1) {
 	                //windows with the user is already opened => ignore request
@@ -44789,9 +44772,6 @@
 	    }, {
 	        key: 'closeChatWindow',
 	        value: function closeChatWindow(data) {
-	            console.log("closing");
-	            console.log(data.id);
-	
 	            //remove id of user I've been chatting with
 	            var users = this.state.usersChattingWith.slice();
 	            users.splice(users.indexOf(data.withUser), 1);
@@ -44841,7 +44821,8 @@
 	                    { className: 'main' },
 	                    _react2.default.createElement(_LeftToolBar2.default, null),
 	                    _react2.default.createElement(_RightToolBar2.default, { chat: this.openNewChatWindow.bind(this) }),
-	                    this.state.addUsers ? _react2.default.createElement(_AddUsersGroupMsg2.default, { addUser: this.addUsersGroupMsg.bind(this), windowInfo: this.state.windowInfo }) : null,
+	                    this.state.addUsers ? _react2.default.createElement(_AddUsersGroupMsg2.default, { addUser: this.addUsersGroupMsg.bind(this),
+	                        windowInfo: this.state.windowInfo }) : null,
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'body container-fluid' },
@@ -44925,11 +44906,11 @@
 	            var _this2 = this;
 	
 	            if (this.context.user.socket === null) {
+	                //user did refresh the page => socket is null
 	                return;
-	            } //user did refresh the page => socket is null
+	            }
 	            this.context.user.socket.on('getUsers', function (response) {
 	                var temp = [];
-	                console.log(response);
 	
 	                var _iteratorNormalCompletion = true;
 	                var _didIteratorError = false;
@@ -44944,7 +44925,7 @@
 	                            //if it's my id, ignore, I don't wanna be shown in online users list :D
 	                            continue;
 	                        }
-	                        console.log(user);
+	
 	                        temp.push(_react2.default.createElement(_OnlineUser2.default, { key: user.id,
 	                            id: user.id,
 	                            username: user.name,
@@ -44966,7 +44947,6 @@
 	                }
 	
 	                _this2.setState({ users: temp });
-	                console.log(temp);
 	            });
 	        }
 	    }, {
@@ -45031,11 +45011,6 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            console.log(this.props.windowInfo.x);
-	            console.log(this.props.windowInfo.y);
-	            console.log(this.props.windowInfo.x + 168 + 'px');
-	            console.log(this.props.windowInfo.y + 190 + 'px');
-	
 	            var myBigGreenDialog = {
 	                backgroundColor: '#708cd8',
 	                color: '#fffff',
@@ -45603,9 +45578,6 @@
 	            groupIDs: [],
 	            messages: []
 	        };
-	        console.log("this conversation is initialized as group");
-	        console.log(Array.isArray(_this.props.to.id));
-	        console.log(_this.props.to);
 	        return _this;
 	    }
 	
@@ -45619,41 +45591,28 @@
 	
 	            if (this.props.msg !== null) {
 	                this.showMessage(this.props.msg, false);
-	                /*console.log("initialization of message");
-	                if (this.props.msg.to.length > 1) {
-	                    console.log("saving multiple users");
-	                    console.log(this.props.msg.to);
-	                    this.setState({groupIDs: this.props.msg.to});
-	                }*/
 	            }
 	
 	            this.context.user.socket.on('message', function (msg) {
-	                console.log("message received window");
-	                console.log(_this2.state.id);
-	                console.log(msg);
 	
 	                if (msg.serviceMsg) {
-	                    console.log("got service message");
 	                    if (msg.myID == _this2.context.user.id && msg.id != _this2.state.id) {
 	                        //this message is sent to all my windows, so add new receivers only to the right one
 	                        return;
 	                    }
 	                    var allIDs = _this2.state.groupIDs.concat(msg.text);
 	                    _this2.setState({ groupIDs: allIDs });
-	                    console.log(msg.text);
 	                    return;
 	                }
 	
 	                if (msg.to.length === 1) {
 	                    //non group conversation  //TODO problem when group message?
-	                    console.log("single msg window");
 	                    if (_this2.state.toWhoInfo.id == msg.from.id) {
 	                        _this2.showMessage(msg, false);
 	                    }
 	                } else {
 	                    //group conversation
 	                    //check if the message is for this window
-	                    console.log("group msg window");
 	                    if (_this2.state.id == msg.id) {
 	                        _this2.showMessage(msg, false);
 	                    }
@@ -45674,10 +45633,6 @@
 	    }, {
 	        key: 'showMessage',
 	        value: function showMessage(message, sent) {
-	            console.log("message:");
-	            console.log(this.state.text);
-	            console.log(message);
-	
 	            var temp = this.state.messages.slice();
 	            temp.push(_react2.default.createElement(_Message2.default, { key: this.state.messages.length,
 	                userID: message.from.id,
@@ -45696,8 +45651,6 @@
 	            }
 	
 	            var allReceivers = this.state.initAsGroup ? this.state.toWhoInfo.id : [this.state.toWhoInfo.id];
-	            console.log("sending msg");
-	            console.log(allReceivers);
 	            if (this.state.groupIDs.length > 0) {
 	                allReceivers = allReceivers.concat(this.state.groupIDs);
 	            }
@@ -61016,11 +60969,11 @@
 	
 	            //create listener
 	            if (this.context.user.socket === null) {
+	                //user did refresh the page => socket is null
 	                return;
-	            } //user did refresh the page => socket is null
+	            }
 	            this.context.user.socket.on('getUsers', function (response) {
 	                var temp = [];
-	                console.log(response);
 	
 	                var _iteratorNormalCompletion = true;
 	                var _didIteratorError = false;

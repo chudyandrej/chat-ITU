@@ -18,10 +18,12 @@ export default class RightToolBar extends React.Component {
 
     componentWillMount() {
         //create listener
-        if (this.context.user.socket === null) { return; } //user did refresh the page => socket is null
+        if (this.context.user.socket === null) {
+            //user did refresh the page => socket is null
+            return;
+        }
         this.context.user.socket.on('getUsers', (response) => {
             let temp = [];
-            console.log(response);
 
             for (let user of response) {
 

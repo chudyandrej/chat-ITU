@@ -22,9 +22,6 @@ export default class ChatWindow extends React.Component {
             groupIDs: [],
             messages: []
         };
-        console.log("this conversation is initialized as group");
-        console.log(Array.isArray(this.props.to.id));
-        console.log(this.props.to);
     }
 
     componentDidMount() {
@@ -33,41 +30,28 @@ export default class ChatWindow extends React.Component {
 
         if (this.props.msg !== null) {
             this.showMessage(this.props.msg, false);
-            /*console.log("initialization of message");
-            if (this.props.msg.to.length > 1) {
-                console.log("saving multiple users");
-                console.log(this.props.msg.to);
-                this.setState({groupIDs: this.props.msg.to});
-            }*/
         }
 
         this.context.user.socket.on('message', (msg) => {
-            console.log("message received window");
-            console.log(this.state.id);
-            console.log(msg);
 
             if (msg.serviceMsg) {
-                console.log("got service message");
                 if (msg.myID == this.context.user.id && msg.id != this.state.id) {
                     //this message is sent to all my windows, so add new receivers only to the right one
                     return;
                 }
                 let allIDs = this.state.groupIDs.concat(msg.text);
                 this.setState({groupIDs: allIDs});
-                console.log(msg.text);
                 return;
             }
 
             if (msg.to.length === 1) {
                 //non group conversation  //TODO problem when group message?
-                console.log("single msg window");
                 if (this.state.toWhoInfo.id == msg.from.id) {
                     this.showMessage(msg, false);
                 }
             }
             else {  //group conversation
                 //check if the message is for this window
-                console.log("group msg window");
                 if (this.state.id == msg.id) {
                     this.showMessage(msg, false);
                 }
@@ -85,10 +69,6 @@ export default class ChatWindow extends React.Component {
     }
 
     showMessage(message, sent) {
-        console.log("message:");
-        console.log(this.state.text);
-        console.log(message);
-
         let temp = this.state.messages.slice();
         temp.push(
             <Message key={this.state.messages.length}
@@ -108,8 +88,6 @@ export default class ChatWindow extends React.Component {
         }
 
         let allReceivers = this.state.initAsGroup ? this.state.toWhoInfo.id : [this.state.toWhoInfo.id];
-        console.log("sending msg");
-        console.log(allReceivers);
         if (this.state.groupIDs.length > 0) {
             allReceivers = allReceivers.concat(this.state.groupIDs);
         }
@@ -153,7 +131,7 @@ export default class ChatWindow extends React.Component {
             true,
             null,
             {id: this.state.id, to: to, x: evt.clientX, y: evt.clientY}
-            );
+        );
     }
 
     closeWindow() {

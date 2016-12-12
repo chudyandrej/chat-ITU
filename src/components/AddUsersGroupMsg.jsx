@@ -19,10 +19,12 @@ export default class AddUsersGroupMsg extends React.Component {
     }
 
     componentWillMount() {
-        if (this.context.user.socket === null) { return; } //user did refresh the page => socket is null
+        if (this.context.user.socket === null) {
+            //user did refresh the page => socket is null
+            return;
+        }
         this.context.user.socket.on('getUsers', (response) => {
             let temp = [];
-            console.log(response);
 
             for (let user of response) {
 
@@ -30,7 +32,7 @@ export default class AddUsersGroupMsg extends React.Component {
                     //if it's my id, ignore, I don't wanna be shown in online users list :D
                     continue;
                 }
-                console.log(user);
+
                 temp.push(<OnlineUser key={user.id}
                                       id={user.id}
                                       username={user.name}
@@ -38,7 +40,7 @@ export default class AddUsersGroupMsg extends React.Component {
             }
 
             this.setState({users: temp});
-            console.log(temp);
+
         });
     }
 
@@ -78,11 +80,6 @@ export default class AddUsersGroupMsg extends React.Component {
 
 
     render() {
-        console.log(this.props.windowInfo.x);
-        console.log(this.props.windowInfo.y);
-        console.log((this.props.windowInfo.x + 168) + 'px');
-        console.log((this.props.windowInfo.y + 190) + 'px');
-
         let myBigGreenDialog = {
             backgroundColor: '#708cd8',
             color: '#fffff',

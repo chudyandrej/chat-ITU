@@ -51,7 +51,6 @@ export default class LoginForm extends Form {
 
             //fill user structure
             //const {user} = this.context;
-            console.log(response);
             let userInfo = {
                 loggedIn: true,
                 username: response.name,
@@ -62,7 +61,6 @@ export default class LoginForm extends Form {
             hashHistory.push('/chat');
         }
         else {          //wrong username or password
-            console.log(response);
             this.setState({
                 error: true,
                 errorMsg: response.message
