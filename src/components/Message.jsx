@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactEmoji from 'react-emoji';
 
 
 export default class Message extends React.Component {
@@ -10,29 +11,6 @@ export default class Message extends React.Component {
             sendReceived: this.props.sent ? "sent" : "receive",
             text: ""
         }
-    }
-
-    componentWillMount() {
-        //find and replace code of smiley for emoji html
-        let smileys = {
-            ':)': <i className="em em-yum"></i>,
-            ':-)': <i className="em em-yum"></i>,
-            ';)': <i className="em em-wink"></i>,
-            ';-)': <i className="em em-wink"></i>,
-            ':D': <i className="em em-laughing"></i>,
-            ':-D': <i className="em em-laughing"></i>,
-            'lol': <i className="em em-joy"></i>,
-            ':(' : <i className="em em-disappointed"></i>,
-            ':-(': <i className="em em-disappointed"></i>,
-            ':\'(': <i className="em em-cry"></i>,
-            ':/' : <i className="em em-confused"></i>,
-            '(y)': <i className="em em---1"></i>,
-            ':o': <i className="em em-dizzy_face"></i>,
-            ':P': <i className="em em-stuck_out_tongue"></i>,
-            ':*': <i className="em em-kissing_heart"></i>,
-        };
-        let text = "";
-
     }
 
     render() {
@@ -51,7 +29,7 @@ export default class Message extends React.Component {
                 {this.props.sent ? null : avatar}
                 <div className="col-md-10 col-xs-10">
                     <div className={"messages msg_" + this.state.sendReceived}>
-                        <p>{this.props.text}</p>
+                        <p>{ ReactEmoji.emojify(this.props.text) }</p>
                         <time>{this.state.time}</time>
                     </div>
                 </div>

@@ -37,11 +37,13 @@ export default class Header extends React.Component {
                                 <img className="hover-img"
                                      id="user"
                                      src={require("../../public/img/user.png")}/>
+                                My account
                             </li>
                             <li role="presentation" onClick={this.context.user.logout}>
                                 <img className="hover-img"
                                      id="user"
                                      src={require("../../public/img/log-out.png")}/>
+                                    Logout
                             </li>
                         </ul>
                     </div>

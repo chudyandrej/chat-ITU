@@ -328,7 +328,7 @@ a.logo{
 #sidebar-wrapper{
     position: fixed;
     right: -160px;
-    top: 125px;
+    top: 135px;
 
     -webkit-transition: all 0.15s ease-out 0;
     -moz-transition: all 0.15s ease-out 0;
