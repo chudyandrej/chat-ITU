@@ -1,4 +1,5 @@
 import React from 'react';
+import UserProfile from './UserProfile.jsx';
 
 
 export default class Header extends React.Component {
@@ -9,6 +10,11 @@ export default class Header extends React.Component {
 
     constructor(props, context) {
         super(props, context);
+        this.state = {showProfile : false}
+    }
+
+    UserProfile(){
+        this.setState({showProfile:!this.state.showProfile})
     }
 
     render() {
@@ -32,11 +38,13 @@ export default class Header extends React.Component {
                                 </a>
                             </li>
                         </ul>
+                        {this.state.showProfile ? <UserProfile/>:null}
                         <ul className="nav navbar-nav navbar-right">
                             <li role="presentation">
                                 <img className="hover-img"
                                      id="user"
-                                     src={require("../../public/img/user.png")}/>
+                                     src={require("../../public/img/user.png")}
+                                     onClick={this.UserProfile.bind(this)}/>
                                 My account
                             </li>
                             <li role="presentation">
