@@ -128,11 +128,14 @@ export default class ChatWindow extends React.Component {
 
     handleChange(event) {
         this.setState({text: event.target.value});
-        //TODO timeout for typing = true ? will we even use typing var?
     }
 
-    addUsers() {
-        this.props.addUsers(true, null, {id: this.state.id, to: [this.state.toWhoInfo.id]}); //TODO concat more users
+    addUsers(evt) {
+        this.props.addUsers(
+            true,
+            null,
+            {id: this.state.id, to: [this.state.toWhoInfo.id], x: evt.clientX, y: evt.clientY}
+            ); //TODO concat more users
     }
 
     closeWindow() {

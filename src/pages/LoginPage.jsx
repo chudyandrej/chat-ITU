@@ -66,10 +66,10 @@ export default class LoginPage extends React.Component {
                 <div className='btn-toolbar pull-right'>
                     <div className='btn-group'>
                         <button type='button'
-                                className='btn btn-primary'
+                                className='btn-lg btn-primary sharp'
                                 onClick={ this.signInClicked.bind(this) }>Sign In</button>
                         <button type='button'
-                                className='btn btn-primary'
+                                className='btn-lg btn-primary sharp'
                                 onClick={ this.signUpClicked.bind(this) }>Sign Up</button>
                     </div>
                 </div>

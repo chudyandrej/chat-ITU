@@ -54,7 +54,7 @@ export default class LoginForm extends Form {
             console.log(response);
             let userInfo = {
                 loggedIn: true,
-                userName: response.name,
+                username: response.name,
                 id: response.id
             };
             this.context.user.changeHandler(userInfo);

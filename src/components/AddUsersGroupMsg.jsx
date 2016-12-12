@@ -78,14 +78,20 @@ export default class AddUsersGroupMsg extends React.Component {
 
 
     render() {
+        console.log(this.props.windowInfo.x);
+        console.log(this.props.windowInfo.y);
+        console.log((this.props.windowInfo.x + 168) + 'px');
+        console.log((this.props.windowInfo.y + 190) + 'px');
 
         let myBigGreenDialog = {
             backgroundColor: '#708cd8',
             color: '#fffff',
             width: '335px',
             height: '380x',
-            marginTop: '-300px',
-            marginLeft: '-35%',
+            top: 0,
+            left: 0,
+            marginTop: (this.props.windowInfo.y - 20) + 'px',
+            marginLeft: (this.props.windowInfo.x - 215) + 'px'
         };
 
         return (

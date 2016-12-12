@@ -130,7 +130,6 @@ export default class ChatPage extends React.Component {
         let temp = this.state.chatWindows.slice();
         temp.splice(temp.indexOf(window), 1);
         this.setState({chatWindows: temp, usersChattingWith: users});
-
     }
 
     render() {
@@ -141,7 +140,7 @@ export default class ChatPage extends React.Component {
                 <div className="main">
                     <LeftToolBar />
                     <RightToolBar chat={this.openNewChatWindow.bind(this)}/>
-                    {this.state.addUsers ? <AddUsersGroupMsg addUser={this.addUsersGroupMsg.bind(this)}/> : null}
+                    {this.state.addUsers ? <AddUsersGroupMsg addUser={this.addUsersGroupMsg.bind(this)} windowInfo={this.state.windowInfo}/> : null}
                     <div className="body container-fluid">
                         <div className="row" id="mainContentWrap">
                             <div className="container-fluid">

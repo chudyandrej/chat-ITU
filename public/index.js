@@ -28105,14 +28105,14 @@
 	                        _react2.default.createElement(
 	                            'button',
 	                            { type: 'button',
-	                                className: 'btn btn-primary',
+	                                className: 'btn-lg btn-primary sharp',
 	                                onClick: this.signInClicked.bind(this) },
 	                            'Sign In'
 	                        ),
 	                        _react2.default.createElement(
 	                            'button',
 	                            { type: 'button',
-	                                className: 'btn btn-primary',
+	                                className: 'btn-lg btn-primary sharp',
 	                                onClick: this.signUpClicked.bind(this) },
 	                            'Sign Up'
 	                        )
@@ -28604,7 +28604,7 @@
 	                console.log(response);
 	                var userInfo = {
 	                    loggedIn: true,
-	                    userName: response.name,
+	                    username: response.name,
 	                    id: response.id
 	                };
 	                this.context.user.changeHandler(userInfo);
@@ -44778,7 +44778,7 @@
 	                    { className: 'main' },
 	                    _react2.default.createElement(_LeftToolBar2.default, null),
 	                    _react2.default.createElement(_RightToolBar2.default, { chat: this.openNewChatWindow.bind(this) }),
-	                    this.state.addUsers ? _react2.default.createElement(_AddUsersGroupMsg2.default, { addUser: this.addUsersGroupMsg.bind(this) }) : null,
+	                    this.state.addUsers ? _react2.default.createElement(_AddUsersGroupMsg2.default, { addUser: this.addUsersGroupMsg.bind(this), windowInfo: this.state.windowInfo }) : null,
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'body container-fluid' },
@@ -44968,14 +44968,20 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            console.log(this.props.windowInfo.x);
+	            console.log(this.props.windowInfo.y);
+	            console.log(this.props.windowInfo.x + 168 + 'px');
+	            console.log(this.props.windowInfo.y + 190 + 'px');
 	
 	            var myBigGreenDialog = {
 	                backgroundColor: '#708cd8',
 	                color: '#fffff',
 	                width: '335px',
 	                height: '380x',
-	                marginTop: '-300px',
-	                marginLeft: '-35%'
+	                top: 0,
+	                left: 0,
+	                marginTop: this.props.windowInfo.y - 20 + 'px',
+	                marginLeft: this.props.windowInfo.x - 215 + 'px'
 	            };
 	
 	            return _react2.default.createElement(
@@ -45647,12 +45653,11 @@
 	        key: 'handleChange',
 	        value: function handleChange(event) {
 	            this.setState({ text: event.target.value });
-	            //TODO timeout for typing = true ? will we even use typing var?
 	        }
 	    }, {
 	        key: 'addUsers',
-	        value: function addUsers() {
-	            this.props.addUsers(true, null, { id: this.state.id, to: [this.state.toWhoInfo.id] }); //TODO concat more users
+	        value: function addUsers(evt) {
+	            this.props.addUsers(true, null, { id: this.state.id, to: [this.state.toWhoInfo.id], x: evt.clientX, y: evt.clientY }); //TODO concat more users
 	        }
 	    }, {
 	        key: 'closeWindow',

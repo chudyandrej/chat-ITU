@@ -471,8 +471,9 @@ a.logo{
 
 
 .add_users_panel{
-   
-    margin: 0;
+    margin-top: -31px;
+    margin-bottom: 10px;
+    margin-left: -20px;
    
     max-height:300px;
     min-height: 300px;
@@ -481,4 +482,10 @@ a.logo{
     float: left;
     
 }
+
+.btn-lg.sharp  {
+  border-radius:0;
+  margin: 10px;
+}
+
 
